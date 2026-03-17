@@ -1,0 +1,1304 @@
+# Recommended Tools
+
+AI Kit works on its own — run `npx ai-kit init` on any project and you immediately get a smarter AI assistant. But a set of free, well-supported tools can unlock the full potential of every slash command. This page covers all of them: what each tool does, why it matters, how to set it up, and exactly which AI Kit commands it makes better.
+
+You do not need every tool listed here. Read through, pick the ones that match your workflow, and come back for the others when you need them.
+
+---
+
+## Section 1: MCP Servers
+
+### What is an MCP Server?
+
+Before diving into specific tools, it helps to understand what MCP is — because it is not obvious from the name.
+
+**MCP stands for Model Context Protocol.** It is an open standard, created by Anthropic, that lets AI assistants communicate with external tools and services in real time during a conversation. Think of it as a plugin system for AI.
+
+Without MCP, an AI assistant like Claude Code can only work with text you paste into the chat or files in your project directory. It cannot open a browser, fetch the latest documentation, or create a GitHub pull request on its own.
+
+With MCP servers configured, the AI gains new capabilities. You say "take a screenshot of this component at mobile width" and the AI actually opens a browser, navigates to the component, resizes the viewport, and returns the screenshot to the conversation. You say "create a PR for my staged changes" and the AI calls the GitHub API directly.
+
+MCP servers are separate processes that run alongside your AI tool. They expose tools the AI can call — and the AI decides when to call them based on what you ask.
+
+**How to configure MCP servers in Claude Code:**
+
+MCP servers are configured in a JSON file. For project-specific servers, create `.claude/settings.json` in your project root. For servers you want available in every project, use `~/.claude/settings.json`.
+
+```json
+{
+  "mcpServers": {
+    "server-name": {
+      "command": "npx",
+      "args": ["package-name", "--any-flags"]
+    }
+  }
+}
+```
+
+After adding or changing MCP config, restart Claude Code for the changes to take effect.
+
+---
+
+### 1. Playwright MCP
+
+**What it does:**
+
+Playwright MCP gives the AI the ability to control a real web browser. Not a headless simulation — an actual Chromium browser that can navigate to URLs, click buttons, fill in forms, take screenshots, and read what is on screen.
+
+Without Playwright MCP, if you ask the AI to "check how this component looks on mobile", it can only reason about the code. With Playwright MCP installed, it can open a browser, navigate to the running dev server, resize the viewport to 375px wide, and hand you back an actual screenshot.
+
+**What it enables:**
+
+- The AI can run your Playwright end-to-end tests and report results directly in the chat
+- The AI can navigate to your localhost dev server and take real screenshots for responsive checks
+- The AI can interact with forms and UI flows to verify behavior, not just code
+- The AI can confirm that accessibility fixes work by checking rendered output, not just source code
+
+**Setup:**
+
+Add to `.claude/settings.json` in your project root:
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-playwright"]
+    }
+  }
+}
+```
+
+No additional installation is required beyond having Node.js available. The `npx` command fetches and runs the MCP server package automatically.
+
+If you want Playwright browsers installed for the MCP to use, run:
+
+```bash
+npx playwright install chromium
+```
+
+**Verify it is working:**
+
+After restarting Claude Code, ask: "Can you open my localhost:3000 and take a screenshot?" If Playwright MCP is active, the AI will attempt to do it. If not configured, it will say it does not have that capability.
+
+**Which AI Kit commands benefit:**
+
+| Command | How Playwright MCP helps |
+|---|---|
+| `/test` | AI can generate E2E tests and immediately run them to verify they pass |
+| `/responsive-check` | AI takes actual screenshots at each breakpoint instead of only reading code |
+| `/accessibility-audit` | AI can inspect rendered output — not just source — for accessibility issues |
+| `/fix-bug` | AI can reproduce UI bugs in a real browser to confirm the fix works |
+
+---
+
+### 2. Figma MCP (Dev Mode)
+
+**What it does:**
+
+Figma MCP connects the AI directly to Figma's Dev Mode API. Instead of you describing a design — "the button is about 16px padding, uses a blue that is close to our primary color, and has a border radius" — the AI reads the exact values from the Figma file itself.
+
+This matters because design-to-code translation is where a lot of precision is lost. Developers approximate. Spacing ends up as `p-4` when the design specifies 14px. Colors end up hardcoded when they should reference a token. With Figma MCP, the AI reads the ground truth directly.
+
+**What it enables:**
+
+- `/figma-to-code` receives exact spacing, color, typography, and component data from the Figma file — not your approximation of it
+- The AI can check whether a Figma design uses tokens that already exist in your Tailwind config
+- The AI can identify gaps between what Figma defines and what your design token system covers
+- Design handoff becomes a single step: share the Figma link, run `/figma-to-code`
+
+**Setup:**
+
+Install the Figma MCP server package:
+
+```bash
+npm install -g figma-developer-mcp
+```
+
+You will need a Figma Personal Access Token. To get one:
+
+1. Open Figma in your browser
+2. Click your profile picture in the top left
+3. Go to **Settings**
+4. Scroll to **Personal access tokens**
+5. Click **Generate new token**, name it something like "AI Kit MCP", and copy the token
+
+Now add the server to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "figma-developer-mcp",
+      "args": ["--figma-api-key", "YOUR_FIGMA_TOKEN_HERE"]
+    }
+  }
+}
+```
+
+If you prefer not to put the token directly in the config file (recommended for shared repos), use an environment variable:
+
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "figma-developer-mcp",
+      "args": ["--figma-api-key", "${FIGMA_API_KEY}"]
+    }
+  }
+}
+```
+
+Then add `FIGMA_API_KEY=your_token_here` to your `.env.local` file (which should not be committed).
+
+**Verify it is working:**
+
+Copy a Figma frame URL (it looks like `https://figma.com/file/abc123/...?node-id=...`) and ask the AI: "What are the exact spacing and color values in this Figma frame?" If the MCP is active, it will fetch real data.
+
+**Which AI Kit commands benefit:**
+
+| Command | How Figma MCP helps |
+|---|---|
+| `/figma-to-code` | Reads exact design values instead of relying on your description |
+| `/design-tokens` | Compares Figma token names directly against your Tailwind config |
+| `/responsive-check` | Can read Figma frame dimensions to verify implementation matches spec |
+| `/new-component` | Component scaffolding can be seeded with real design values |
+
+---
+
+### 3. Context7 MCP
+
+**What it does:**
+
+Context7 MCP fetches up-to-date documentation for libraries and frameworks during a conversation. It resolves one of the most frustrating problems with AI-generated code: outdated APIs.
+
+AI models are trained on data up to a cutoff date. For fast-moving ecosystems like Next.js, React, and Tailwind, this means the AI frequently generates code using APIs that have been deprecated, renamed, or changed in the version your project is actually using. You get code that looks correct but does not work.
+
+With Context7 MCP active, when you ask about the Next.js App Router `generateMetadata` function, the AI fetches the current Next.js docs and answers based on the version that exists today — not the version it was trained on.
+
+**What it enables:**
+
+- Migration commands get real breaking change data for the library version you are moving to
+- Component generation uses the correct API surface for your current Next.js, React, or Tailwind version
+- The AI can look up Sitecore JSS documentation that may not have been well-represented in training data
+- Any question about library-specific patterns returns answers grounded in current docs
+
+**Setup:**
+
+Add to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+No API key is required. Context7 MCP is a free service.
+
+**Verify it is working:**
+
+Ask the AI: "Using Context7, what is the current API for generateMetadata in Next.js 15?" If active, you will see the AI fetch documentation before answering.
+
+**Which AI Kit commands benefit:**
+
+| Command | How Context7 MCP helps |
+|---|---|
+| `/migrate` | Fetches real migration guides and breaking changes for the target library version |
+| `/new-component` | Generates code against current API docs, not potentially outdated training data |
+| `/api-route` | Uses current Next.js route handler API patterns |
+| `/type-fix` | Can look up current type definitions when TypeScript errors relate to library types |
+| `/dep-check` | Can fetch current changelog data when evaluating upgrade impact |
+
+Context7 MCP benefits every command that generates code. It is one of the highest-value MCPs in this list.
+
+---
+
+### 4. GitHub MCP
+
+**What it does:**
+
+GitHub MCP gives the AI direct access to the GitHub API — authenticated as you. It can read repository data, create and update pull requests, manage issues, read PR diffs, and more.
+
+Without GitHub MCP, `/pre-pr` runs its checklist and tells you what to do. With GitHub MCP, it can also create the PR for you, pre-filled with a structured description based on what it found. Without GitHub MCP, `/review` can only review the code you paste or the files you point it at. With GitHub MCP, it can read the actual diff of an open PR.
+
+**What it enables:**
+
+- AI can create pull requests with structured descriptions, milestone assignments, and labels
+- AI can read open PR diffs directly instead of requiring you to paste code
+- AI can create GitHub Issues from bugs found during review
+- AI can check whether a PR has merge conflicts or failing CI before recommending a merge
+- AI can read issue descriptions to inform implementation work
+
+**Setup:**
+
+First, install the GitHub CLI if you do not have it:
+
+```bash
+# macOS
+brew install gh
+
+# Other platforms: https://cli.github.com/
+```
+
+Authenticate the GitHub CLI with your account:
+
+```bash
+gh auth login
+```
+
+Follow the prompts — this stores a credential that the GitHub MCP server will use.
+
+Now add the server to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"]
+    }
+  }
+}
+```
+
+If your project is a work project and you have separate GitHub accounts, see the GitHub Account Routing section in your workspace rules. The key principle is to use the MCP that corresponds to the account that owns the repository.
+
+**Verify it is working:**
+
+Ask the AI: "What are the open pull requests on this repository?" If GitHub MCP is active and authenticated, it will list them.
+
+**Which AI Kit commands benefit:**
+
+| Command | How GitHub MCP helps |
+|---|---|
+| `/pre-pr` | Can automatically create the PR after the checklist passes |
+| `/review` | Can read the actual diff of an open PR directly from GitHub |
+| `/commit-msg` | Can read recent commit history and open issues for better context |
+| `/fix-bug` | Can read the issue description and related comments for bug context |
+
+---
+
+### 5. Perplexity MCP
+
+**What it does:**
+
+Perplexity MCP gives the AI the ability to search the live web during a conversation. It uses Perplexity's search engine to find current information, documentation, Stack Overflow answers, GitHub issues, and breaking change announcements — anything on the public internet.
+
+This is different from Context7 MCP (which fetches structured library docs) — Perplexity searches broadly. It is most useful when you need to find information that is not in any single documentation site: a specific error message, a known bug with a particular dependency combination, or a recently published migration guide.
+
+**What it enables:**
+
+- `/migrate` can search for real migration experiences, gotchas, and community-reported issues
+- `/fix-bug` can search for known bugs related to the error message you are seeing
+- `/dep-check` can check for recent security advisories and community-reported vulnerabilities
+- The AI can find the latest release notes for any package when evaluating an upgrade
+
+**Setup:**
+
+Get a Perplexity API key:
+
+1. Go to [perplexity.ai](https://www.perplexity.ai/)
+2. Create an account if you do not have one
+3. Go to **Settings** > **API**
+4. Generate an API key
+
+Add the server to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "mcp-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+As with the Figma token, use an environment variable if this config is in a shared repository:
+
+```json
+{
+  "mcpServers": {
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "mcp-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Perplexity has a free tier that covers typical development usage. Paid plans are available for heavier use.
+
+**Verify it is working:**
+
+Ask the AI: "Using Perplexity, search for recent breaking changes in Next.js 15." If the MCP is active, the AI will search before answering.
+
+**Which AI Kit commands benefit:**
+
+| Command | How Perplexity MCP helps |
+|---|---|
+| `/migrate` | Searches for community migration reports, not just official docs |
+| `/fix-bug` | Searches for known issues matching the specific error message |
+| `/dep-check` | Searches for recent CVEs, advisories, and compatibility reports |
+| `/security-check` | Can research recent attack vectors and known vulnerability patterns |
+
+---
+
+### 6. Notion MCP
+
+**What it does:**
+
+Notion MCP gives the AI read and write access to your Notion workspace. It can read page content, query databases, create new pages, and update existing ones.
+
+For teams that use Notion as a project wiki or knowledge base, this turns the AI into a bridge between your code and your documentation. Component specifications written in Notion can inform how the AI builds them. Documentation generated by `/document` can be pushed to Notion automatically.
+
+**What it enables:**
+
+- `/document` can create or update a component page in your Notion wiki directly
+- The AI can read project specifications from Notion before starting implementation
+- The AI can query a Notion database to find which components already have documentation
+- Meeting notes, design decisions, and project context stored in Notion become accessible during development
+
+**Setup:**
+
+Create a Notion integration:
+
+1. Go to [notion.so/my-integrations](https://www.notion.so/my-integrations)
+2. Click **New integration**
+3. Give it a name (e.g., "AI Kit Integration"), select your workspace, and click **Submit**
+4. Copy the **Internal Integration Token** shown on the next screen
+
+Connect the integration to pages it should be able to access:
+
+1. Open any Notion page you want the AI to be able to read or write
+2. Click the **...** menu (top right)
+3. Go to **Connections** > **Add connections**
+4. Find and add the integration you just created
+5. Repeat for each page or parent page
+
+Add the server to `.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-notion"],
+      "env": {
+        "NOTION_API_KEY": "your_integration_token_here"
+      }
+    }
+  }
+}
+```
+
+**Verify it is working:**
+
+Ask the AI: "List the pages in my Notion workspace." If the MCP is active and the integration is connected, it will return the pages it has access to.
+
+**Which AI Kit commands benefit:**
+
+| Command | How Notion MCP helps |
+|---|---|
+| `/document` | Can create or update component documentation pages directly in Notion |
+| `/understand` | Can read project specifications from Notion to inform code explanations |
+| `/new-component` | Can read component specs from Notion before scaffolding |
+
+---
+
+## Section 2: Testing Tools
+
+Testing is the fastest way to catch regressions and verify that AI-generated code actually works. The tools in this section integrate directly with AI Kit's quality commands.
+
+---
+
+### 7. Playwright (Testing Framework)
+
+**What it is:**
+
+Playwright is an end-to-end testing framework by Microsoft. It controls real browsers (Chromium, Firefox, WebKit) and lets you write tests that simulate what a user actually does — clicking buttons, filling forms, navigating between pages, checking what is visible on screen.
+
+This is different from unit tests, which test individual functions in isolation. Playwright tests your running application the way a real user would use it. They catch bugs that unit tests cannot: layout issues, incorrect navigation, forms that submit but do nothing visible, buttons that are clickable in the source but obscured by another element on screen.
+
+**Why E2E testing matters:**
+
+Unit tests verify that individual pieces of code work correctly. Integration tests verify that those pieces work together. End-to-end tests verify that the whole application works correctly from the user's perspective. All three are valuable. E2E tests are the ones most likely to catch what actually breaks in production.
+
+**Install:**
+
+```bash
+npm install -D @playwright/test
+
+# Install the browsers Playwright will control
+npx playwright install
+```
+
+If you only want Chromium (smaller install, covers most use cases):
+
+```bash
+npx playwright install chromium
+```
+
+**Basic project setup:**
+
+Create `playwright.config.ts` in your project root:
+
+```typescript
+import { defineConfig, devices } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './e2e',
+  fullyParallel: true,
+  retries: process.env.CI ? 2 : 0,
+  use: {
+    baseURL: 'http://localhost:3000',
+    trace: 'on-first-retry',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+  ],
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+  },
+})
+```
+
+Create an `e2e/` directory and add your first test:
+
+```typescript
+// e2e/navigation.spec.ts
+import { test, expect } from '@playwright/test'
+
+test('homepage loads and shows main navigation', async ({ page }) => {
+  await page.goto('/')
+  await expect(page).toHaveTitle(/your site title/i)
+  await expect(page.getByRole('navigation')).toBeVisible()
+})
+
+test('product page displays product details', async ({ page }) => {
+  await page.goto('/products/example-product')
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  await expect(page.getByRole('button', { name: /add to cart/i })).toBeEnabled()
+})
+```
+
+**Run tests:**
+
+```bash
+# Run all E2E tests
+npx playwright test
+
+# Run in headed mode (watch the browser)
+npx playwright test --headed
+
+# Run a specific test file
+npx playwright test e2e/navigation.spec.ts
+
+# Show the test report after a run
+npx playwright show-report
+```
+
+**How it pairs with `/test`:**
+
+When you run `/test` on a component, the AI generates test files. With Playwright installed, it can also generate E2E tests for page-level behavior and user flows — not just unit tests. If Playwright MCP is also configured, the AI can run those tests immediately and report results in the conversation.
+
+---
+
+### 8. Vitest (Unit Testing)
+
+**Already configured by AI Kit.** If your project was set up with AI Kit, Vitest configuration is already included in your generated rules.
+
+Vitest is a fast unit testing framework built for Vite-based projects. It handles your component unit tests and hook tests.
+
+**Key commands:**
+
+```bash
+# Run tests in watch mode (re-runs on file changes)
+npm run test
+
+# Run tests once without watch mode
+npm run test:run
+
+# Run with coverage report
+npm run test:coverage
+```
+
+If you do not see these scripts in your `package.json`, add them:
+
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  }
+}
+```
+
+And install Vitest if it is not already present:
+
+```bash
+npm install -D vitest @vitejs/plugin-react @testing-library/react @testing-library/user-event jsdom
+```
+
+**How it pairs with `/test`:**
+
+`/test` generates unit tests designed to run with Vitest and React Testing Library. The generated tests follow behavior-driven patterns — they test what the component does from the user's perspective, not its internal implementation.
+
+---
+
+### 9. axe-core and @axe-core/playwright
+
+**What it is:**
+
+axe-core is the industry-standard automated accessibility testing engine. It scans rendered HTML and reports violations of WCAG (Web Content Accessibility Guidelines) — the international standard for web accessibility. Over 57% of accessibility issues can be caught automatically, and axe-core catches most of them.
+
+`@axe-core/playwright` is the Playwright integration that lets you run axe-core scans inside your Playwright tests. This means you can automatically verify accessibility as part of your CI pipeline — not just during manual audits.
+
+**Install:**
+
+```bash
+npm install -D axe-core @axe-core/playwright
+```
+
+**Usage in a Playwright test:**
+
+```typescript
+// e2e/accessibility.spec.ts
+import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+test('homepage should not have any automatically detectable accessibility issues', async ({ page }) => {
+  await page.goto('/')
+
+  const accessibilityScanResults = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze()
+
+  expect(accessibilityScanResults.violations).toEqual([])
+})
+
+test('checkout form should be accessible', async ({ page }) => {
+  await page.goto('/checkout')
+
+  const results = await new AxeBuilder({ page })
+    .include('#checkout-form')  // Scope the scan to a specific element
+    .withTags(['wcag2a', 'wcag2aa'])
+    .analyze()
+
+  // Log violations for debugging if the test fails
+  if (results.violations.length > 0) {
+    console.log(JSON.stringify(results.violations, null, 2))
+  }
+
+  expect(results.violations).toEqual([])
+})
+```
+
+**How it pairs with `/accessibility-audit`:**
+
+`/accessibility-audit` is a code-level analysis — it reads your component source and identifies potential accessibility issues. axe-core complements this by scanning the rendered output in a real browser. The two tools catch different things. Code analysis finds missing ARIA attributes in JSX. axe-core finds issues that only appear after rendering — like a button that becomes inaccessible due to a CSS `pointer-events: none` applied by a parent.
+
+Run `/accessibility-audit` on a component, implement the fixes, then verify with an axe-core Playwright test. This gives you both a documented analysis and a programmatic assertion that can run in CI.
+
+---
+
+### 10. Storybook
+
+**What it is:**
+
+Storybook is a tool for building and documenting UI components in isolation. It runs as a separate local server where you can view each component in different states — without needing to navigate through the actual application to reach them.
+
+Think of it as a component explorer: a living catalogue of every button variant, every card state, every form with errors populated. Designers can review components without needing access to the full app. Developers can build components without building the surrounding page. QA can test edge cases — like an empty state or a maximum-length string — by directly adjusting props.
+
+**Install:**
+
+Run the Storybook initializer in your project root:
+
+```bash
+npx storybook@latest init
+```
+
+This detects your framework (Next.js, React) and installs the appropriate Storybook configuration automatically. Follow the prompts.
+
+After setup, start Storybook:
+
+```bash
+npm run storybook
+```
+
+It will open at `http://localhost:6006`.
+
+**Writing a story:**
+
+```typescript
+// src/components/Button/Button.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react'
+import { Button } from './Button'
+
+const meta: Meta<typeof Button> = {
+  title: 'Components/Button',
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'ghost'],
+    },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+    },
+  },
+}
+
+export default meta
+type Story = StoryObj<typeof Button>
+
+export const Primary: Story = {
+  args: {
+    variant: 'primary',
+    children: 'Click me',
+  },
+}
+
+export const Loading: Story = {
+  args: {
+    variant: 'primary',
+    isLoading: true,
+    children: 'Submitting...',
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    variant: 'secondary',
+    disabled: true,
+    children: 'Unavailable',
+  },
+}
+```
+
+**How it pairs with `/new-component`:**
+
+When you run `/new-component`, the AI asks whether to generate a Storybook story. If you answer yes, it generates a `.stories.tsx` file alongside the component with stories for the primary use cases, loading state, error state, and edge cases — so you can review the component visually before wiring it into a page.
+
+---
+
+## Section 3: Code Quality Tools
+
+These tools enforce consistency automatically — so code review catches logic issues, not formatting debates or missed conventions.
+
+---
+
+### 11. ESLint
+
+**What it is:**
+
+ESLint is a static analysis tool that reads your JavaScript and TypeScript source code and flags problems — without running the code. It catches bugs (using a variable before it is declared), enforces conventions (import order, naming patterns), and detects anti-patterns (using `any` in TypeScript, missing dependency arrays in `useEffect`).
+
+It is not a formatter — it does not change your whitespace or quotes. It is a code quality analyzer. Think of it as an automated code reviewer that never misses a rule and never gets tired.
+
+**Install:**
+
+If you do not already have ESLint configured, Next.js can set it up for you:
+
+```bash
+npx next lint
+```
+
+This installs `eslint` and `eslint-config-next` and creates a basic `.eslintrc.json`. Accept the "Strict" configuration when prompted.
+
+For a more complete setup with TypeScript and accessibility rules:
+
+```bash
+npm install -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react-hooks eslint-plugin-jsx-a11y
+```
+
+**Recommended `.eslintrc.json` configuration:**
+
+```json
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks",
+    "jsx-a11y"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/anchor-is-valid": "error"
+  }
+}
+```
+
+**What each plugin does:**
+
+- `@typescript-eslint` — TypeScript-specific rules: no `any`, no unused variables, correct generic usage
+- `eslint-plugin-react-hooks` — Enforces the rules of hooks: no hooks in conditionals, correct `useEffect` dependency arrays
+- `eslint-plugin-jsx-a11y` — Accessibility rules in JSX: images need alt text, buttons need labels, anchors need content
+
+**Run ESLint:**
+
+```bash
+# Check all files
+npx next lint
+
+# Auto-fix fixable issues
+npx next lint --fix
+```
+
+**How it pairs with AI Kit:**
+
+AI Kit generates rules that tell the AI to follow your coding conventions. ESLint enforces those same conventions programmatically. If the AI generates code with a missing `alt` attribute on an image, ESLint flags it before it reaches review. The rules reinforce each other.
+
+---
+
+### 12. Prettier
+
+**What it is:**
+
+Prettier is an opinionated code formatter. It takes your code and reprints it in a consistent format — consistent indentation, consistent quote style, consistent line length, consistent bracket spacing. It removes all formatting debates from code review.
+
+The key word is "opinionated". Prettier has a fixed set of formatting rules and almost no configuration. This is intentional: the goal is to end formatting discussions entirely, not to give everyone their preferred style.
+
+**Install:**
+
+```bash
+npm install -D prettier
+```
+
+Create `.prettierrc` in your project root:
+
+```json
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "arrowParens": "avoid"
+}
+```
+
+Create `.prettierignore` to exclude build output and generated files:
+
+```
+.next/
+node_modules/
+dist/
+build/
+public/
+*.generated.ts
+```
+
+**Add format scripts to `package.json`:**
+
+```json
+{
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  }
+}
+```
+
+**Integrate with ESLint:**
+
+Install the ESLint-Prettier integration to prevent conflicts between the two tools:
+
+```bash
+npm install -D eslint-config-prettier
+```
+
+Add `"prettier"` to the end of your ESLint `extends` array:
+
+```json
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier"
+  ]
+}
+```
+
+The `prettier` config disables ESLint rules that would conflict with Prettier's formatting.
+
+**How it pairs with AI Kit:**
+
+AI Kit generates rules that include Prettier configuration awareness. When the AI generates code, it follows the formatting conventions. Running `npm run format` after generation ensures any minor formatting drift is corrected automatically.
+
+---
+
+### 13. Knip
+
+**What it is:**
+
+Knip finds unused exports, files, and dependencies in your TypeScript project. It is the tool that answers: "Do I actually use this package? Is this utility function called anywhere? Can I delete this file?"
+
+Most projects accumulate dead code over time. Packages get installed for a feature that was later removed. Utility functions get replaced without the old one being deleted. Knip finds all of it.
+
+**Install:**
+
+```bash
+npm install -D knip
+```
+
+Add a script to `package.json`:
+
+```json
+{
+  "scripts": {
+    "knip": "knip"
+  }
+}
+```
+
+**Run it:**
+
+```bash
+npm run knip
+```
+
+The output groups findings into categories:
+
+```
+Unused files (2)
+  src/utils/old-formatter.ts
+  src/components/DeprecatedBanner/
+
+Unused exports (5)
+  src/lib/api.ts: formatDate
+  src/utils/strings.ts: truncateMiddle, padStart
+
+Unused dependencies (3)
+  lodash
+  moment
+  @types/uuid
+```
+
+**Configuration (optional):**
+
+Create `knip.json` if you need to adjust what Knip analyzes:
+
+```json
+{
+  "entry": ["src/app/**/*.{ts,tsx}", "src/pages/**/*.{ts,tsx}"],
+  "ignore": ["src/**/*.stories.tsx", "e2e/**"],
+  "ignoreDependencies": ["@types/node"]
+}
+```
+
+**How it pairs with `/dep-check`:**
+
+`/dep-check` audits your dependencies for outdated versions, vulnerabilities, and sizing issues. Knip tells it exactly which packages are actually unused — so when `/dep-check` recommends removing a package, it is backed by real data showing the package is not imported anywhere. Run Knip before running `/dep-check` for the most accurate analysis.
+
+---
+
+## Section 4: Security and Performance Tools
+
+These tools give you automated, repeatable verification of security and performance — not just AI analysis.
+
+---
+
+### 14. Snyk (Free Tier)
+
+**What it is:**
+
+Snyk is a security scanning tool that checks your dependencies for known vulnerabilities. It maintains a database of CVEs (Common Vulnerabilities and Exposures) and reports when any package in your `node_modules` tree has a known security issue.
+
+The free tier covers unlimited scans for open-source projects and up to 200 scans per month for private repositories — more than enough for most development workflows.
+
+**Why this matters:**
+
+Every dependency you install brings its entire dependency tree with it. A single `npm install` can add hundreds of packages you never directly chose. Snyk checks all of them — not just the ones in your `package.json`, but every transitive dependency.
+
+**Setup:**
+
+```bash
+# Install the Snyk CLI
+npm install -g snyk
+
+# Authenticate (opens a browser window to create an account or log in)
+snyk auth
+```
+
+**Run a vulnerability scan:**
+
+```bash
+# Scan dependencies
+snyk test
+
+# Scan and show a detailed report
+snyk test --json | snyk-to-html -o snyk-report.html
+
+# Monitor your project (sends ongoing alerts for new CVEs)
+snyk monitor
+```
+
+**Fix vulnerabilities:**
+
+```bash
+# Auto-fix fixable vulnerabilities by upgrading packages
+snyk fix
+```
+
+**How it pairs with `/security-check`:**
+
+`/security-check` analyzes your code for security vulnerabilities: XSS vectors, unvalidated inputs, exposed secrets, missing auth guards. Snyk complements this by checking your dependency tree for known CVEs. The two operate at different layers. Run `/security-check` on your code, run `snyk test` on your dependencies. Both pass before a release.
+
+---
+
+### 15. Lighthouse CI
+
+**What it is:**
+
+Lighthouse is Google's automated auditing tool for web performance, accessibility, SEO, and best practices. You have likely used the Lighthouse tab in Chrome DevTools. Lighthouse CI is the command-line version that lets you run those same audits automatically — in CI pipelines or from the terminal — and assert that scores meet minimum thresholds.
+
+Scores below a threshold can block a PR. This makes performance regressions visible the same way test failures are visible.
+
+**Install:**
+
+```bash
+npm install -D @lhci/cli
+```
+
+**Create a Lighthouse CI config:**
+
+Add `.lighthouserc.json` to your project root:
+
+```json
+{
+  "ci": {
+    "collect": {
+      "url": ["http://localhost:3000", "http://localhost:3000/products"],
+      "startServerCommand": "npm run start",
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.8 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["warn", { "minScore": 0.85 }],
+        "categories:seo": ["warn", { "minScore": 0.8 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
+```
+
+**Run Lighthouse CI:**
+
+```bash
+# Build your Next.js app first (Lighthouse CI runs against the production build)
+npm run build
+
+# Run Lighthouse CI
+npx lhci autorun
+```
+
+**Add to `package.json` scripts:**
+
+```json
+{
+  "scripts": {
+    "lighthouse": "lhci autorun"
+  }
+}
+```
+
+**How it pairs with `/optimize`:**
+
+`/optimize` analyzes your code and recommends performance improvements: add `useMemo` here, move this to a Server Component, lazy load this module. Lighthouse CI measures the actual result. Run `/optimize` to get the recommendations, implement them, run `npm run lighthouse` to verify that Core Web Vitals scores improved. The audit loop closes.
+
+---
+
+### 16. @next/bundle-analyzer
+
+**What it is:**
+
+Bundle analyzer generates an interactive visual map of your Next.js JavaScript bundle. Every module in your bundle is shown as a rectangle sized proportionally to its contribution to the total bundle weight. At a glance, you can see which packages are taking up the most space, what is being included that should not be, and where code splitting opportunities exist.
+
+This is particularly important for Next.js projects because an oversized JavaScript bundle is one of the most common causes of poor Largest Contentful Paint (LCP) and Time to Interactive (TTI) scores.
+
+**Install:**
+
+```bash
+npm install -D @next/bundle-analyzer
+```
+
+**Configure in `next.config.mjs`:**
+
+```javascript
+import bundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // your existing config here
+}
+
+export default withBundleAnalyzer(nextConfig)
+```
+
+**Add a script to `package.json`:**
+
+```json
+{
+  "scripts": {
+    "analyze": "ANALYZE=true next build"
+  }
+}
+```
+
+**Run the analyzer:**
+
+```bash
+npm run analyze
+```
+
+This runs a full production build and opens two browser windows showing the bundle composition — one for the client bundle and one for the server bundle. Hover over any rectangle to see the module name and exact size.
+
+**What to look for:**
+
+- A large rectangle for a package you only use in one place — consider dynamic importing it
+- Duplicate packages at different versions — a dependency conflict bloating the bundle
+- A module that appears in many chunks — a good candidate for extraction into a shared chunk
+- A large utility library (like `lodash` or `moment`) when you only use one function — consider tree-shaking or a lighter alternative
+
+**How it pairs with `/dep-check`:**
+
+`/dep-check` identifies packages that could be removed or replaced. Bundle analyzer shows you the weight cost of each package — so when `/dep-check` flags a large dependency, you can see exactly how much bundle weight removing it would save. Run `/dep-check` first for the list, then run `npm run analyze` to quantify the impact.
+
+---
+
+## Section 5: Quick Setup Guide
+
+If you want to get the essential tooling configured in a single session, follow this sequence. It installs the testing, quality, and security tools that have the broadest impact across AI Kit commands.
+
+**Step 1: Install npm packages**
+
+```bash
+# Testing
+npm install -D @playwright/test @axe-core/playwright
+
+# Code quality
+npm install -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-react-hooks eslint-plugin-jsx-a11y eslint-config-prettier prettier
+
+# Dead code detection
+npm install -D knip
+
+# Performance auditing
+npm install -D @lhci/cli @next/bundle-analyzer
+
+# Security scanning (global install for CLI access)
+npm install -g snyk
+```
+
+**Step 2: Install Playwright browsers**
+
+```bash
+npx playwright install chromium
+```
+
+**Step 3: Add scripts to `package.json`**
+
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "next lint",
+    "knip": "knip",
+    "analyze": "ANALYZE=true next build",
+    "lighthouse": "lhci autorun"
+  }
+}
+```
+
+**Step 4: Configure MCP servers**
+
+Create `.claude/settings.json` in your project root with the MCP servers you want to use. The essential two are Playwright MCP (for browser automation) and Context7 MCP (for current documentation):
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-playwright"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+To add GitHub MCP (requires `gh` CLI authenticated):
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-playwright"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"]
+    }
+  }
+}
+```
+
+To add Figma MCP and Perplexity MCP, include your API keys (use environment variables for shared repositories):
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@anthropic-ai/mcp-playwright"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"]
+    },
+    "figma": {
+      "command": "figma-developer-mcp",
+      "args": ["--figma-api-key", "${FIGMA_API_KEY}"]
+    },
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "mcp-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+**Step 5: Restart Claude Code**
+
+MCP server changes require a Claude Code restart to take effect.
+
+**Step 6: Verify**
+
+Run a quick check to confirm the tools are working:
+
+```bash
+# Verify ESLint
+npx next lint
+
+# Verify Prettier
+npx prettier --check .
+
+# Verify Knip
+npx knip
+
+# Verify Playwright
+npx playwright test --list
+
+# Verify Snyk
+snyk test
+```
+
+---
+
+## Section 6: Tool and Command Pairing Matrix
+
+This table maps every AI Kit slash command to the tools that meaningfully enhance it. "Core" means the command works fine without the tool. "Enhanced" means the tool unlocks additional capability or verification.
+
+| AI Kit Command | Playwright MCP | Figma MCP | Context7 MCP | GitHub MCP | Perplexity MCP | Playwright Tests | axe-core | Storybook | ESLint | Prettier | Knip | Snyk | Lighthouse CI | Bundle Analyzer |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `/prompt-help` | | | | | | | | | | | | | | |
+| `/understand` | | | Context7 | GitHub | Perplexity | | | | | | | | | |
+| `/new-component` | | Figma | Context7 | | | | | Storybook | ESLint | Prettier | | | | |
+| `/new-page` | | | Context7 | | | | | | ESLint | Prettier | | | | |
+| `/api-route` | | | Context7 | | | | | | ESLint | Prettier | | Snyk | | |
+| `/error-boundary` | | | Context7 | | | | | | ESLint | Prettier | | | | |
+| `/extract-hook` | | | Context7 | | | Playwright | | | ESLint | Prettier | | | | |
+| `/figma-to-code` | | Figma | | | | | | | ESLint | Prettier | | | | |
+| `/design-tokens` | | Figma | Context7 | | | | | | | | | | | |
+| `/review` | | | Context7 | GitHub | | | | | ESLint | Prettier | | | | |
+| `/pre-pr` | | | | GitHub | | | | | ESLint | Prettier | Knip | Snyk | | |
+| `/test` | Playwright | | Context7 | | | Playwright | axe-core | Storybook | | | | | | |
+| `/accessibility-audit` | Playwright | | | | | | axe-core | | ESLint | | | | Lighthouse CI | |
+| `/security-check` | | | | | Perplexity | | | | ESLint | | | Snyk | | |
+| `/responsive-check` | Playwright | Figma | | | | Playwright | | | | | | | | |
+| `/type-fix` | | | Context7 | | | | | | ESLint | | | | | |
+| `/fix-bug` | Playwright | | Context7 | GitHub | Perplexity | Playwright | | | | | | | | |
+| `/refactor` | | | Context7 | | | | | | ESLint | Prettier | Knip | | | |
+| `/optimize` | | | Context7 | | Perplexity | | | | | | Knip | | Lighthouse CI | Bundle Analyzer |
+| `/migrate` | | | Context7 | | Perplexity | | | | ESLint | Prettier | | | | |
+| `/dep-check` | | | Context7 | | Perplexity | | | | | | Knip | Snyk | | Bundle Analyzer |
+| `/sitecore-debug` | Playwright | | Context7 | | Perplexity | | | | | | | | | |
+| `/document` | | | | GitHub | | | | Storybook | | | | | | |
+| `/commit-msg` | | | | GitHub | | | | | | | | | | |
+| `/env-setup` | | | | GitHub | | | | | | | | | | |
+
+**Reading this table:**
+
+A cell with a tool name means that tool meaningfully improves that command. Empty cells mean the command works on its own without enhancement from that tool. No command requires all tools — install what fits your workflow and leave the rest for later.
+
+**Highest-value tools by breadth of impact:**
+
+1. **Context7 MCP** — enhances 17 of 25 commands. Install this first.
+2. **ESLint** — enforces generated code quality across 14 commands. Install early.
+3. **Playwright MCP** — enables browser automation for 8 commands. High value for QA-focused work.
+4. **GitHub MCP** — automates PR and issue workflows for 6 commands. High value for teams.
+5. **Perplexity MCP** — adds real-time research to 7 commands. High value for migration and debugging work.

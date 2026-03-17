@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     template: '%s — AI Kit Docs',
   },
   description:
-    'Documentation and knowledge hub for @horizontal/ai-kit — auto-generate AI assistant configs tailored to your tech stack.',
+    'Documentation and knowledge hub for ai-kit — auto-generate AI assistant configs tailored to your tech stack.',
 }
 
 export default function RootLayout({

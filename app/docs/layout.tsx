@@ -17,7 +17,7 @@ const navbar = (
 const footer = (
   <Footer>
     <span>
-      MIT {new Date().getFullYear()} &copy; Horizontal Digital. Built with{' '}
+      MIT {new Date().getFullYear()} &copy; Mikul Gohil. Built with{' '}
       <a href="https://nextra.site" target="_blank" rel="noreferrer">
         Nextra
       </a>

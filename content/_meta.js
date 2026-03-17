@@ -8,6 +8,7 @@ export default {
   'supported-stacks': 'Supported Tech Stacks',
   'slash-commands': 'Slash Commands',
   guides: 'Guides',
+  'recommended-tools': 'Recommended Tools',
   configuration: 'Configuration',
   'tips-and-tricks': 'Tips & Tricks',
   troubleshooting: 'Troubleshooting',

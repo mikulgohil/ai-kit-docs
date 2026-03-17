@@ -1,7 +1,7 @@
 {
   "name": "ai-kit-docs",
   "version": "1.0.0",
-  "description": "Knowledge hub for @horizontal/ai-kit",
+  "description": "Knowledge hub for ai-kit",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "keywords": [],
-  "author": "Horizontal Digital",
+  "author": "Mikul Gohil",
   "license": "MIT",
   "dependencies": {
     "next": "^16.1.7",
