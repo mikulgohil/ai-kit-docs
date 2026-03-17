@@ -1,156 +1,601 @@
 # Slash Commands
 
-AI Kit copies 10 slash commands to `.claude/commands/` in your project. These are available in Claude Code by typing `/command-name`.
+AI Kit copies 25 slash commands to `.claude/commands/` in your project. These are available in Claude Code by typing `/command-name`. Each command is a structured workflow prompt — not a one-liner — designed to produce consistent, reviewable output.
 
-## /prompt-help
+## Quick Reference
 
-**The most important command.** Start here if you're unsure how to prompt effectively.
-
-Launches an interactive prompt builder that helps you construct a well-structured request. It asks:
-1. What type of task? (new feature, bug fix, refactor, etc.)
-2. What files are involved?
-3. What constraints exist?
-4. What does success look like?
-
-Then generates a ready-to-use prompt you can paste directly.
-
-**When to use**: Any time you're not sure how to phrase a request, or you want to ensure you're giving the AI enough context.
+| Command | Category | What it does |
+|---|---|---|
+| `/prompt-help` | Getting Started | Interactive prompt builder for better AI requests |
+| `/understand` | Getting Started | Explains code, architecture, and data flow |
+| `/new-component` | Building | Scaffolds a component with types, tests, and docs |
+| `/new-page` | Building | Scaffolds a new route with all required files |
+| `/api-route` | Building | Creates a typed API route handler with validation |
+| `/error-boundary` | Building | Adds a React error boundary to a component tree |
+| `/extract-hook` | Building | Pulls logic out of a component into a custom hook |
+| `/figma-to-code` | Building | Implements a Figma design using project tokens |
+| `/design-tokens` | Building | Audits and manages your design token system |
+| `/review` | Quality & Review | Deep code review following Horizontal standards |
+| `/pre-pr` | Quality & Review | Full pre-PR checklist before you open a pull request |
+| `/test` | Quality & Review | Generates unit and integration tests for any file |
+| `/accessibility-audit` | Quality & Review | Audits a component for WCAG accessibility issues |
+| `/security-check` | Quality & Review | Scans code for common security vulnerabilities |
+| `/responsive-check` | Quality & Review | Verifies responsive behavior across breakpoints |
+| `/type-fix` | Quality & Review | Resolves TypeScript errors and tightens types |
+| `/fix-bug` | Maintenance | Guided systematic debugging workflow |
+| `/refactor` | Maintenance | Refactors code while preserving behavior |
+| `/optimize` | Maintenance | Performance analysis and optimization |
+| `/migrate` | Maintenance | Migrates code to a new API, pattern, or version |
+| `/dep-check` | Maintenance | Audits dependencies for issues and updates |
+| `/sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
+| `/document` | Workflow | Generates JSDoc, README, and component docs |
+| `/commit-msg` | Workflow | Writes a conventional commit message for staged changes |
+| `/env-setup` | Workflow | Sets up local environment variables and configuration |
 
 ---
 
-## /review
+## Getting Started
 
-Deep code review following Horizontal standards. Checks for:
+These two commands are the best entry points when you're new to the project or unsure how to phrase a request.
 
-- Naming convention violations
-- Component structure issues
-- Missing error handling or accessibility
-- Performance anti-patterns
-- Security vulnerabilities
-- Import order violations
-- Missing or outdated documentation
+### /prompt-help
+
+**The most important command.** If you're not sure how to ask the AI for something, start here. It runs an interactive prompt builder that walks you through what you're trying to do, which files are involved, what constraints exist, and what success looks like — then generates a ready-to-paste prompt for you.
+
+**Usage**
+```
+/prompt-help
+```
+
+**When to use**: Any time you're stuck on how to phrase a request, or you want to make sure you're giving the AI enough context before a complex task.
+
+**What it asks you**
+- What type of task is this? (new feature, bug fix, refactor, etc.)
+- Which files or areas of the codebase are involved?
+- What constraints or conventions apply?
+- What does "done" look like?
+
+---
+
+### /understand
+
+Explains any piece of code in plain language. Point it at a file, function, or module and it returns a structured breakdown that covers purpose, architecture fit, data flow, dependencies, edge cases, and related files worth reading.
+
+**Usage**
+```
+/understand src/lib/auth.ts
+/understand src/components/Header.tsx
+/understand src/app/api/products/route.ts
+```
+
+**When to use**: When onboarding to a new project, inheriting unfamiliar code, or before refactoring something you didn't write.
+
+**What it covers**
+- The single responsibility of the file or function
+- How it fits into the broader architecture
+- Inputs, outputs, and data flow
+- Known edge cases or gotchas
+- Related files that provide full context
+
+---
+
+## Building
+
+Commands for creating new code that follows project conventions from the start.
+
+### /new-component
+
+Scaffolds a complete new component by asking a series of structured questions. The output follows your project's naming conventions and generates everything the component needs to be production-ready.
+
+**Usage**
+```
+/new-component
+/new-component ProductCard
+/new-component NavigationMenu
+```
+
+**When to use**: Every time you create a new component. This ensures consistency — it's far easier to start with the right structure than to retrofit it later.
+
+**What it generates**
+- Component file with typed props interface
+- Barrel export
+- JSDoc documentation
+- Test file with RTL happy-path and edge case tests
+- Optional Storybook story
+- Optional doc file in `docs/components/`
+- Sitecore component manifest (if XM Cloud project)
+
+---
+
+### /new-page
+
+Scaffolds a new route with all the supporting files your router needs. Detects whether you're using App Router or Pages Router and generates the appropriate file structure.
+
+**Usage**
+```
+/new-page
+/new-page products/[id]
+/new-page checkout/confirmation
+```
+
+**When to use**: Whenever you add a new URL to the application. Handles the boilerplate so you can focus on the page logic.
+
+**What it generates**
+- `page.tsx` (App Router) or the page file (Pages Router)
+- `layout.tsx` if a new layout scope is needed
+- `loading.tsx` for streaming and Suspense boundaries
+- `error.tsx` for route-level error handling
+- `getServerSideProps` or `getStaticProps` stubs for Pages Router
+
+---
+
+### /api-route
+
+Creates a fully typed API route handler with input validation, error handling, and response shaping. Follows Next.js conventions and adds the structure needed for a maintainable endpoint.
+
+**Usage**
+```
+/api-route
+/api-route POST /api/orders
+/api-route GET /api/users/[id]
+```
+
+**When to use**: When adding a new API endpoint. Prevents the common pattern of writing route handlers without validation or consistent error responses.
+
+**What it generates**
+- Typed request/response interfaces
+- Input validation with Zod
+- Structured error handling with appropriate HTTP status codes
+- JSDoc for the handler
+- A basic test file for the route
+
+---
+
+### /error-boundary
+
+Adds a React error boundary to a component tree. Generates the boundary component itself along with a fallback UI, and wraps the target component so errors are caught and displayed gracefully rather than crashing the page.
+
+**Usage**
+```
+/error-boundary
+/error-boundary src/components/ProductList.tsx
+```
+
+**When to use**: When a component relies on external data or has failure modes that should be contained — especially before shipping to production.
+
+**What it generates**
+- `ErrorBoundary` class component
+- Fallback UI component with reset affordance
+- Wrapping of the target component
+- Optional logging hook for error reporting
+
+---
+
+### /extract-hook
+
+Pulls logic out of a component and into a reusable custom hook. Identifies state, effects, and derived values that belong outside the render function and moves them cleanly while keeping the component readable.
+
+**Usage**
+```
+/extract-hook src/components/ProductFilter.tsx
+/extract-hook src/components/SearchBar.tsx useSearch
+```
+
+**When to use**: When a component is getting long, when the same logic appears in multiple components, or when you want to test logic independently from the UI.
+
+**What it generates**
+- Named custom hook file in `hooks/`
+- Updated component importing the hook
+- JSDoc for the hook's parameters and return values
+- Test file for the hook in isolation
+
+---
+
+### /figma-to-code
+
+Structured workflow for translating a Figma design into code. Uses the Figma MCP (if configured) to extract design context, maps visual properties to existing project tokens, identifies reusable components, and implements with correct responsive breakpoints.
+
+**Usage**
+```
+/figma-to-code
+/figma-to-code https://figma.com/file/...
+```
+
+**When to use**: Any time you're implementing a Figma design. Prevents the habit of hardcoding values that should reference design tokens.
+
+**What it checks**
+- Figma frame dimensions and spacing
+- Token mapping (colors, typography, spacing)
+- Reuse opportunities against existing components
+- Responsive behavior at each breakpoint
+- Visual fidelity verification steps
+
+---
+
+### /design-tokens
+
+Audits and manages the design token system for your project. Maps Figma token names to Tailwind config values or CSS custom properties, surfaces any hardcoded values that should be using tokens, and generates token documentation.
+
+**Usage**
+```
+/design-tokens
+/design-tokens audit
+/design-tokens src/components/Button.tsx
+```
+
+**When to use**: When setting up a new project's token system, after a design update introduces new tokens, or when auditing for consistency before a design review.
+
+**What it covers**
+- Current token inventory (colors, spacing, typography, radius)
+- Hardcoded values that should reference tokens
+- Mismatches between Figma tokens and Tailwind config
+- Generated token reference documentation
+
+---
+
+## Quality & Review
+
+Commands for catching problems before they reach production or a reviewer.
+
+### /review
+
+Deep code review following Horizontal Digital standards. Goes beyond linting — it evaluates structure, intent, and maintainability.
+
+**Usage**
+```
+/review
+/review src/components/CheckoutForm.tsx
+/review src/lib/api.ts
+```
 
 **When to use**: Before creating a PR, or when reviewing someone else's code with AI assistance.
 
----
-
-## /fix-bug
-
-Guided bug fix workflow:
-
-1. Describe the bug (expected vs actual behavior)
-2. Identify reproduction steps
-3. Locate the root cause
-4. Implement the fix
-5. Verify with tests
-
-Forces a structured approach instead of "just fix it."
-
-**When to use**: When you encounter a bug and want a systematic debugging approach.
+**What it checks**
+- Naming convention violations
+- Component structure and separation of concerns
+- Missing error handling
+- Accessibility gaps (missing ARIA, keyboard nav)
+- Performance anti-patterns (unnecessary re-renders, N+1)
+- Security issues (XSS, unvalidated inputs, exposed secrets)
+- Import order and barrel export consistency
+- Missing or outdated JSDoc
 
 ---
 
-## /new-component
+### /pre-pr
 
-Scaffolds a new component following project conventions. Asks:
+Runs a full pre-PR checklist before you open a pull request. Combines review, test coverage check, accessibility audit, and documentation check into a single workflow that produces a clear go/no-go summary.
 
-1. Component name
-2. What does it do?
-3. Where should it go?
-4. What props does it need?
-5. Server or Client Component?
-6. Does it need data fetching?
-7. Is it a Sitecore component? (if XM Cloud)
-8. Responsive requirements
-9. States to handle (loading, error, empty)
-10. Similar existing component to reference
+**Usage**
+```
+/pre-pr
+/pre-pr src/features/checkout/
+```
 
-Generates: component file, types, doc file (for complex components), test file, and optionally a Storybook story.
+**When to use**: As the last step before pushing a branch and opening a PR. Catches issues that reviewers would otherwise flag.
 
-**When to use**: Every time you create a new component — ensures consistency across the project.
-
----
-
-## /new-page
-
-Scaffolds a new page or route. Adapts to your router type:
-- **App Router**: Creates `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx` as needed
-- **Pages Router**: Creates the page file with `getServerSideProps`/`getStaticProps`
-
-**When to use**: When adding a new route to the application.
+**What it checks**
+- Code review against Horizontal standards
+- Test file presence and coverage for changed files
+- JSDoc on exported functions and components
+- Accessibility compliance for any UI changes
+- No console logs, debug code, or TODO comments left in
+- Branch name and commit message format
 
 ---
 
-## /understand
+### /test
 
-Explains code in detail. Point it at a file, function, or module and it provides:
+Generates a test file for any component, hook, or utility function. Produces behavior-driven tests using React Testing Library, covering the happy path, error states, and edge cases.
 
-- Purpose and responsibility
-- How it fits into the broader architecture
-- Data flow and dependencies
-- Edge cases and gotchas
-- Related files to read for full context
+**Usage**
+```
+/test src/components/Header.tsx
+/test src/hooks/useCart.ts
+/test src/lib/formatPrice.ts
+```
 
-**When to use**: Onboarding to a new codebase, understanding unfamiliar modules, or documenting complex logic.
+**When to use**: After writing a new component or utility, or when increasing test coverage on existing code.
 
----
-
-## /test
-
-Generates tests for a file or function. Creates:
-
-- Happy path tests
-- Error state tests
-- Edge case tests
-- Accessibility tests (for components)
-- Uses React Testing Library and behavior-driven patterns
-
-Tests are colocated next to the source file.
-
-**When to use**: After creating a new component or utility, or when adding tests to existing code.
+**What it generates**
+- Happy path tests for primary use cases
+- Error state and boundary condition tests
+- Edge case tests (empty data, max values, etc.)
+- Accessibility tests for interactive components (role, label, keyboard)
+- Tests colocated next to the source file following project conventions
 
 ---
 
-## /optimize
+### /accessibility-audit
 
-Performance optimization review. Analyzes:
+Audits a component or page for WCAG 2.1 AA compliance issues. Covers semantic HTML, keyboard navigation, ARIA usage, color contrast guidance, and screen reader behavior.
 
-- Unnecessary re-renders
-- Missing memoization
-- Heavy computations in render paths
-- Bundle size impact
-- Image optimization opportunities
-- Data fetching patterns (N+1, waterfalls)
-- Server vs Client Component opportunities
+**Usage**
+```
+/accessibility-audit src/components/Modal.tsx
+/accessibility-audit src/app/checkout/page.tsx
+```
 
-**When to use**: When a page feels slow, before a performance audit, or when reviewing a data-heavy component.
+**When to use**: Before shipping any interactive UI, when a component receives focus-related feedback, or as part of an accessibility sprint.
 
----
-
-## /figma-to-code
-
-Structured Figma-to-code implementation workflow:
-
-1. Extract design context from Figma (using Figma MCP if available)
-2. Map design tokens to existing project tokens
-3. Identify reusable components
-4. Implement with proper responsive breakpoints
-5. Verify visual match
-
-**When to use**: When implementing a Figma design — ensures you use design tokens instead of hardcoded values.
+**What it checks**
+- Semantic HTML element usage
+- Focus management and visible focus indicators
+- ARIA roles, labels, and descriptions
+- Keyboard navigability (Tab, Enter, Escape, arrow keys)
+- Alt text on images
+- Form label associations
+- Color contrast recommendations
 
 ---
 
-## /design-tokens
+### /security-check
 
-Design token management:
+Scans code for common security vulnerabilities relevant to Next.js and React applications. Produces a prioritized list of issues with remediation guidance.
 
-- Audit current token usage
-- Map Figma tokens to Tailwind/CSS variables
-- Find hardcoded values that should use tokens
-- Generate token documentation
+**Usage**
+```
+/security-check src/app/api/
+/security-check src/components/RichTextEditor.tsx
+```
 
-**When to use**: When setting up or auditing your design token system.
+**When to use**: Before shipping new API routes, when handling user-generated content, or during a security review sprint.
+
+**What it checks**
+- XSS vectors (dangerouslySetInnerHTML, unsanitized input rendering)
+- Unvalidated or unsanitized API inputs
+- Exposed environment variables or secrets
+- Insecure direct object references in route params
+- Missing authentication/authorization guards
+- CSRF exposure in mutation endpoints
+- Dependency versions with known CVEs
+
+---
+
+### /responsive-check
+
+Verifies that a component or page handles all required responsive breakpoints correctly. Maps your Tailwind breakpoint config to the design system and identifies gaps or inconsistencies.
+
+**Usage**
+```
+/responsive-check src/components/NavigationBar.tsx
+/responsive-check src/app/products/page.tsx
+```
+
+**When to use**: Before shipping any layout change, when a component looks off on mobile, or during a responsive QA pass.
+
+**What it checks**
+- Breakpoint coverage (mobile, tablet, desktop, wide)
+- Missing responsive variants on layout-affecting classes
+- Hardcoded widths or heights that break at small viewports
+- Touch target sizes (minimum 44x44px)
+- Overflow and scrolling behavior at each size
+- Image scaling and aspect ratio handling
+
+---
+
+### /type-fix
+
+Resolves TypeScript errors in a file and tightens loose typing. Explains the root cause of each error, applies the fix, and avoids the anti-pattern of silencing errors with `any` or `// @ts-ignore`.
+
+**Usage**
+```
+/type-fix src/components/DataTable.tsx
+/type-fix src/lib/api-client.ts
+```
+
+**When to use**: When TypeScript is reporting errors you're not sure how to fix, or after upgrading a dependency that changed its type signatures.
+
+**What it covers**
+- Root cause explanation for each type error
+- Correct fix using proper TypeScript patterns
+- Tightening of overly broad `any` or `unknown` usages
+- Generic type improvements where applicable
+- Import of missing type dependencies
+
+---
+
+## Maintenance
+
+Commands for improving, fixing, and managing existing code.
+
+### /fix-bug
+
+Guided systematic debugging workflow. Forces a structured approach — describe the bug, identify reproduction steps, locate the root cause, implement the fix, verify with tests — instead of jumping straight to guessing a solution.
+
+**Usage**
+```
+/fix-bug
+/fix-bug src/components/CartSummary.tsx
+```
+
+**When to use**: When you encounter a bug and want to avoid the trial-and-error spiral. Especially useful for bugs where the cause isn't immediately obvious.
+
+**What it produces**
+- Structured bug description (expected vs. actual)
+- Hypothesis for root cause with supporting evidence
+- Targeted fix with explanation
+- Regression test to prevent recurrence
+- Notes on any related areas that may be affected
+
+---
+
+### /refactor
+
+Refactors a file or function to improve readability, reduce duplication, or align with current conventions — while preserving the existing behavior. Proposes the approach before making changes.
+
+**Usage**
+```
+/refactor src/components/ProductList.tsx
+/refactor src/lib/utils.ts
+```
+
+**When to use**: When a file has grown too large, when you spot repeated logic, or when code conventions have evolved and an older file hasn't kept up.
+
+**What it covers**
+- Extraction of reusable logic into hooks or utilities
+- Reduction of prop drilling
+- Simplification of complex conditionals
+- Alignment with current naming conventions
+- No behavior changes — refactor only
+
+---
+
+### /optimize
+
+Performance analysis and optimization for a component or page. Identifies specific, actionable improvements rather than generic advice.
+
+**Usage**
+```
+/optimize src/components/ProductGrid.tsx
+/optimize src/app/dashboard/page.tsx
+```
+
+**When to use**: When a page feels slow, before a performance audit, or when reviewing a component that handles large data sets.
+
+**What it analyzes**
+- Unnecessary re-renders and missing memoization (`useMemo`, `useCallback`, `memo`)
+- Heavy computations running in the render path
+- Bundle size impact and code splitting opportunities
+- Image optimization (format, size, lazy loading)
+- Data fetching patterns (N+1 queries, request waterfalls)
+- Server vs. Client Component boundary placement
+
+---
+
+### /migrate
+
+Migrates code from one API, pattern, library version, or convention to another. Documents what changed and why, so the diff is reviewable and reversible.
+
+**Usage**
+```
+/migrate src/components/ --from pages-router --to app-router
+/migrate src/lib/api.ts --from axios --to fetch
+/migrate src/components/Form.tsx --from react-hook-form-v6 --to react-hook-form-v7
+```
+
+**When to use**: During a library upgrade, when adopting a new pattern project-wide, or when migrating from one router to another.
+
+**What it covers**
+- Inventory of files that need changes
+- Mapping of old API to new API
+- Automated changes where safe
+- Manual review flags for ambiguous cases
+- Migration notes in the relevant doc file
+
+---
+
+### /dep-check
+
+Audits project dependencies for outdated versions, known vulnerabilities, duplicates, and unused packages. Produces a prioritized action list rather than a raw dump of every package.
+
+**Usage**
+```
+/dep-check
+/dep-check --security-only
+```
+
+**When to use**: Before a release, after a security advisory, or when the lockfile hasn't been reviewed in a while.
+
+**What it checks**
+- Packages with known CVEs (cross-referenced against advisories)
+- Significantly outdated minor/major versions
+- Duplicate packages at different versions
+- Packages present in `dependencies` that should be `devDependencies`
+- Unused packages that can be removed
+- Peer dependency conflicts
+
+---
+
+### /sitecore-debug
+
+Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in the Sitecore + Next.js integration — component registration, field mapping, rendering host config, and personalization rules.
+
+**Usage**
+```
+/sitecore-debug
+/sitecore-debug src/components/HeroBanner.tsx
+```
+
+**When to use**: When a Sitecore component isn't rendering, fields aren't mapping correctly, or the rendering host is failing to connect.
+
+**What it checks**
+- Component registration in `ComponentBuilder` / `componentFactory`
+- Field type alignment between Sitecore template and component props
+- `withDatasourceCheck` and `withPlaceholderProps` usage
+- Layout service response structure
+- Rendering host environment variables and proxy config
+- Personalization and variant rendering issues
+- Edge Config and preview mode setup
+
+---
+
+## Workflow
+
+Commands that support day-to-day development process rather than specific code tasks.
+
+### /document
+
+Generates JSDoc for exported functions and components, creates or updates README files, and produces component documentation in `docs/components/`. Targets a file or directory.
+
+**Usage**
+```
+/document src/components/Button.tsx
+/document src/hooks/
+/document src/lib/api-client.ts
+```
+
+**When to use**: After writing a new module, before a PR that touches public API surface, or when running a documentation sprint.
+
+**What it generates**
+- JSDoc on all exported functions, components, and interfaces
+- `@param`, `@returns`, and `@example` tags
+- Props table in the component's doc file
+- README update if the module is a significant feature
+- Coverage report showing documented vs. undocumented exports
+
+---
+
+### /commit-msg
+
+Writes a conventional commit message for your currently staged changes. Reads the diff, infers the type and scope, and produces a message that follows the `type(scope): description` format with an optional body.
+
+**Usage**
+```
+/commit-msg
+/commit-msg --with-body
+```
+
+**When to use**: When you've staged your changes and want a well-formed commit message without writing it from scratch.
+
+**What it produces**
+- Conventional commit type (`feat`, `fix`, `refactor`, `chore`, `docs`, etc.)
+- Scope derived from the files changed
+- Concise imperative description under 72 characters
+- Optional body with bullet points summarizing key changes
+- `Co-Authored-By` trailer if applicable
+
+---
+
+### /env-setup
+
+Sets up local environment variables and configuration for a new developer joining the project. Reads existing `.env.example` files, explains what each variable does, and generates a populated `.env.local` with safe defaults.
+
+**Usage**
+```
+/env-setup
+/env-setup --service sitecore
+/env-setup --service vercel
+```
+
+**When to use**: When onboarding to a project for the first time, after cloning the repo, or when a new service integration requires new environment variables.
+
+**What it covers**
+- Parsing `.env.example` with explanations for each variable
+- Required vs. optional variable identification
+- Safe local defaults where applicable
+- Service-specific setup steps (Sitecore rendering host, Vercel env, etc.)
+- Links to where secrets can be retrieved (without logging the secrets themselves)
 
 ---
 
@@ -162,12 +607,16 @@ In Claude Code, type the command name:
 /prompt-help
 ```
 
-Some commands accept arguments:
+Most commands work best with a target file or argument:
 
 ```
 /new-component ProductCard
 /understand src/lib/auth.ts
 /test src/components/Header.tsx
+/review src/features/checkout/
+/accessibility-audit src/components/Modal.tsx
 ```
 
-Commands work best when you provide context — the more specific you are, the better the output.
+Commands work best when you provide context. The more specific you are about the file, behavior, and constraints, the more useful the output.
+
+If you're ever unsure what command to reach for, run `/prompt-help` first — it will guide you to the right one.
