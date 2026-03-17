@@ -9,7 +9,7 @@ Practical techniques to get the most out of AI Kit and AI-assisted development.
 Add to your `~/.zshrc` or `~/.bashrc`:
 
 ```bash
-alias aik="npx ai-kit"
+alias aik="npx @mikulgohil/ai-kit"
 ```
 
 Now you can run:
@@ -121,7 +121,7 @@ Run `ai-kit init` on every project in your org. This ensures:
 New developer joining the team?
 
 1. Clone the repo
-2. Run `npx ai-kit init` (if not already committed)
+2. Run `npx @mikulgohil/ai-kit init` (if not already committed)
 3. Read `ai-kit/guides/getting-started.md`
 4. Use `/understand` on unfamiliar modules
 5. Use `/prompt-help` when unsure how to ask
@@ -187,8 +187,8 @@ For monorepos with different stacks per package:
 
 ```bash
 # Run in each package directory
-cd packages/web && npx ai-kit init
-cd packages/api && npx ai-kit init
+cd packages/web && npx @mikulgohil/ai-kit init
+cd packages/api && npx @mikulgohil/ai-kit init
 ```
 
 Each package gets its own tailored `CLAUDE.md`.

@@ -11,10 +11,10 @@ Common issues and how to resolve them.
 **Fix**:
 ```bash
 # Use npx (recommended)
-npx ai-kit init
+npx @mikulgohil/ai-kit init
 
 # Or install globally if preferred
-npm install -g ai-kit
+npm install -g @mikulgohil/ai-kit
 ai-kit init
 ```
 
@@ -39,7 +39,7 @@ nvm use 18
 **Fix**:
 ```bash
 # Option 1: Use npx (avoids global install)
-npx ai-kit init
+npx @mikulgohil/ai-kit init
 
 # Option 2: Fix npm permissions
 mkdir -p ~/.npm-global
@@ -59,12 +59,12 @@ export PATH=~/.npm-global/bin:$PATH
 **Fix**: Navigate to your project root (where `package.json` lives) and run again:
 ```bash
 cd /path/to/your/project
-npx ai-kit init
+npx @mikulgohil/ai-kit init
 ```
 
 Or specify the path directly:
 ```bash
-npx ai-kit init /path/to/your/project
+npx @mikulgohil/ai-kit init /path/to/your/project
 ```
 
 ### Wrong framework detected
