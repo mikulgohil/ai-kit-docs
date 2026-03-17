@@ -1,5 +1,6 @@
 export default {
   index: 'Introduction',
+  'ai-self-improvement': 'AI That Improves Itself',
   'getting-started': 'Getting Started',
   'cli-reference': 'CLI Reference',
   'what-gets-generated': 'What Gets Generated',

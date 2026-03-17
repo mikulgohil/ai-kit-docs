@@ -33,6 +33,18 @@ AI Kit scans your project, detects everything automatically, and generates:
 
 ## Key Features
 
+### AI That Improves Itself
+
+This is the feature that sets AI Kit apart. The generated rules don't just give the AI context — they make it **actively better**:
+
+- **Prompt Quality Guard** — When you write a vague request like "fix this", the AI doesn't guess. It asks: *"Which file? What's the expected vs actual behavior?"* One clarification prevents 10 minutes of wrong output.
+- **Self-Enforcement** — The AI auto-creates documentation for complex components, auto-adds regression tests for bug fixes, auto-updates change logs, and flags incomplete TODOs — even when you don't ask.
+- **Structured Commands** — All 25 slash commands use prompt engineering (role framing, mandatory steps, output templates, self-checks) so you get consistent, reviewable output every time, across every project.
+
+[Read the full deep-dive on AI Self-Improvement](/docs/ai-self-improvement)
+
+### Everything Else
+
 - **Zero configuration** — detects your stack automatically from `package.json`, config files, and directory structure
 - **Stack-aware rules** — generates different rules for App Router vs Pages Router, Sitecore vs plain Next.js, Tailwind vs SCSS
 - **Safe updates** — `ai-kit update` preserves your manual edits using `AI-KIT:START/END` markers

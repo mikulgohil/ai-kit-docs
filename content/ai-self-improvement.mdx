@@ -1,0 +1,257 @@
+# AI That Improves Itself
+
+Most AI coding tools are passive — they do exactly what you ask, nothing more. If you write a vague prompt, you get vague output. If you forget to ask for tests, you don't get tests. If you skip documentation, it stays skipped.
+
+**AI Kit changes this.** The generated rules make your AI assistant actively push back on bad prompts, auto-enforce standards even when you don't ask, and catch mistakes before they reach code review.
+
+This is not a plugin or a runtime process. It's built into the `CLAUDE.md` and `.cursorrules` files that AI Kit generates — the AI reads these rules at the start of every conversation and follows them automatically.
+
+---
+
+## Feature 1: Prompt Quality Guard
+
+When a developer writes a vague or incomplete request, the AI doesn't just try its best and hope — it asks targeted clarifying questions first.
+
+### How It Works
+
+The generated rules include this directive:
+
+```markdown
+## Prompt Quality Guard
+
+When a developer's request is vague or missing critical context,
+you MUST push back before proceeding.
+
+- If the request is missing a target file or scope, ask:
+  "Which file or component should I focus on?"
+
+- If the request is ambiguous (e.g., "fix this", "make it work"),
+  ask 1-2 targeted questions:
+  "What specifically is broken — expected vs actual behavior?"
+
+- If the request could produce very different outputs, ask for constraints:
+  "Should this be a Server or Client Component? What props does it need?"
+
+Never guess when you can ask. A 10-second clarification saves
+10 minutes of wrong output.
+```
+
+### Before vs After
+
+**Without Prompt Quality Guard:**
+```
+Developer: "fix the auth"
+AI: *reads 15 files, guesses the problem, generates 200 lines
+    of changes that may or may not fix the right issue*
+```
+
+**With Prompt Quality Guard:**
+```
+Developer: "fix the auth"
+AI: "I want to help fix the auth issue. A couple quick questions:
+     1. Which file is the auth problem in? (e.g., src/lib/auth.ts)
+     2. What's happening — are users getting logged out, failing
+        to log in, or seeing an error?"
+Developer: "Users are getting logged out after 5 minutes, the
+           session timeout is wrong in src/lib/auth.ts"
+AI: *reads the exact file, finds the timeout config, fixes it
+    with a targeted 3-line change*
+```
+
+The difference: **one clarification question prevents 10 minutes of wasted tokens and wrong output.**
+
+### What Triggers It
+
+| Developer Says | AI Responds |
+|---------------|-------------|
+| "fix this" | "Which file? What's the expected vs actual behavior?" |
+| "make it work" | "What specifically isn't working? What do you see vs what you expect?" |
+| "create a component" | "What should it do? What props? Server or Client Component?" |
+| "improve this code" | "What aspect — performance, readability, type safety, or something else?" |
+| "add some tests" | "For which file? Should I focus on happy path, error cases, or edge cases?" |
+
+The AI only asks when the request is genuinely ambiguous. Clear, specific requests proceed immediately without questions.
+
+---
+
+## Feature 2: Self-Enforcement Rules
+
+Even when a developer doesn't ask for documentation, tests, or logging, the AI enforces team standards automatically.
+
+### What Gets Auto-Enforced
+
+| Rule | What the AI Does | Why |
+|------|-----------------|-----|
+| **Auto-document complex components** | When creating or modifying a component with >50 lines or >3 props, the AI creates/updates its `.docs.md` file — even if the developer didn't ask | Complex components without docs become tribal knowledge |
+| **Auto-test bug fixes** | When fixing a bug, the AI adds a regression test that reproduces the bug before fixing it — even if the developer didn't ask | Without a test, the same bug can come back |
+| **Auto-add JSDoc** | When generating code, the AI adds JSDoc comments to all exported functions — even if the developer didn't ask | Exported functions without JSDoc are invisible to IDE tooltips |
+| **Auto-update Change Logs** | After modifying a documented component, the AI appends an entry to the component's Change Log — even if the developer didn't ask | Change history prevents "who changed this and why?" questions |
+| **Flag incomplete TODOs** | When the AI encounters a `// TODO` without a ticket number, it flags it to the developer | Untracked TODOs never get done |
+
+### Example: Auto-Documentation
+
+```
+Developer: "Add a loading prop to the ProductCard component"
+
+AI does ALL of the following:
+1. Adds the loading prop to ProductCard.tsx
+2. Updates ProductCard.docs.md props table with the new prop
+3. Adds a Change Log entry: "2026-03-17: Added loading prop for skeleton state"
+4. Updates the JSDoc comment above the component
+
+The developer asked for ONE thing. The AI did FOUR things —
+because the rules say documentation must stay in sync.
+```
+
+### Example: Auto-Testing Bug Fixes
+
+```
+Developer: "The checkout total is wrong when there's a discount"
+
+AI does:
+1. Reads the checkout calculation code
+2. Writes a failing test that reproduces the bug:
+   "test: cart with 10% discount should show $90, not $100"
+3. Fixes the calculation
+4. Confirms the test now passes
+
+The developer asked to fix a bug. The AI also added a
+regression test — because the rules say every bug fix
+needs a test.
+```
+
+---
+
+## Feature 3: Structured Command Output
+
+Every slash command produces output in a **consistent, predictable format** — regardless of which developer runs it, on which project, at what time.
+
+### How It Works
+
+Each of the 25 slash commands has:
+
+1. **Role framing** — The AI assumes a specific expert persona
+   ```
+   > Role: You are a senior accessibility engineer certified in WCAG 2.1...
+   ```
+
+2. **Mandatory numbered steps** — The AI cannot skip steps
+   ```
+   1. Read the target file (MUST do this first)
+   2. Check semantic HTML
+   3. Check ARIA attributes
+   ...
+   ```
+
+3. **Structured output template** — Every run produces the same format
+   ```
+   ## Accessibility Audit Results
+   | # | Issue | Where | WCAG | Fix |
+   |---|-------|-------|------|-----|
+   ```
+
+4. **Self-check** — Before responding, the AI verifies it covered everything
+   ```
+   Before responding, verify:
+   - [ ] You read the target file(s)
+   - [ ] You covered every section
+   - [ ] Your suggestions reference specific code
+   ```
+
+5. **Constraints** — Hard rules the AI cannot break
+   ```
+   - Do NOT give generic advice
+   - Do NOT skip sections
+   - If no issues found, explicitly say "No issues found"
+   ```
+
+### The Result
+
+Developer A running `/security-check` on Project X gets a report in the same format as Developer B running `/security-check` on Project Y. Both get:
+- A severity-sorted table
+- File paths and line numbers for every issue
+- Before/after code for every fix
+- OWASP references
+- A summary with go/no-go recommendation
+
+**Consistency across developers, projects, and time.**
+
+---
+
+## Feature 4: Cross-Project Standardization
+
+When AI Kit is installed on multiple projects, every project gets the same base standards. This means:
+
+### Same Documentation Standard
+- Every complex component gets a `.docs.md` file with the same structure: purpose, props table, usage examples, edge cases, change log
+- Simple components get JSDoc — no unnecessary doc files
+- The threshold is consistent: >50 lines OR >3 props
+
+### Same Testing Expectations
+- Every new component gets a test file
+- Tests follow the same pattern: happy path, error states, edge cases, accessibility
+- React Testing Library with behavior-driven tests
+
+### Same Code Quality
+- Same naming conventions (PascalCase components, camelCase hooks, UPPER_SNAKE constants)
+- Same import order (external, internal, local, type)
+- Same component size limits (200 lines max)
+- Same error handling patterns (never blank screens)
+
+### Same Review Standards
+- `/pre-pr` checks the same 10 categories on every project
+- `/review` evaluates the same criteria everywhere
+- `/security-check` scans for the same vulnerability classes
+
+**The AI becomes your team's coding standards — enforced automatically, consistently, every time.**
+
+---
+
+## How This Compares
+
+| Capability | Without AI Kit | With AI Kit |
+|-----------|---------------|-------------|
+| Vague prompt | AI guesses, often wrong | AI asks clarifying questions |
+| Missing docs | Nothing happens | AI auto-creates docs for complex components |
+| Bug fix without test | Bug can recur | AI auto-adds regression test |
+| Code review feedback | Reviewer catches issues | `/pre-pr` catches them before review |
+| Cross-project consistency | Every project different | Same standards everywhere |
+| New developer onboarding | "Read the wiki" | AI already knows the conventions |
+| Command output format | Unpredictable | Same structured format every time |
+
+---
+
+## Technical Details
+
+These features are implemented through three mechanisms:
+
+1. **Prompt Quality Guard** — Directive in the generated `CLAUDE.md` and `.cursorrules` that instructs the AI to ask questions when input is vague
+
+2. **Self-Enforcement Rules** — Directive in the generated rules that instructs the AI to auto-create documentation, tests, and change log entries regardless of whether the developer asked
+
+3. **Structured Commands** — Each `.md` file in `.claude/commands/` uses prompt engineering patterns (role framing, mandatory steps, output templates, self-checks, constraints) to produce consistent output
+
+None of these require runtime code, background processes, or API calls. They are pure prompt engineering — instructions baked into the files that AI tools read at conversation start.
+
+---
+
+## Try It
+
+```bash
+# Install AI Kit on your project
+npx @horizontal/ai-kit init
+
+# Open Claude Code and try a vague prompt
+"fix the styling"
+# Watch the AI ask you which component and what's wrong
+
+# Try a slash command
+/pre-pr
+# Watch it produce a structured 10-category audit
+
+# Modify a complex component
+"Add a variant prop to HeroBanner"
+# Watch the AI auto-update the docs and change log
+```
+
+See [Getting Started](/docs/getting-started) for the full setup walkthrough.
