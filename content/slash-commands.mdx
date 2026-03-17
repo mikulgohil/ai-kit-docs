@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 26 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 38 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -45,6 +45,8 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/extract-hook` | Building | Pulls logic out of a component into a custom hook |
 | `/figma-to-code` | Building | Implements a Figma design using project tokens |
 | `/design-tokens` | Building | Audits and manages your design token system |
+| `/schema-gen` | Building | Generates TypeScript types and Zod schemas from data |
+| `/storybook-gen` | Building | Generates Storybook stories with controls and play functions |
 | `/review` | Quality & Review | Deep code review following project standards |
 | `/pre-pr` | Quality & Review | Full pre-PR checklist before you open a pull request |
 | `/test` | Quality & Review | Generates unit and integration tests for any file |
@@ -52,15 +54,25 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/security-check` | Quality & Review | Scans code for common security vulnerabilities |
 | `/responsive-check` | Quality & Review | Verifies responsive behavior across breakpoints |
 | `/type-fix` | Quality & Review | Resolves TypeScript errors and tightens types |
+| `/perf-audit` | Quality & Review | Lighthouse-style performance audit with Core Web Vitals |
+| `/bundle-check` | Quality & Review | Analyzes bundle size and suggests optimizations |
+| `/i18n-check` | Quality & Review | Finds hardcoded strings and internationalization gaps |
 | `/fix-bug` | Maintenance | Guided systematic debugging workflow |
 | `/refactor` | Maintenance | Refactors code while preserving behavior |
 | `/optimize` | Maintenance | Performance analysis and optimization |
 | `/migrate` | Maintenance | Migrates code to a new API, pattern, or version |
 | `/dep-check` | Maintenance | Audits dependencies for issues and updates |
 | `/sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
+| `/docker-debug` | Maintenance | Analyzes Dockerfiles for security and efficiency |
+| `/ci-fix` | Maintenance | Debugs CI/CD pipeline failures and optimizations |
+| `/db-migrate` | Maintenance | Creates safe database migrations with rollback plans |
+| `/dependency-graph` | Maintenance | Maps module dependencies and finds circular imports |
 | `/document` | Workflow | Generates JSDoc, README, and component docs |
 | `/commit-msg` | Workflow | Writes a conventional commit message for staged changes |
 | `/env-setup` | Workflow | Sets up local environment variables and configuration |
+| `/changelog` | Workflow | Generates formatted changelogs from git history |
+| `/release` | Workflow | Guided release workflow with versioning and tagging |
+| `/visual-diff` | Workflow | Visual regression testing plan for UI changes |
 
 ---
 
@@ -263,6 +275,47 @@ Audits and manages the design token system for your project. Maps Figma token na
 
 ---
 
+### /schema-gen
+
+Generates TypeScript interfaces and Zod validation schemas from API responses, JSON samples, or GraphQL schemas.
+
+**Usage**
+```
+/schema-gen
+/schema-gen src/api/response.json
+/schema-gen https://api.example.com/products
+```
+
+**When to use**: When integrating a new API, when API responses change, or when you need runtime validation alongside types.
+
+**What it generates**
+- TypeScript interfaces with proper optionality
+- Zod schemas for runtime validation
+- Type guards for narrowing
+- API response wrapper types
+
+---
+
+### /storybook-gen
+
+Generates comprehensive Storybook stories for a component with typed controls, play functions for interaction testing, and visual state coverage.
+
+**Usage**
+```
+/storybook-gen src/components/Button.tsx
+/storybook-gen src/components/Modal.tsx
+```
+
+**When to use**: After creating a new component, when adding Storybook to a project, or when expanding story coverage.
+
+**What it generates**
+- CSF3 stories with `satisfies Meta` typing
+- Stories for every meaningful prop combination and visual state
+- Play functions for interactive components
+- Accessibility test integration
+
+---
+
 ## Quality & Review
 
 Commands for catching problems before they reach production or a reviewer.
@@ -425,6 +478,69 @@ Resolves TypeScript errors in a file and tightens loose typing. Explains the roo
 
 ---
 
+### /perf-audit
+
+Lighthouse-style performance audit covering Core Web Vitals, resource loading, render-blocking resources, and caching strategies.
+
+**Usage**
+```
+/perf-audit
+/perf-audit src/app/page.tsx
+```
+
+**When to use**: Before a performance review, when Lighthouse scores are low, or after shipping a large feature.
+
+**What it checks**
+- Core Web Vitals (LCP, CLS, INP)
+- Resource loading and render-blocking assets
+- Font loading strategies
+- Third-party script impact
+- Caching headers and strategies
+
+---
+
+### /bundle-check
+
+Analyzes bundle size, identifies heavy imports, suggests tree-shaking opportunities, and recommends code splitting points.
+
+**Usage**
+```
+/bundle-check
+/bundle-check src/components/Dashboard.tsx
+```
+
+**When to use**: Before a release, when bundle size has grown, or when page load times have increased.
+
+**What it checks**
+- Heavy dependencies and lighter alternatives
+- Tree-shaking opportunities (named vs default imports)
+- Dynamic import candidates for code splitting
+- Duplicate packages in the bundle
+- Import cost analysis
+
+---
+
+### /i18n-check
+
+Finds hardcoded user-facing strings, missing translation keys, and internationalization gaps including RTL support and locale formatting.
+
+**Usage**
+```
+/i18n-check
+/i18n-check src/components/
+```
+
+**When to use**: Before launching in a new locale, during an i18n sprint, or when auditing for localization readiness.
+
+**What it checks**
+- Hardcoded user-facing strings that should be translated
+- Missing translation keys across locale files
+- String concatenation that should use interpolation
+- Date, number, and currency formatting
+- RTL layout support
+
+---
+
 ## Maintenance
 
 Commands for improving, fixing, and managing existing code.
@@ -560,6 +676,90 @@ Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in 
 
 ---
 
+### /docker-debug
+
+Analyzes Dockerfiles and docker-compose configurations for security risks, build inefficiencies, image size issues, and best practice violations.
+
+**Usage**
+```
+/docker-debug
+/docker-debug Dockerfile.production
+```
+
+**When to use**: When building or optimizing Docker images, debugging container issues, or reviewing container security.
+
+**What it checks**
+- Multi-stage build opportunities
+- Layer caching optimization
+- Security issues (running as root, exposed secrets)
+- Image size reduction opportunities
+- Docker Compose health checks and dependencies
+
+---
+
+### /ci-fix
+
+Debugs CI/CD pipeline failures, identifies caching opportunities, and suggests performance optimizations for GitHub Actions and other CI systems.
+
+**Usage**
+```
+/ci-fix
+/ci-fix .github/workflows/ci.yml
+```
+
+**When to use**: When a CI pipeline is failing, running slowly, or needs optimization.
+
+**What it checks**
+- Failure root cause analysis
+- Caching configuration (node_modules, build cache)
+- Parallel job opportunities
+- Security best practices (pinned actions, scoped permissions)
+- Missing steps (lint, test, build verification)
+
+---
+
+### /db-migrate
+
+Creates safe database migrations with rollback strategies for Prisma, Drizzle, or raw SQL, with data loss risk assessment and backward compatibility checking.
+
+**Usage**
+```
+/db-migrate add column email to users
+/db-migrate rename column name to full_name in customers
+```
+
+**When to use**: When making schema changes, before deploying database modifications, or when planning zero-downtime migrations.
+
+**What it covers**
+- Data loss risk assessment
+- Backward compatibility analysis
+- Forward and rollback migration code
+- Index and foreign key recommendations
+- Multi-step strategy for destructive changes
+
+---
+
+### /dependency-graph
+
+Maps module import relationships, finds circular dependencies, analyzes coupling metrics, and identifies architectural boundary violations.
+
+**Usage**
+```
+/dependency-graph src/features/
+/dependency-graph src/components/
+```
+
+**When to use**: When the codebase feels tangled, during architecture reviews, or when planning a refactoring initiative.
+
+**What it analyzes**
+- Circular dependency detection (direct and indirect)
+- Afferent/efferent coupling metrics and instability ratios
+- Cross-feature import violations
+- Hub modules (high-risk bottlenecks)
+- Recommended extraction points
+
+---
+
 ## Workflow
 
 Commands that support day-to-day development process rather than specific code tasks.
@@ -626,6 +826,68 @@ Sets up local environment variables and configuration for a new developer joinin
 - Safe local defaults where applicable
 - Service-specific setup steps (Sitecore rendering host, Vercel env, etc.)
 - Links to where secrets can be retrieved (without logging the secrets themselves)
+
+---
+
+### /changelog
+
+Generates a formatted changelog entry from git history since the last release tag, categorized by change type following the Keep a Changelog format.
+
+**Usage**
+```
+/changelog
+/changelog --since v1.0.0
+```
+
+**When to use**: Before a release, when preparing release notes, or when catching up on what changed.
+
+**What it produces**
+- Categorized changes (Added, Fixed, Changed, Breaking)
+- Scope grouping from conventional commits
+- User-facing descriptions (not raw commit messages)
+- Semantic version bump recommendation
+
+---
+
+### /release
+
+Guided release workflow that walks through version decision, changelog generation, package.json update, git tag creation, and release notes preparation.
+
+**Usage**
+```
+/release
+/release --type minor
+```
+
+**When to use**: When cutting a new release. Ensures nothing is missed in the release process.
+
+**What it produces**
+- Pre-release state check (clean tree, tests passing)
+- Version bump recommendation with reasoning
+- Complete changelog entry
+- Copy-pasteable release commands
+- Post-release verification checklist
+
+---
+
+### /visual-diff
+
+Creates a visual regression test plan for changed components, mapping impact radius and identifying specific states and breakpoints to check.
+
+**Usage**
+```
+/visual-diff
+/visual-diff src/components/Button.tsx
+```
+
+**When to use**: After making UI changes, before merging visual PRs, or during QA review.
+
+**What it covers**
+- Changed component identification
+- Impact radius mapping (parent and consumer components)
+- Visual test matrix (states x breakpoints)
+- CSS side effect warnings
+- Manual and automated test recommendations
 
 ---
 

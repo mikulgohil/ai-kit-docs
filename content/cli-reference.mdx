@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides three commands: `init`, `update`, and `reset`.
+AI Kit provides eight commands: `init`, `update`, `reset`, `tokens`, `doctor`, `diff`, `export`, and `stats`.
 
 ## `ai-kit init [path]`
 
@@ -120,10 +120,171 @@ npx @mikulgohil/ai-kit reset ./path/to/project
 
 ---
 
+## `ai-kit tokens`
+
+Show token usage summary, cost estimates, and analytics.
+
+```bash
+ai-kit tokens
+ai-kit tokens --export
+ai-kit tokens --csv
+ai-kit tokens --budget 100
+```
+
+### Options
+
+| Option | Description |
+|---|---|
+| `--export` | Export data and open interactive HTML dashboard |
+| `--csv` | Export daily usage data to CSV file |
+| `--budget <amount>` | Set monthly budget in USD (default: $20) |
+
+### What it shows
+
+- **Period summaries**: Today, this week, this month (sessions, tokens, cost)
+- **Budget progress**: Visual progress bar with percentage used
+- **Budget alerts**: Warnings at 50%, 75%, 90% thresholds
+- **Per-project breakdown**: Cost per project ranked by usage
+- **Week-over-week trend**: Cost comparison with previous week
+- **Model recommendations**: Suggests Sonnet vs Opus usage optimization
+- **ROI estimate**: Estimated time saved and developer cost offset
+
+---
+
+## `ai-kit doctor [path]`
+
+Diagnose your AI Kit setup and check for issues.
+
+```bash
+ai-kit doctor
+ai-kit doctor ./path/to/project
+```
+
+### What it checks
+
+| Check | Description |
+|---|---|
+| Config file | Verifies `ai-kit.config.json` exists and is readable |
+| Version match | Compares config version with installed CLI version |
+| File integrity | Confirms all listed templates exist on disk |
+| Skills check | Verifies all skills are present in `.claude/skills/` and `.cursor/skills/` |
+| Guides check | Verifies all guides exist in `ai-kit/guides/` |
+| Staleness | Re-scans project and compares with saved config to detect stack changes |
+| MCP servers | Checks configuration for Playwright, Context7, GitHub, Perplexity, Figma MCPs |
+| Recommended tools | Checks for Playwright, ESLint, Prettier, axe-core, Knip, Bundle Analyzer |
+
+### Output
+
+```
+AI Kit — Doctor
+
+✓ ai-kit.config.json found (v1.0.0)
+✓ Version matches CLI (v1.0.0)
+✓ CLAUDE.md exists and in sync
+✓ .cursorrules exists and in sync
+✓ 38/38 skills present
+✓ 5/5 guides present
+⚠ Stack may have changed — detected new styling: scss
+⚠ Perplexity MCP not configured
+
+Summary: 6 passed, 2 warnings, 0 issues
+```
+
+---
+
+## `ai-kit diff [path]`
+
+Preview what would change on `ai-kit update` without writing any files.
+
+```bash
+ai-kit diff
+ai-kit diff ./path/to/project
+```
+
+### What it shows
+
+- **Stack changes**: New technologies detected, versions changed, or technologies removed
+- **File changes**: Which generated files would be modified, added, or remain unchanged
+- **Fragment changes**: Which template fragments would be added or removed
+
+### Output
+
+```
+AI Kit — Diff (dry run)
+
+Stack Changes:
+  + scss detected (styling)
+  ~ Next.js version: 15.0.0 → 15.1.0
+
+File Changes:
+  modified  CLAUDE.md (template fragments changed: +monorepo)
+  modified  .cursorrules (template fragments changed: +monorepo)
+  unchanged .claude/skills/ (38 skills)
+  unchanged ai-kit/guides/ (5 guides)
+
+Summary: 2 files would be modified, 0 added, 0 removed
+Run `ai-kit update` to apply these changes.
+```
+
+---
+
+## `ai-kit export [path]`
+
+Export your AI rules to other AI editor tools.
+
+```bash
+ai-kit export
+ai-kit export --format windsurf
+ai-kit export --format all
+```
+
+### Options
+
+| Option | Description |
+|---|---|
+| `--format <format>` | Target format: `windsurf`, `aider`, `cline`, or `all` |
+
+### Supported Formats
+
+| Format | Output File | Tool |
+|---|---|---|
+| Windsurf | `.windsurfrules` | Windsurf AI Editor |
+| Aider | `.aider.conf.yml` | Aider CLI |
+| Cline | `.clinerules` | Cline VS Code Extension |
+
+The exported files contain the same rules as your CLAUDE.md, reformatted for each tool's expected format. AI-KIT markers are stripped during export.
+
+---
+
+## `ai-kit stats [path]`
+
+Show project setup statistics and complexity analysis.
+
+```bash
+ai-kit stats
+ai-kit stats ./path/to/project
+```
+
+### What it shows
+
+- **Project overview**: Name, version, generation date, package manager
+- **Stack complexity score**: Weighted score (1-10) with label (Simple/Moderate/Complex/Enterprise)
+- **Active rules**: Which template fragments are included
+- **Skills breakdown**: Total count grouped by category
+- **Tools status**: Detected vs missing development tools
+- **MCP servers**: Configured vs missing MCP integrations
+
+---
+
 ## Global Options
 
 ```bash
-ai-kit --version    # Show version number
-ai-kit --help       # Show help
-ai-kit init --help  # Show command-specific help
+ai-kit --version      # Show version number
+ai-kit --help         # Show help
+ai-kit init --help    # Show command-specific help
+ai-kit tokens --help  # Show tokens command help
+ai-kit doctor --help  # Show doctor command help
+ai-kit diff --help    # Show diff command help
+ai-kit export --help  # Show export command help
+ai-kit stats --help   # Show stats command help
 ```

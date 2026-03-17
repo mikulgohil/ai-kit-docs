@@ -1,0 +1,89 @@
+# Changelog
+
+All notable changes to AI Kit are documented here. This project follows [Semantic Versioning](https://semver.org/).
+
+---
+
+## v1.1.0 — 2026-03-17
+
+### New CLI Commands
+
+Four new commands for deeper project insights and cross-tool compatibility:
+
+| Command | Description |
+|---|---|
+| `ai-kit doctor` | Diagnose your setup — checks file integrity, version sync, staleness, MCP health, and missing tools |
+| `ai-kit diff` | Dry-run preview — shows what would change on `ai-kit update` without writing files |
+| `ai-kit export` | Export rules to Windsurf (`.windsurfrules`), Aider (`.aider.conf.yml`), and Cline (`.clinerules`) |
+| `ai-kit stats` | Project analytics — stack complexity score, skills breakdown, tools and MCP status |
+
+### New Skills (12)
+
+Expanded the skills library from 26 to 38:
+
+| Skill | Category | Description |
+|---|---|---|
+| `/perf-audit` | Quality & Review | Lighthouse-style performance audit with Core Web Vitals |
+| `/bundle-check` | Quality & Review | Bundle size analysis with tree-shaking and code splitting suggestions |
+| `/i18n-check` | Quality & Review | Internationalization audit — hardcoded strings, missing keys, RTL support |
+| `/schema-gen` | Building | Generate TypeScript types and Zod schemas from API responses or JSON |
+| `/storybook-gen` | Building | Generate Storybook stories with controls, play functions, and visual states |
+| `/docker-debug` | Maintenance | Analyze Dockerfiles for security, efficiency, and best practices |
+| `/ci-fix` | Maintenance | Debug CI/CD pipeline failures and optimize build performance |
+| `/db-migrate` | Maintenance | Create safe database migrations with rollback plans |
+| `/dependency-graph` | Maintenance | Map module dependencies, find circular imports, analyze coupling |
+| `/changelog` | Workflow | Generate formatted changelogs from git history |
+| `/release` | Workflow | Guided release workflow with versioning, tagging, and release notes |
+| `/visual-diff` | Workflow | Visual regression test plan for UI changes |
+
+### Template System Improvements
+
+- **Strictness levels**: Choose between `strict`, `standard` (default), or `relaxed` rule enforcement during `ai-kit init`
+- **Custom fragments**: Add your own rule markdown files to `.ai-kit/fragments/` — they're automatically included in generated configs
+- **Expanded variable system**: More placeholder tokens available for template customization
+
+### Token Tracking Enhancements
+
+- **Per-project breakdown**: See cost per project ranked by usage
+- **Budget alerts**: Warnings at 50%, 75%, and 90% of monthly budget
+- **Model recommendations**: Suggests Sonnet vs Opus usage optimization when Opus cost is disproportionate
+- **CSV export**: `ai-kit tokens --csv` exports daily usage data
+- **Custom budget**: `ai-kit tokens --budget 100` sets a custom monthly budget
+- **Week-over-week trends**: Cost comparison with the previous week
+- **ROI estimate**: Estimated time saved and developer cost offset based on session count
+
+### Configuration Changes
+
+`ai-kit.config.json` now includes two new fields:
+
+```json
+{
+  "strictness": "standard",
+  "customFragments": []
+}
+```
+
+These are backward-compatible — existing configs without these fields default to `"standard"` strictness and no custom fragments.
+
+---
+
+## v1.0.1 — 2026-03-10
+
+### Fixed
+
+- Minor bug fixes and improvements
+
+---
+
+## v1.0.0 — 2026-03-01
+
+### Initial Release
+
+- Project scanner with 9 detection modules (Next.js, Sitecore, styling, TypeScript, monorepo, package manager, Figma, tools, MCP)
+- Template generator with 8 fragments (base, nextjs-app-router, nextjs-pages-router, sitecore-xmc, tailwind, typescript, monorepo, figma)
+- 26 auto-discovered skills for Claude Code and Cursor
+- 5 developer guides
+- 3 documentation scaffolds
+- Token usage tracking with HTML dashboard export
+- Marker-based safe merging for updates
+- Support for Claude Code and Cursor AI editors

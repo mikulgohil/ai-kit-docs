@@ -58,6 +58,32 @@ The content is assembled from **template fragments** based on your scan:
 | `monorepo` | Turborepo, Nx, Lerna, or workspaces detected |
 | `figma` | Figma MCP, design tokens, or figma-code-cli detected |
 
+### Strictness Levels
+
+During `ai-kit init`, you choose a strictness level that controls how the AI enforces rules:
+
+| Level | Behavior |
+|---|---|
+| **Standard** (default) | Follow rules by default, use judgment for edge cases |
+| **Strict** | Enforce all rules strictly. No exceptions without explicit approval. Zero tolerance for `any` types, missing tests, or accessibility gaps |
+| **Relaxed** | Rules are guidelines, not hard requirements. Prioritize shipping speed over perfection |
+
+The strictness level is appended to the generated CLAUDE.md and .cursorrules files as a directive.
+
+### Custom Fragments
+
+You can add your own rule fragments by creating markdown files in `.ai-kit/fragments/`:
+
+```
+.ai-kit/
+  fragments/
+    team-conventions.md
+    api-standards.md
+    design-system.md
+```
+
+These are automatically detected and appended to the generated CLAUDE.md and .cursorrules files during `ai-kit init` and `ai-kit update`. This lets you add project-specific rules without modifying the generated sections.
+
 ### What the Base Rules Cover
 
 - **Workflow**: Read before writing, understand before coding, ask when unclear
@@ -110,7 +136,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-26 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+38 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -134,15 +160,14 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 
 | Category | Skills |
 |---|---|
-| **Getting Started** | `prompt-help`, `understand` |
-| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens` |
-| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix` |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` |
-| **Workflow** | `document`, `commit-msg`, `env-setup` |
+| **Building** | `prompt-help`, `understand`, `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` |
+| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `docker-debug`, `ci-fix`, `db-migrate`, `dependency-graph` |
+| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `visual-diff` |
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 26 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 38 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/
@@ -193,6 +218,8 @@ Configuration file that tracks what AI Kit generated:
 ```json
 {
   "version": "1.0.0",
+  "strictness": "standard",
+  "customFragments": [],
   "scanResult": {
     "framework": "nextjs",
     "nextjsVersion": "15.1.0",

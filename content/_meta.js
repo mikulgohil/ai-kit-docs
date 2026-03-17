@@ -14,5 +14,6 @@ export default {
   troubleshooting: 'Troubleshooting',
   faq: 'FAQ',
   'how-it-works': 'How It Works',
+  changelog: 'Changelog',
   contributing: 'Contributing',
 }
