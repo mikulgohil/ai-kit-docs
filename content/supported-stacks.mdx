@@ -1,0 +1,134 @@
+# Supported Tech Stacks
+
+AI Kit detects seven technology dimensions from your project. Here's how each detection works and what it triggers.
+
+## Frameworks
+
+### Next.js
+
+**Detection**: `next` package in `dependencies` or `devDependencies`
+
+**Version extraction**: Reads version from `package.json`, strips range characters (`^`, `~`, `>=`)
+
+**Router detection**:
+- `app/` or `src/app/` directory exists → **App Router**
+- `pages/` or `src/pages/` directory exists → **Pages Router**
+- Both exist → **Hybrid** (both rule sets applied)
+- Neither found → Prompts you to choose
+
+**Rules generated**: Next.js-specific patterns for data fetching, routing, Server Components, Server Actions, file structure, and common mistakes.
+
+### React (without Next.js)
+
+**Detection**: `react` in deps without `next`
+
+**Rules generated**: Base rules only — no framework-specific fragment.
+
+---
+
+## CMS
+
+### Sitecore XM Cloud
+
+**Detection**: `@sitecore-content-sdk/nextjs` or `@sitecore-jss/sitecore-jss-nextjs` in deps
+
+**Rules generated**: Sitecore component patterns, field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`), GraphQL patterns, placeholder usage, and common XM Cloud mistakes.
+
+### Sitecore JSS (Legacy)
+
+**Detection**: `@sitecore-jss/sitecore-jss-react` in deps (without the XM Cloud packages)
+
+**Rules generated**: Same Sitecore fragment with JSS-specific guidance.
+
+---
+
+## Styling
+
+### Tailwind CSS
+
+**Detection** (any of):
+- `tailwindcss` or `@tailwindcss/postcss` in deps
+- `tailwind.config.js`, `tailwind.config.ts`, or `tailwind.config.mjs` file exists
+
+**Version extracted**: From the dep version string
+
+**Rules generated**: Tailwind utility patterns, design token conventions, responsive patterns.
+
+### SCSS
+
+**Detection**: `sass` or `node-sass` in deps
+
+### styled-components
+
+**Detection**: `styled-components` in deps
+
+### CSS Modules
+
+**Detection**: Included in the styling scan when CSS module files are present
+
+> Multiple styling tools can be detected simultaneously. All detected tools are listed in the generated rules.
+
+---
+
+## TypeScript
+
+**Detection**: `tsconfig.json` exists in project root
+
+**Strict mode**: Reads `compilerOptions.strict` from `tsconfig.json`
+
+**Rules generated**: TypeScript-specific patterns — strict typing, generics, type guards, `import type` usage.
+
+---
+
+## Monorepo Tools
+
+| Tool | Detection |
+|---|---|
+| **Turborepo** | `turbo.json` exists |
+| **Nx** | `nx.json` exists |
+| **Lerna** | `lerna.json` exists |
+| **pnpm workspaces** | `pnpm-workspace.yaml` exists |
+| **npm/yarn workspaces** | `workspaces` field in `package.json` |
+
+**Rules generated**: Workspace conventions, cross-package imports, shared tooling patterns.
+
+---
+
+## Figma Integration
+
+AI Kit detects five Figma-related indicators:
+
+| Indicator | Detection Method |
+|---|---|
+| **Figma MCP** | `.claude/settings.json`, `.claude/settings.local.json`, or `.mcp.json` contains "figma" |
+| **Figma Code CLI** | `@figma-code/*` or `figma-code-cli` in deps |
+| **Design tokens** | `tokens.json`, `tokens/`, `design-tokens.json`, `src/tokens/`, or `@theme` in `globals.css` |
+| **Token format** | Tailwind v4 (`@theme`), Tailwind v3 (config theme), CSS variables (`--`), or none |
+| **Visual tests** | `@playwright/test` or `playwright` in deps, or `playwright.config.*` exists |
+
+**Rules generated**: Figma-to-code workflow, design token rules, component mapping, responsive implementation, and visual verification guidance.
+
+---
+
+## Package Manager
+
+| Manager | Detection (priority order) |
+|---|---|
+| **pnpm** | `packageManager` field starts with "pnpm", or `pnpm-lock.yaml` exists |
+| **yarn** | `packageManager` field starts with "yarn", or `yarn.lock` exists |
+| **bun** | `packageManager` field starts with "bun", or `bun.lockb`/`bun.lock` exists |
+| **npm** | Default fallback |
+
+The detected package manager is used in generated scripts section (e.g., `npm run dev` vs `pnpm run dev`).
+
+---
+
+## Detection Priority
+
+AI Kit reads detection signals in this order:
+1. **`package.json`** — dependencies, devDependencies, scripts, workspaces, packageManager
+2. **Config files** — `tsconfig.json`, `turbo.json`, `tailwind.config.*`, etc.
+3. **Directory structure** — `app/`, `pages/`, `src/`, `tokens/`
+4. **File content** — `globals.css` for `@theme`, settings files for Figma MCP
+
+If a detection is ambiguous, AI Kit prompts you interactively.

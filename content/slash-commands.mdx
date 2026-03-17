@@ -1,0 +1,173 @@
+# Slash Commands
+
+AI Kit copies 10 slash commands to `.claude/commands/` in your project. These are available in Claude Code by typing `/command-name`.
+
+## /prompt-help
+
+**The most important command.** Start here if you're unsure how to prompt effectively.
+
+Launches an interactive prompt builder that helps you construct a well-structured request. It asks:
+1. What type of task? (new feature, bug fix, refactor, etc.)
+2. What files are involved?
+3. What constraints exist?
+4. What does success look like?
+
+Then generates a ready-to-use prompt you can paste directly.
+
+**When to use**: Any time you're not sure how to phrase a request, or you want to ensure you're giving the AI enough context.
+
+---
+
+## /review
+
+Deep code review following Horizontal standards. Checks for:
+
+- Naming convention violations
+- Component structure issues
+- Missing error handling or accessibility
+- Performance anti-patterns
+- Security vulnerabilities
+- Import order violations
+- Missing or outdated documentation
+
+**When to use**: Before creating a PR, or when reviewing someone else's code with AI assistance.
+
+---
+
+## /fix-bug
+
+Guided bug fix workflow:
+
+1. Describe the bug (expected vs actual behavior)
+2. Identify reproduction steps
+3. Locate the root cause
+4. Implement the fix
+5. Verify with tests
+
+Forces a structured approach instead of "just fix it."
+
+**When to use**: When you encounter a bug and want a systematic debugging approach.
+
+---
+
+## /new-component
+
+Scaffolds a new component following project conventions. Asks:
+
+1. Component name
+2. What does it do?
+3. Where should it go?
+4. What props does it need?
+5. Server or Client Component?
+6. Does it need data fetching?
+7. Is it a Sitecore component? (if XM Cloud)
+8. Responsive requirements
+9. States to handle (loading, error, empty)
+10. Similar existing component to reference
+
+Generates: component file, types, doc file (for complex components), test file, and optionally a Storybook story.
+
+**When to use**: Every time you create a new component — ensures consistency across the project.
+
+---
+
+## /new-page
+
+Scaffolds a new page or route. Adapts to your router type:
+- **App Router**: Creates `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx` as needed
+- **Pages Router**: Creates the page file with `getServerSideProps`/`getStaticProps`
+
+**When to use**: When adding a new route to the application.
+
+---
+
+## /understand
+
+Explains code in detail. Point it at a file, function, or module and it provides:
+
+- Purpose and responsibility
+- How it fits into the broader architecture
+- Data flow and dependencies
+- Edge cases and gotchas
+- Related files to read for full context
+
+**When to use**: Onboarding to a new codebase, understanding unfamiliar modules, or documenting complex logic.
+
+---
+
+## /test
+
+Generates tests for a file or function. Creates:
+
+- Happy path tests
+- Error state tests
+- Edge case tests
+- Accessibility tests (for components)
+- Uses React Testing Library and behavior-driven patterns
+
+Tests are colocated next to the source file.
+
+**When to use**: After creating a new component or utility, or when adding tests to existing code.
+
+---
+
+## /optimize
+
+Performance optimization review. Analyzes:
+
+- Unnecessary re-renders
+- Missing memoization
+- Heavy computations in render paths
+- Bundle size impact
+- Image optimization opportunities
+- Data fetching patterns (N+1, waterfalls)
+- Server vs Client Component opportunities
+
+**When to use**: When a page feels slow, before a performance audit, or when reviewing a data-heavy component.
+
+---
+
+## /figma-to-code
+
+Structured Figma-to-code implementation workflow:
+
+1. Extract design context from Figma (using Figma MCP if available)
+2. Map design tokens to existing project tokens
+3. Identify reusable components
+4. Implement with proper responsive breakpoints
+5. Verify visual match
+
+**When to use**: When implementing a Figma design — ensures you use design tokens instead of hardcoded values.
+
+---
+
+## /design-tokens
+
+Design token management:
+
+- Audit current token usage
+- Map Figma tokens to Tailwind/CSS variables
+- Find hardcoded values that should use tokens
+- Generate token documentation
+
+**When to use**: When setting up or auditing your design token system.
+
+---
+
+## Using Commands
+
+In Claude Code, type the command name:
+
+```
+/prompt-help
+```
+
+Some commands accept arguments:
+
+```
+/new-component ProductCard
+/understand src/lib/auth.ts
+/test src/components/Header.tsx
+```
+
+Commands work best when you provide context — the more specific you are, the better the output.

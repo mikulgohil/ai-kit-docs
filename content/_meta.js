@@ -1,0 +1,15 @@
+export default {
+  index: 'Introduction',
+  'getting-started': 'Getting Started',
+  'cli-reference': 'CLI Reference',
+  'what-gets-generated': 'What Gets Generated',
+  'supported-stacks': 'Supported Tech Stacks',
+  'slash-commands': 'Slash Commands',
+  guides: 'Guides',
+  configuration: 'Configuration',
+  'tips-and-tricks': 'Tips & Tricks',
+  troubleshooting: 'Troubleshooting',
+  faq: 'FAQ',
+  'how-it-works': 'How It Works',
+  contributing: 'Contributing',
+}

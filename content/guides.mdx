@@ -1,0 +1,105 @@
+# Guides
+
+AI Kit generates five developer guides in `ai-kit/guides/`. These are practical playbooks for getting the most out of AI-assisted development.
+
+## getting-started.md
+
+**Your first read after running `ai-kit init`.**
+
+Covers:
+- What files were generated and where to find them
+- How to verify the setup is working
+- Your first AI interaction with project-aware context
+- How to read and customize the generated rules
+
+---
+
+## prompt-playbook.md
+
+**Template prompts for common development tasks.**
+
+Provides ready-to-use prompt templates for:
+- Creating new components
+- Fixing bugs with context
+- Code reviews with specific focus areas
+- Refactoring with safety constraints
+- Writing tests for existing code
+- Explaining complex modules
+
+Each template follows a pattern:
+```
+[Context] + [Task] + [Constraints] + [Output format]
+```
+
+**Example**:
+```
+Context: I'm working on the checkout flow in src/components/Checkout/.
+Task: Add form validation for the shipping address fields.
+Constraints: Use Zod for schema validation, show inline errors, match existing form patterns in src/components/Forms/.
+Output: The validation schema, updated component, and a test file.
+```
+
+---
+
+## when-to-use-ai.md
+
+**Decision framework for when AI helps vs when it hurts.**
+
+### AI excels at:
+- Boilerplate generation (components, pages, tests)
+- Pattern replication (create X similar to Y)
+- Code explanation and documentation
+- Refactoring with clear rules (rename, extract, inline)
+- Bug fixes with clear reproduction steps
+
+### AI struggles with:
+- Novel architecture decisions (design it yourself, then ask AI to implement)
+- Business logic with implicit domain knowledge
+- Performance optimization without profiling data
+- Security-critical code (always review manually)
+- Multi-step debugging with complex state
+
+### The rule of thumb:
+> If you can explain the task in 2-3 sentences with clear success criteria, AI will do well. If you need to "explore" or "figure it out," start manually and bring AI in once you have direction.
+
+---
+
+## token-saving-tips.md
+
+**Reduce token usage and costs without sacrificing quality.**
+
+Key strategies:
+- **Be specific about files**: Instead of "fix the auth," say "fix the login error in `src/lib/auth.ts` line 45"
+- **Scope your context**: Don't ask AI to read the entire codebase — point to specific files
+- **Use slash commands**: They provide structured context so you don't have to type it
+- **Break large tasks**: 5 focused prompts is cheaper than 1 vague prompt that requires 3 follow-ups
+- **Read before asking**: If you can answer the question by reading a file, do that instead
+- **Use `/understand` first**: Understanding the code costs fewer tokens than a failed implementation attempt
+
+---
+
+## figma-workflow.md
+
+**End-to-end guide for implementing designs from Figma.**
+
+### The Workflow
+
+1. **Extract design context** — Use Figma MCP or manual extraction to understand the design: layout, spacing, colors, typography, components
+2. **Map tokens** — Match Figma design tokens to your project's token system (Tailwind `@theme`, CSS variables, etc.)
+3. **Identify existing components** — Check if similar components already exist before building new ones
+4. **Implement** — Build the component using `/figma-to-code` command for structured guidance
+5. **Verify** — Compare the result against the Figma design, check responsive breakpoints
+
+### Token Mapping Examples
+
+```
+Figma: spacing/lg → Tailwind: p-6
+Figma: color/primary → @theme: --color-primary
+Figma: text/heading-1 → Tailwind: text-3xl font-bold
+```
+
+### Common Mistakes
+- Hardcoding pixel values instead of using design tokens
+- Ignoring responsive behavior defined in Figma
+- Building from scratch when an existing component can be extended
+- Not checking the design system for shared patterns

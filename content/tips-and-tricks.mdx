@@ -1,0 +1,211 @@
+# Tips & Tricks
+
+Practical techniques to get the most out of AI Kit and AI-assisted development.
+
+## Productivity Tips
+
+### Shell Alias
+
+Add to your `~/.zshrc` or `~/.bashrc`:
+
+```bash
+alias aik="npx @horizontal/ai-kit"
+```
+
+Now you can run:
+```bash
+aik init
+aik update
+aik reset
+```
+
+### Re-scan After Major Changes
+
+Run `ai-kit update` after:
+- Adding a new framework or library (e.g., adding Tailwind to an existing project)
+- Converting from Pages Router to App Router
+- Adding Sitecore to a plain Next.js project
+- Setting up a monorepo structure
+- Adding Figma MCP or design tokens
+
+The update command re-scans and adjusts the rules automatically.
+
+### Start Every AI Session with Context
+
+Even with `CLAUDE.md` loaded, give the AI specific context for your current task:
+
+```
+I'm working on the ProductCard component in src/components/ProductCard/.
+It currently fetches data client-side but we need to move it to a Server Component.
+The component uses Sitecore field helpers.
+```
+
+The generated rules handle conventions; you provide task-specific context.
+
+### Use Slash Commands as Checklists
+
+Even if you don't use the AI output directly, slash commands like `/review` and `/new-component` serve as checklists for what to cover.
+
+---
+
+## Prompt Engineering Tips
+
+### The Context-Task-Constraints Pattern
+
+```
+[Context] What you're working on, what exists already
+[Task] What you want done
+[Constraints] Rules, patterns to follow, things to avoid
+```
+
+**Bad prompt**:
+```
+Make a card component
+```
+
+**Good prompt**:
+```
+Context: Working in src/components/Products/. The project uses Tailwind v4 with
+@theme tokens and Sitecore field helpers. See ProductList.tsx for the parent component.
+
+Task: Create a ProductCard component that displays product image, title, price,
+and an "Add to Cart" button.
+
+Constraints: Use Server Component (no client state needed). Use Sitecore
+<Image> and <Text> field helpers. Match the spacing tokens in globals.css.
+Must be responsive (stack on mobile, horizontal on tablet+).
+```
+
+### Reference Existing Code
+
+The most effective prompt technique: point to existing code as a reference.
+
+```
+Create a new ShippingForm component following the same patterns as
+src/components/Forms/BillingForm.tsx — same validation approach, same
+error handling, same Tailwind class patterns.
+```
+
+AI Kit's rules enforce conventions, but referencing specific files ensures pattern matching.
+
+### Break Large Tasks
+
+Instead of:
+```
+Build the entire checkout flow with cart, shipping, payment, and confirmation pages.
+```
+
+Do:
+```
+Step 1: Create the cart summary component (reference existing ProductCard patterns)
+Step 2: Create the shipping form (reference BillingForm)
+Step 3: Create the payment integration (I'll provide the Stripe API details)
+Step 4: Wire up the page routing and data flow
+```
+
+Each step produces better output and costs fewer tokens than one massive prompt.
+
+---
+
+## Team Tips
+
+### Standardize Across Projects
+
+Run `ai-kit init` on every project in your org. This ensures:
+- Same coding conventions enforced by AI across all projects
+- Consistent slash commands available everywhere
+- New team members get the same AI experience on any project
+
+### Onboarding Shortcut
+
+New developer joining the team?
+
+1. Clone the repo
+2. Run `npx @horizontal/ai-kit init` (if not already committed)
+3. Read `ai-kit/guides/getting-started.md`
+4. Use `/understand` on unfamiliar modules
+5. Use `/prompt-help` when unsure how to ask
+
+### Custom Rules Per Team
+
+Add team-specific rules outside the `AI-KIT:START/END` markers:
+
+```markdown
+# Team-Specific Rules
+
+- PR reviews require at least 2 approvals
+- Use `@company/shared-ui` for common components — don't rebuild
+- API contracts are defined in `api-contracts/` — always check before changing endpoints
+- Feature branches: `feature/JIRA-123-description`
+
+<!-- AI-KIT:START -->
+...
+```
+
+---
+
+## Performance Tips
+
+### Reduce Token Usage
+
+1. **Be specific about files** — "Fix the error in `src/lib/auth.ts:45`" not "fix the auth"
+2. **Use `/understand` before modifying** — Costs fewer tokens than a failed attempt
+3. **Don't ask AI to read everything** — Point to specific files
+4. **Use slash commands** — They provide structured context efficiently
+
+### Speed Up Generation
+
+AI Kit scans are fast (under 1 second) because they only read:
+- `package.json`
+- Config files (`tsconfig.json`, `turbo.json`, etc.)
+- Directory existence checks
+- A few file content reads (`globals.css`, settings files)
+
+No deep file scanning or AST parsing.
+
+---
+
+## Advanced Tips
+
+### Custom Slash Commands
+
+Add your own slash commands alongside AI Kit's:
+
+```
+.claude/commands/
+├── prompt-help.md       # AI Kit generated
+├── review.md            # AI Kit generated
+├── deploy.md            # Your custom command
+└── pr-template.md       # Your custom command
+```
+
+AI Kit won't touch files it didn't create. Just add `.md` files to `.claude/commands/`.
+
+### Multiple Config Variants
+
+For monorepos with different stacks per package:
+
+```bash
+# Run in each package directory
+cd packages/web && npx @horizontal/ai-kit init
+cd packages/api && npx @horizontal/ai-kit init
+```
+
+Each package gets its own tailored `CLAUDE.md`.
+
+### Debugging Detection Issues
+
+If AI Kit detects something incorrectly:
+
+1. Check what it detected: `cat ai-kit.config.json | jq .scanResult`
+2. Verify your `package.json` has the expected dependencies
+3. Verify config files exist where expected
+4. Run `ai-kit init` again — it will show the scan results before generating
+
+### Keeping Rules Fresh
+
+Set a reminder to run `ai-kit update` when you:
+- Upgrade Next.js major version
+- Add or remove major dependencies
+- Restructure the project
+- Update team coding standards (by updating the base template)

@@ -1,0 +1,119 @@
+# Getting Started
+
+This guide walks you through installing AI Kit, running it on your project, and understanding what it generates.
+
+## Prerequisites
+
+- **Node.js 18+** — check with `node --version`
+- **A project with `package.json`** — AI Kit reads this to detect your stack
+- **Claude Code or Cursor** — at least one AI tool installed
+
+## Step 1: Run AI Kit
+
+Navigate to your project root and run:
+
+```bash
+npx @horizontal/ai-kit init
+```
+
+No global install needed — `npx` downloads and runs it directly.
+
+## Step 2: Review the Scan
+
+AI Kit scans your project and shows what it detected:
+
+```
+AI Kit — Project Setup
+ℹ Scanning: /Users/you/projects/my-app
+
+Detected Stack
+ℹ Framework: Next.js 15.1.0 (app router)
+ℹ CMS: Sitecore XM Cloud (JSS 22.3.0)
+ℹ Styling: tailwind
+ℹ TypeScript: Yes
+ℹ Monorepo: No
+ℹ Package Manager: npm
+```
+
+If something looks wrong, you'll get clarification prompts (e.g., router type if both `app/` and `pages/` directories exist).
+
+## Step 3: Choose Your Tools
+
+```
+? Which AI tools does this project use?
+❯ Both Claude Code & Cursor
+  Claude Code only
+  Cursor only
+```
+
+Select which AI tools your team uses. AI Kit generates configs for each.
+
+## Step 4: Handle Conflicts
+
+If you already have a `CLAUDE.md` or `.cursorrules`:
+
+```
+? Existing AI config files detected. How should we handle conflicts?
+❯ Overwrite — replace with fresh generated files
+  Skip — keep existing files, only add missing ones
+```
+
+## Step 5: Review Generated Files
+
+After generation, you'll see a summary:
+
+```
+Setup Complete
+✓ CLAUDE.md generated
+✓ .cursorrules generated
+✓ 10 slash commands copied
+✓ 5 guides added to ai-kit/guides/
+✓ 3 doc scaffolds created in docs/
+```
+
+### Files created in your project:
+
+```
+your-project/
+├── CLAUDE.md                          # Claude Code rules
+├── .cursorrules                       # Cursor rules
+├── .cursor/rules/                     # Scoped Cursor rules (.mdc)
+│   ├── base.mdc
+│   ├── nextjs-app-router.mdc
+│   ├── tailwind.mdc
+│   └── ...
+├── .claude/commands/                  # Slash commands
+│   ├── prompt-help.md
+│   ├── new-component.md
+│   ├── review.md
+│   └── ...
+├── ai-kit/
+│   └── guides/                        # Developer guides
+│       ├── getting-started.md
+│       ├── prompt-playbook.md
+│       └── ...
+├── docs/                              # Doc scaffolds (won't overwrite existing)
+│   ├── mistakes-log.md
+│   ├── decisions-log.md
+│   └── time-log.md
+└── ai-kit.config.json                 # AI Kit configuration
+```
+
+## Step 6: Start Using AI
+
+Open your project in Claude Code or Cursor. The AI assistant will automatically read the generated config files and follow your project's conventions.
+
+Try a slash command to verify:
+
+```
+/prompt-help
+```
+
+This launches the interactive prompt builder — a great way to verify everything is working.
+
+## Next Steps
+
+- Read [What Gets Generated](/docs/what-gets-generated) to understand each file in detail
+- Check [Slash Commands](/docs/slash-commands) to see all 10 available commands
+- See [Tips & Tricks](/docs/tips-and-tricks) for productivity shortcuts
+- Read [Troubleshooting](/docs/troubleshooting) if something went wrong

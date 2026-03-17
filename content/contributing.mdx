@@ -1,0 +1,156 @@
+# Contributing
+
+AI Kit is open source and welcomes contributions. Here's how to get involved.
+
+## Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/mikulgohil/ai-kit.git
+cd ai-kit
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run tests
+npm run test:run
+
+# Watch mode during development
+npm run dev
+```
+
+## Project Structure
+
+```
+ai-kit/
+├── src/
+│   ├── index.ts              # CLI entry point (Commander.js)
+│   ├── types.ts              # TypeScript interfaces
+│   ├── constants.ts          # Paths, version, fragment list
+│   ├── utils.ts              # File I/O, logging, merge utilities
+│   ├── commands/
+│   │   ├── init.ts           # ai-kit init command
+│   │   ├── update.ts         # ai-kit update command
+│   │   └── reset.ts          # ai-kit reset command
+│   ├── scanner/
+│   │   ├── index.ts          # Master scanner orchestrator
+│   │   ├── nextjs.ts         # Next.js detection
+│   │   ├── sitecore.ts       # Sitecore detection
+│   │   ├── styling.ts        # Styling tools detection
+│   │   ├── typescript.ts     # TypeScript detection
+│   │   ├── monorepo.ts       # Monorepo tool detection
+│   │   ├── package-manager.ts # Package manager detection
+│   │   └── figma.ts          # Figma integration detection
+│   ├── generator/
+│   │   ├── assembler.ts      # Template reading and assembly
+│   │   ├── claude-md.ts      # CLAUDE.md generation + fragment selection
+│   │   ├── cursorrules.ts    # .cursorrules generation
+│   │   ├── cursor-mdc.ts     # .cursor/rules/*.mdc generation
+│   │   └── config.ts         # ai-kit.config.json generation
+│   └── copier/
+│       ├── commands.ts       # Slash command copying
+│       ├── guides.ts         # Guide copying
+│       └── docs.ts           # Doc scaffold copying
+├── templates/
+│   ├── header.md             # Shared header template
+│   ├── claude-md/            # 8 CLAUDE.md fragments
+│   └── cursorrules/          # 8 .cursorrules fragments
+├── commands/                 # 10 slash command files
+├── guides/                   # 5 developer guide files
+├── docs-scaffolds/           # 3 doc scaffold templates
+├── tests/                    # Vitest test files
+│   ├── scanner/              # Scanner unit tests
+│   ├── generator/            # Generator unit tests
+│   └── copier/               # Copier unit tests
+└── docs/                     # Project documentation
+```
+
+## Adding a New Scanner
+
+To support a new technology:
+
+1. Create `src/scanner/your-tech.ts`:
+```typescript
+interface YourTechResult {
+  yourTech: boolean;
+  yourTechVersion?: string;
+}
+
+export function detectYourTech(
+  projectPath: string,
+  pkg: Record<string, unknown>,
+): YourTechResult {
+  // Detection logic
+}
+```
+
+2. Add the detector to `src/scanner/index.ts`
+3. Add the result fields to `ProjectScan` in `src/types.ts`
+4. Create template fragments in `templates/claude-md/your-tech.md` and `templates/cursorrules/your-tech.md`
+5. Add the fragment name to `TEMPLATE_FRAGMENTS` in `src/constants.ts`
+6. Add selection logic in `selectFragments()` in `src/generator/claude-md.ts`
+7. Add `.mdc` config in `src/generator/cursor-mdc.ts`
+8. Write tests in `tests/scanner/your-tech.test.ts`
+
+## Adding a New Slash Command
+
+1. Create `commands/your-command.md` with the command content
+2. Add the command name to `AVAILABLE_COMMANDS` in `src/copier/commands.ts`
+
+## Modifying Templates
+
+Templates are in `templates/claude-md/` and `templates/cursorrules/`. They use `{{variable}}` placeholders.
+
+Available variables:
+- `{{projectName}}` — project name from package.json
+- `{{techStack}}` — detected technologies
+- `{{packageManager}}` — detected package manager
+- `{{routerType}}` — Next.js router type
+- `{{scripts}}` — filtered project scripts
+- `{{framework}}` — detected framework name
+
+## Running Tests
+
+```bash
+# Run all tests
+npm run test:run
+
+# Run tests in watch mode
+npm run test
+
+# Run specific test file
+npx vitest run tests/scanner/nextjs.test.ts
+
+# Run with coverage
+npm run test:run -- --coverage
+```
+
+## Code Style
+
+- TypeScript with strict mode
+- ESM modules (`"type": "module"`)
+- Named exports preferred
+- Colocated types (interfaces near usage)
+- Defensive file I/O (try-catch, existence checks)
+
+## Commit Messages
+
+Follow conventional commits:
+```
+feat: add Vue.js scanner
+fix: correct Tailwind v4 detection for @theme
+docs: update supported stacks page
+test: add tests for monorepo scanner
+refactor: extract shared detection utilities
+```
+
+## Pull Request Process
+
+1. Create a feature branch from `main`
+2. Make your changes
+3. Run `npm run test:run` — all tests must pass
+4. Run `npm run build` — build must succeed
+5. Submit PR with description of changes and motivation

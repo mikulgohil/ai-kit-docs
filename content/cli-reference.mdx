@@ -1,0 +1,125 @@
+# CLI Reference
+
+AI Kit provides three commands: `init`, `update`, and `reset`.
+
+## `ai-kit init [path]`
+
+Scan a project and generate AI configuration files.
+
+```bash
+npx @horizontal/ai-kit init
+npx @horizontal/ai-kit init ./path/to/project
+```
+
+### What it does
+
+1. Scans the project directory for tech stack indicators
+2. Shows detected stack and asks clarification questions if needed
+3. Asks which AI tools to generate configs for (Claude Code, Cursor, or both)
+4. Asks how to handle existing files (overwrite or skip)
+5. Generates all configuration files
+6. Writes `ai-kit.config.json` to track what was generated
+
+### Interactive Prompts
+
+| Prompt | When it appears |
+|---|---|
+| Re-initialize? | `ai-kit.config.json` already exists |
+| Router type? | Next.js detected but router ambiguous |
+| Which AI tools? | Always — choose Claude, Cursor, or both |
+| Conflict strategy? | Existing `CLAUDE.md` or `.cursorrules` found |
+
+### Generated Files
+
+| File | Condition |
+|---|---|
+| `CLAUDE.md` | Claude Code selected |
+| `.cursorrules` | Cursor selected |
+| `.cursor/rules/*.mdc` | Cursor selected |
+| `.claude/commands/*.md` | Claude Code selected |
+| `ai-kit/guides/*.md` | Always |
+| `docs/*.md` | Always (won't overwrite existing) |
+| `ai-kit.config.json` | Always |
+
+---
+
+## `ai-kit update [path]`
+
+Re-scan the project and update all generated files.
+
+```bash
+npx @horizontal/ai-kit update
+npx @horizontal/ai-kit update ./path/to/project
+```
+
+### What it does
+
+1. Reads existing `ai-kit.config.json` (fails if not found)
+2. Checks for version mismatch — warns if major version differs
+3. Re-scans the project for tech stack changes
+4. Updates `CLAUDE.md` and `.cursorrules` using **safe merge** — only content between `AI-KIT:START/END` markers is replaced, preserving your manual edits
+5. Updates `.cursor/rules/*.mdc` files
+6. Refreshes slash commands and guides
+7. Updates `ai-kit.config.json`
+
+### Safe Merge Behavior
+
+Generated files contain markers:
+
+```markdown
+<!-- AI-KIT:START -->
+[generated content]
+<!-- AI-KIT:END -->
+```
+
+On update, only content between these markers is replaced. Anything you add above or below the markers is preserved.
+
+**If no markers exist** (files from before v1.0.0), the entire file is replaced.
+
+### Version Mismatch Warning
+
+```
+⚠ Config was generated with ai-kit v1.0.0, but you're running v2.0.0.
+  Consider running `ai-kit init` to re-initialize.
+```
+
+This appears when the major version differs. Minor/patch updates proceed silently.
+
+---
+
+## `ai-kit reset [path]`
+
+Remove all AI Kit generated files from a project.
+
+```bash
+npx @horizontal/ai-kit reset
+npx @horizontal/ai-kit reset ./path/to/project
+```
+
+### What it removes
+
+| Item | Path |
+|---|---|
+| Claude Code rules | `CLAUDE.md` |
+| Cursor rules | `.cursorrules` |
+| Cursor scoped rules | `.cursor/rules/` |
+| Slash commands | `.claude/commands/` |
+| AI Kit folder | `ai-kit/` |
+| Configuration | `ai-kit.config.json` |
+
+### Safety
+
+- Shows a full list of what will be removed before proceeding
+- Requires explicit confirmation (`Are you sure? This cannot be undone.`)
+- Only removes files that AI Kit created — your source code and other configs are untouched
+- **Does NOT remove** `docs/` scaffolds (mistakes-log, decisions-log, time-log) since you may have added content to them
+
+---
+
+## Global Options
+
+```bash
+ai-kit --version    # Show version number
+ai-kit --help       # Show help
+ai-kit init --help  # Show command-specific help
+```

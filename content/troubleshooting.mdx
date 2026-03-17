@@ -1,0 +1,270 @@
+# Troubleshooting
+
+Common issues and how to resolve them.
+
+## Installation Issues
+
+### "command not found: ai-kit"
+
+**Cause**: AI Kit is meant to be run via `npx`, not installed globally.
+
+**Fix**:
+```bash
+# Use npx (recommended)
+npx @horizontal/ai-kit init
+
+# Or install globally if preferred
+npm install -g @horizontal/ai-kit
+ai-kit init
+```
+
+### "npx: command not found"
+
+**Cause**: Node.js is not installed or not in PATH.
+
+**Fix**:
+```bash
+# Check Node.js version (must be 18+)
+node --version
+
+# If not installed, use nvm
+nvm install 18
+nvm use 18
+```
+
+### Permission denied errors on macOS/Linux
+
+**Cause**: npm global directory permissions issue.
+
+**Fix**:
+```bash
+# Option 1: Use npx (avoids global install)
+npx @horizontal/ai-kit init
+
+# Option 2: Fix npm permissions
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+# Add to ~/.zshrc or ~/.bashrc:
+export PATH=~/.npm-global/bin:$PATH
+```
+
+---
+
+## Scan Issues
+
+### "No package.json found"
+
+**Cause**: Running AI Kit in a directory without a `package.json`.
+
+**Fix**: Navigate to your project root (where `package.json` lives) and run again:
+```bash
+cd /path/to/your/project
+npx @horizontal/ai-kit init
+```
+
+Or specify the path directly:
+```bash
+npx @horizontal/ai-kit init /path/to/your/project
+```
+
+### Wrong framework detected
+
+**Cause**: AI Kit reads `package.json` dependencies. If your project uses a non-standard setup, detection may be off.
+
+**Check what was detected**:
+```bash
+cat ai-kit.config.json | grep -A5 framework
+```
+
+**Fix**: Run `ai-kit init` again. If the framework is still wrong:
+1. Verify `next` is in your `package.json` dependencies (not just imported)
+2. Check that your `app/` or `pages/` directory exists at the expected location
+3. If using a custom directory structure, the scanner may not detect it — this is a known limitation
+
+### Router type not detected correctly
+
+**Cause**: Both `app/` and `pages/` directories exist but you only use one.
+
+**Fix**: AI Kit will prompt you when both are found. Choose the correct one. If it didn't prompt, your directory structure may have empty `app/` or `pages/` directories — remove the unused one.
+
+### Sitecore not detected
+
+**Cause**: Sitecore packages not in `package.json`.
+
+**Check**:
+```bash
+# Should show one of these
+npm ls @sitecore-jss/sitecore-jss-nextjs
+npm ls @sitecore-content-sdk/nextjs
+npm ls @sitecore-jss/sitecore-jss-react
+```
+
+If the package exists but isn't detected, run `npm install` to ensure `package.json` is up to date.
+
+### Tailwind not detected
+
+**Cause**: Tailwind installed but not in `package.json` or no config file.
+
+**Check**:
+```bash
+# Should show tailwindcss
+npm ls tailwindcss
+
+# Or check for config file
+ls tailwind.config.*
+```
+
+**Fix**: Ensure `tailwindcss` is in your `dependencies` or `devDependencies`, or that a `tailwind.config.js/ts/mjs` file exists.
+
+---
+
+## Generation Issues
+
+### "ai-kit.config.json already exists"
+
+**Cause**: You've already run `ai-kit init` on this project.
+
+**Options**:
+- Answer "Yes" to re-initialize (overwrites everything)
+- Use `ai-kit update` instead (preserves manual edits)
+- Use `ai-kit reset` first, then `ai-kit init`
+
+### Generated CLAUDE.md has wrong project name
+
+**Cause**: `name` field in `package.json` is missing or incorrect.
+
+**Fix**: Update the `name` field in `package.json`, then run `ai-kit update`.
+
+### Generated rules mention technologies not in my project
+
+**Cause**: Detection false positive — e.g., an empty `turbo.json` or stale `tailwind.config.js`.
+
+**Fix**:
+1. Remove the stale config file
+2. Run `ai-kit update` to re-scan
+
+### Scripts section shows "No scripts detected"
+
+**Cause**: Your `package.json` doesn't have standard script names.
+
+**What AI Kit looks for**: `dev`, `build`, `start`, `lint`, `test`, `type-check`, `typecheck`
+
+**Fix**: Add standard script names to your `package.json`:
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint .",
+    "test": "vitest"
+  }
+}
+```
+
+---
+
+## Update Issues
+
+### "No ai-kit.config.json found"
+
+**Cause**: Running `ai-kit update` before `ai-kit init`.
+
+**Fix**: Run `ai-kit init` first to create the configuration.
+
+### Manual edits lost after update
+
+**Cause**: Your edits were inside the `<!-- AI-KIT:START -->` / `<!-- AI-KIT:END -->` markers.
+
+**Prevention**: Always add custom rules **outside** the markers:
+```markdown
+# My Custom Rules (above the markers — preserved on update)
+...
+
+<!-- AI-KIT:START -->
+[generated content — replaced on update]
+<!-- AI-KIT:END -->
+
+# More Custom Rules (below the markers — preserved on update)
+...
+```
+
+**Recovery**: If you lost edits, check `git diff` or `git stash` if you haven't committed yet.
+
+### Version mismatch warning
+
+```
+⚠ Config was generated with ai-kit v1.0.0, but you're running v2.0.0.
+```
+
+**Cause**: You're running a newer major version of AI Kit than what generated the config.
+
+**Fix**: Run `ai-kit init` to re-initialize with the new version. This ensures template changes from the new version are applied.
+
+---
+
+## Cursor-Specific Issues
+
+### .cursorrules not being read by Cursor
+
+**Check**:
+1. File is in the project root (not a subdirectory)
+2. File is named exactly `.cursorrules` (no extension)
+3. Restart Cursor after adding the file
+
+### .mdc files not working
+
+**Check**:
+1. Files are in `.cursor/rules/` directory
+2. Each file has the correct frontmatter (`description`, `globs`, `alwaysApply`)
+3. Cursor version supports `.mdc` format (check Cursor docs for version requirements)
+
+---
+
+## Claude Code-Specific Issues
+
+### CLAUDE.md not being read
+
+**Check**:
+1. File is named `CLAUDE.md` (case-sensitive)
+2. File is in the project root
+3. You're running Claude Code from the same directory
+
+### Slash commands not appearing
+
+**Check**:
+1. Commands are in `.claude/commands/` directory
+2. Each command is a `.md` file
+3. Restart Claude Code after adding commands
+
+---
+
+## Reset Issues
+
+### "Are you sure?" prompt keeps appearing
+
+**Expected behavior**: The reset command always confirms before deleting files. This is a safety feature.
+
+### Files remain after reset
+
+**Cause**: `ai-kit reset` does not remove `docs/` scaffolds (mistakes-log, decisions-log, time-log) because you may have added content to them.
+
+**Manual cleanup** (if needed):
+```bash
+rm docs/mistakes-log.md docs/decisions-log.md docs/time-log.md
+```
+
+---
+
+## Getting Help
+
+If your issue isn't listed here:
+
+1. Check the scan results: `cat ai-kit.config.json`
+2. Run `ai-kit init` again — the interactive scan shows exactly what was detected
+3. File an issue: [github.com/mikulgohil/ai-kit/issues](https://github.com/mikulgohil/ai-kit/issues)
+
+Include in your issue:
+- Your Node.js version (`node --version`)
+- Your OS
+- The contents of `ai-kit.config.json`
+- What you expected vs what happened

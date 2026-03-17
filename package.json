@@ -1,0 +1,21 @@
+{
+  "name": "ai-kit-docs",
+  "version": "1.0.0",
+  "description": "Knowledge hub for @horizontal/ai-kit",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [],
+  "author": "Horizontal Digital",
+  "license": "MIT",
+  "dependencies": {
+    "next": "^16.1.7",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  }
+}

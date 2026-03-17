@@ -1,0 +1,59 @@
+# AI Kit — Knowledge Hub
+
+**AI Kit** is a CLI tool by Horizontal Digital that auto-detects your project's tech stack and generates tailored AI assistant configuration files — so Claude Code and Cursor understand your project from day one.
+
+## The Problem
+
+Every time you open an AI assistant in a new project, it starts from zero. It doesn't know your:
+- Framework (Next.js App Router? Pages Router? Sitecore XM Cloud?)
+- Coding conventions (naming, file structure, import order)
+- Design system (Tailwind v4 tokens? SCSS modules?)
+- Team standards (documentation rules, testing expectations, git practices)
+
+You end up re-explaining the same context in every conversation. AI output doesn't match your patterns. Code reviews catch AI-generated code that violates team standards.
+
+## The Solution
+
+Run one command:
+
+```bash
+npx @horizontal/ai-kit init
+```
+
+AI Kit scans your project, detects everything automatically, and generates:
+
+| Generated File | Purpose |
+|---|---|
+| `CLAUDE.md` | Rules and conventions for Claude Code |
+| `.cursorrules` | Rules for Cursor AI |
+| `.cursor/rules/*.mdc` | Scoped rules per technology (Cursor v2 format) |
+| `.claude/commands/` | 10 slash commands for common workflows |
+| `ai-kit/guides/` | 5 developer guides for effective AI usage |
+| `docs/` scaffolds | Structured logging templates |
+
+## Key Features
+
+- **Zero configuration** — detects your stack automatically from `package.json`, config files, and directory structure
+- **Stack-aware rules** — generates different rules for App Router vs Pages Router, Sitecore vs plain Next.js, Tailwind vs SCSS
+- **Safe updates** — `ai-kit update` preserves your manual edits using `AI-KIT:START/END` markers
+- **Two AI tools** — generates configs for both Claude Code and Cursor in one pass
+- **Guided workflows** — slash commands like `/prompt-help`, `/new-component`, `/figma-to-code` provide step-by-step AI workflows
+
+## Quick Start
+
+```bash
+# Run in any project directory
+npx @horizontal/ai-kit init
+
+# Follow the interactive prompts
+# Done — your AI assistants now understand your project
+```
+
+See [Getting Started](/docs/getting-started) for a detailed walkthrough.
+
+## Who Is This For?
+
+- **Horizontal Digital developers** working on client projects (DPWorld, XCelerate, etc.)
+- **Teams using Claude Code or Cursor** who want consistent AI output across the org
+- **Tech leads** who want to enforce coding standards through AI tools
+- **Any developer** working with Next.js, Sitecore, Tailwind, or TypeScript who wants better AI assistance
