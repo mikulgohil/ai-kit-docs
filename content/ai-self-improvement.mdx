@@ -122,13 +122,13 @@ needs a test.
 
 ---
 
-## Feature 3: Structured Command Output
+## Feature 3: Structured Skills
 
-Every slash command produces output in a **consistent, predictable format** — regardless of which developer runs it, on which project, at what time.
+Every skill produces output in a **consistent, predictable format** — regardless of which developer triggers it, on which project, at what time. Skills are auto-discovered: the AI reads each skill's description and applies it when your task matches, without you typing a command.
 
 ### How It Works
 
-Each of the 25 slash commands has:
+Each of the 26 skills has:
 
 1. **Role framing** — The AI assumes a specific expert persona
    ```
@@ -167,14 +167,14 @@ Each of the 25 slash commands has:
 
 ### The Result
 
-Developer A running `/security-check` on Project X gets a report in the same format as Developer B running `/security-check` on Project Y. Both get:
+Developer A on Project X (Claude Code) gets a security report in the same format as Developer B on Project Y (Cursor). Whether triggered by `/security-check` or auto-applied when the AI detects a security review task, both get:
 - A severity-sorted table
 - File paths and line numbers for every issue
 - Before/after code for every fix
 - OWASP references
 - A summary with go/no-go recommendation
 
-**Consistency across developers, projects, and time.**
+**Consistency across developers, tools, projects, and time.**
 
 ---
 
@@ -229,7 +229,7 @@ These features are implemented through three mechanisms:
 
 2. **Self-Enforcement Rules** — Directive in the generated rules that instructs the AI to auto-create documentation, tests, and change log entries regardless of whether the developer asked
 
-3. **Structured Commands** — Each `.md` file in `.claude/commands/` uses prompt engineering patterns (role framing, mandatory steps, output templates, self-checks, constraints) to produce consistent output
+3. **Structured Skills** — Each `SKILL.md` in `.claude/skills/` and `.cursor/skills/` uses prompt engineering patterns (role framing, mandatory steps, output templates, self-checks, constraints) to produce consistent output. Skills include a description the AI reads for auto-discovery — it applies the right skill when your task matches, without you typing a command. Legacy slash commands in `.claude/commands/` continue to work for explicit invocation.
 
 None of these require runtime code, background processes, or API calls. They are pure prompt engineering — instructions baked into the files that AI tools read at conversation start.
 

@@ -66,7 +66,8 @@ After generation, you'll see a summary:
 Setup Complete
 ✓ CLAUDE.md generated
 ✓ .cursorrules generated
-✓ 25 slash commands copied
+✓ 26 skills generated (Claude Code + Cursor)
+✓ 26 legacy commands copied (.claude/commands/)
 ✓ 5 guides added to ai-kit/guides/
 ✓ 3 doc scaffolds created in docs/
 ```
@@ -82,7 +83,15 @@ your-project/
 │   ├── nextjs-app-router.mdc
 │   ├── tailwind.mdc
 │   └── ...
-├── .claude/commands/                  # Slash commands
+├── .claude/skills/                    # Auto-discovered skills (Claude Code)
+│   ├── new-component/SKILL.md
+│   ├── review/SKILL.md
+│   └── ...
+├── .cursor/skills/                    # Auto-discovered skills (Cursor)
+│   ├── new-component/SKILL.md
+│   ├── review/SKILL.md
+│   └── ...
+├── .claude/commands/                  # Legacy slash commands (backward compat)
 │   ├── prompt-help.md
 │   ├── new-component.md
 │   ├── review.md
@@ -103,17 +112,23 @@ your-project/
 
 Open your project in Claude Code or Cursor. The AI assistant will automatically read the generated config files and follow your project's conventions.
 
-Try a slash command to verify:
+Try a skill or slash command to verify:
 
 ```
 /prompt-help
 ```
 
-This launches the interactive prompt builder — a great way to verify everything is working.
+Or just describe what you want — the AI will auto-apply the right skill:
+
+```
+I'm not sure how to phrase this request, can you help me?
+```
+
+This launches the prompt-help workflow — a great way to verify everything is working.
 
 ## Next Steps
 
 - Read [What Gets Generated](/docs/what-gets-generated) to understand each file in detail
-- Check [Slash Commands](/docs/slash-commands) to see all 10 available commands
+- Check [Skills & Commands](/docs/slash-commands) to see all 26 available workflows
 - See [Tips & Tricks](/docs/tips-and-tricks) for productivity shortcuts
 - Read [Troubleshooting](/docs/troubleshooting) if something went wrong

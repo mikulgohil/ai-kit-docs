@@ -24,8 +24,8 @@ Runtime cost:         Zero — no background processes, no API calls
 
 | | Without AI Kit | With AI Kit |
 |---|---|---|
-| **What you type** | "Create a ProductCard component" | `/new-component ProductCard` |
-| **What AI knows** | Nothing about your project | Your framework, styling, CMS, conventions |
+| **What you type** | "Create a ProductCard component" | "Create a ProductCard component" or `/new-component ProductCard` |
+| **What AI knows** | Nothing about your project | Your framework, styling, CMS, conventions — and which skill applies |
 | **What you get** | Generic React component. Wrong export style, wrong file structure, no Sitecore helpers, no TypeScript patterns | Component matching your exact project patterns. Correct exports, Tailwind classes, Sitecore field helpers, typed props |
 | **Tests** | None unless you ask | Auto-generated: happy path, error states, edge cases |
 | **Documentation** | None | Auto-generated `.docs.md` if component is complex |
@@ -172,7 +172,7 @@ Being honest about limitations:
 |---|---|---|
 | **Setup** | 30 seconds (`npx @mikulgohil/ai-kit init`) | AI understands your project forever |
 | **Maintenance** | Occasional `ai-kit update` | Rules stay current with stack changes |
-| **Learning curve** | Read getting-started.md (5 min) | 25 slash commands available immediately |
+| **Learning curve** | Read getting-started.md (5 min) | 26 skills auto-discovered — no command names to learn |
 | **Runtime overhead** | Zero — static files only | No performance impact |
 | **Team adoption** | Commit generated files to git | Every developer gets the same AI context |
 

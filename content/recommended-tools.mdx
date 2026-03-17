@@ -1,6 +1,6 @@
 # Recommended Tools
 
-AI Kit works on its own — run `npx @mikulgohil/ai-kit init` on any project and you immediately get a smarter AI assistant. But a set of free, well-supported tools can unlock the full potential of every slash command. This page covers all of them: what each tool does, why it matters, how to set it up, and exactly which AI Kit commands it makes better.
+AI Kit works on its own — run `npx @mikulgohil/ai-kit init` on any project and you immediately get a smarter AI assistant. But a set of free, well-supported tools can unlock the full potential of every skill and workflow. This page covers all of them: what each tool does, why it matters, how to set it up, and exactly which AI Kit skills it makes better.
 
 You do not need every tool listed here. Read through, pick the ones that match your workflow, and come back for the others when you need them.
 
@@ -81,7 +81,7 @@ npx playwright install chromium
 
 After restarting Claude Code, ask: "Can you open my localhost:3000 and take a screenshot?" If Playwright MCP is active, the AI will attempt to do it. If not configured, it will say it does not have that capability.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How Playwright MCP helps |
 |---|---|
@@ -155,7 +155,7 @@ Then add `FIGMA_API_KEY=your_token_here` to your `.env.local` file (which should
 
 Copy a Figma frame URL (it looks like `https://figma.com/file/abc123/...?node-id=...`) and ask the AI: "What are the exact spacing and color values in this Figma frame?" If the MCP is active, it will fetch real data.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How Figma MCP helps |
 |---|---|
@@ -204,7 +204,7 @@ No API key is required. Context7 MCP is a free service.
 
 Ask the AI: "Using Context7, what is the current API for generateMetadata in Next.js 15?" If active, you will see the AI fetch documentation before answering.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How Context7 MCP helps |
 |---|---|
@@ -214,7 +214,7 @@ Ask the AI: "Using Context7, what is the current API for generateMetadata in Nex
 | `/type-fix` | Can look up current type definitions when TypeScript errors relate to library types |
 | `/dep-check` | Can fetch current changelog data when evaluating upgrade impact |
 
-Context7 MCP benefits every command that generates code. It is one of the highest-value MCPs in this list.
+Context7 MCP benefits every skill that generates code. It is one of the highest-value MCPs in this list.
 
 ---
 
@@ -272,7 +272,7 @@ If your project is a work project and you have separate GitHub accounts, see the
 
 Ask the AI: "What are the open pull requests on this repository?" If GitHub MCP is active and authenticated, it will list them.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How GitHub MCP helps |
 |---|---|
@@ -345,7 +345,7 @@ Perplexity has a free tier that covers typical development usage. Paid plans are
 
 Ask the AI: "Using Perplexity, search for recent breaking changes in Next.js 15." If the MCP is active, the AI will search before answering.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How Perplexity MCP helps |
 |---|---|
@@ -408,7 +408,7 @@ Add the server to `.claude/settings.json`:
 
 Ask the AI: "List the pages in my Notion workspace." If the MCP is active and the integration is connected, it will return the pages it has access to.
 
-**Which AI Kit commands benefit:**
+**Which AI Kit skills benefit:**
 
 | Command | How Notion MCP helps |
 |---|---|
@@ -1259,11 +1259,11 @@ snyk test
 
 ---
 
-## Section 6: Tool and Command Pairing Matrix
+## Section 6: Tool and Skill Pairing Matrix
 
-This table maps every AI Kit slash command to the tools that meaningfully enhance it. "Core" means the command works fine without the tool. "Enhanced" means the tool unlocks additional capability or verification.
+This table maps every AI Kit skill to the tools that meaningfully enhance it. "Core" means the skill works fine without the tool. "Enhanced" means the tool unlocks additional capability or verification.
 
-| AI Kit Command | Playwright MCP | Figma MCP | Context7 MCP | GitHub MCP | Perplexity MCP | Playwright Tests | axe-core | Storybook | ESLint | Prettier | Knip | Snyk | Lighthouse CI | Bundle Analyzer |
+| AI Kit Skill | Playwright MCP | Figma MCP | Context7 MCP | GitHub MCP | Perplexity MCP | Playwright Tests | axe-core | Storybook | ESLint | Prettier | Knip | Snyk | Lighthouse CI | Bundle Analyzer |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | `/prompt-help` | | | | | | | | | | | | | | |
 | `/understand` | | | Context7 | GitHub | Perplexity | | | | | | | | | |
@@ -1293,12 +1293,12 @@ This table maps every AI Kit slash command to the tools that meaningfully enhanc
 
 **Reading this table:**
 
-A cell with a tool name means that tool meaningfully improves that command. Empty cells mean the command works on its own without enhancement from that tool. No command requires all tools — install what fits your workflow and leave the rest for later.
+A cell with a tool name means that tool meaningfully improves that skill. Empty cells mean the skill works on its own without enhancement from that tool. No skill requires all tools — install what fits your workflow and leave the rest for later.
 
 **Highest-value tools by breadth of impact:**
 
-1. **Context7 MCP** — enhances 17 of 25 commands. Install this first.
-2. **ESLint** — enforces generated code quality across 14 commands. Install early.
-3. **Playwright MCP** — enables browser automation for 8 commands. High value for QA-focused work.
-4. **GitHub MCP** — automates PR and issue workflows for 6 commands. High value for teams.
-5. **Perplexity MCP** — adds real-time research to 7 commands. High value for migration and debugging work.
+1. **Context7 MCP** — enhances 17 of 26 skills. Install this first.
+2. **ESLint** — enforces generated code quality across 14 skills. Install early.
+3. **Playwright MCP** — enables browser automation for 8 skills. High value for QA-focused work.
+4. **GitHub MCP** — automates PR and issue workflows for 6 skills. High value for teams.
+5. **Perplexity MCP** — adds real-time research to 7 skills. High value for migration and debugging work.

@@ -1,6 +1,36 @@
-# Slash Commands
+# Skills & Commands
 
-AI Kit copies 25 slash commands to `.claude/commands/` in your project. These are available in Claude Code by typing `/command-name`. Each command is a structured workflow prompt — not a one-liner — designed to produce consistent, reviewable output.
+AI Kit generates 26 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+
+## Skills vs Commands
+
+| | Skills | Legacy Commands |
+|---|---|---|
+| **Location** | `.claude/skills/[name]/SKILL.md` and `.cursor/skills/[name]/SKILL.md` | `.claude/commands/[name].md` |
+| **Works in** | Claude Code AND Cursor | Claude Code only |
+| **How invoked** | AI applies automatically when the task matches | You type `/command-name` explicitly |
+| **Learning curve** | Zero — AI finds the right skill | You must know the command name |
+
+### What Are Skills?
+
+Skills are the same structured workflow prompts as commands, but packaged in a way that lets the AI **auto-discover and apply them without you typing a slash command**. Each skill file contains a description the AI reads to understand what the skill covers and when to use it.
+
+When you ask the AI to "review my PR changes" or "scaffold a new component", it reads the skill descriptions, identifies the right one, and applies it — even if you've never heard of `/review` or `/new-component`.
+
+### Auto-Discovery
+
+Skills are automatically discovered by the AI at the start of each conversation. The AI reads each skill's description and builds an internal map of what workflows are available. When your request matches a skill's purpose, the AI applies it without prompting.
+
+This means:
+- **Zero learning curve** — developers don't need to memorize command names
+- **Higher utilization** — skills get applied even when developers don't think to invoke them
+- **Cursor support** — Cursor users get the full workflow library, not just Claude Code users
+
+### Legacy Commands Still Work
+
+If you already use slash commands like `/review` or `/pre-pr`, they continue to work in Claude Code exactly as before. AI Kit generates both formats in every project — skills for auto-discovery and cross-platform support, commands for existing workflows.
+
+---
 
 ## Quick Reference
 
@@ -599,9 +629,23 @@ Sets up local environment variables and configuration for a new developer joinin
 
 ---
 
-## Using Commands
+## Using Skills and Commands
 
-In Claude Code, type the command name:
+### Auto-Discovery (Recommended)
+
+Just describe what you want. The AI reads skill descriptions and applies the right one automatically:
+
+```
+Review my CheckoutForm before I open a PR
+Scaffold a new ProductCard component
+Fix the TypeScript errors in DataTable.tsx
+```
+
+This works in both Claude Code and Cursor.
+
+### Explicit Slash Commands (Claude Code)
+
+In Claude Code, you can also invoke any workflow by name:
 
 ```
 /prompt-help
@@ -617,6 +661,8 @@ Most commands work best with a target file or argument:
 /accessibility-audit src/components/Modal.tsx
 ```
 
-Commands work best when you provide context. The more specific you are about the file, behavior, and constraints, the more useful the output.
+### Tips
 
-If you're ever unsure what command to reach for, run `/prompt-help` first — it will guide you to the right one.
+Skills and commands work best when you provide context. The more specific you are about the file, behavior, and constraints, the more useful the output.
+
+If you're ever unsure what to reach for, run `/prompt-help` first — it will guide you to the right workflow.

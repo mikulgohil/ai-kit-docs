@@ -6,7 +6,7 @@ export default {
   'cli-reference': 'CLI Reference',
   'what-gets-generated': 'What Gets Generated',
   'supported-stacks': 'Supported Tech Stacks',
-  'slash-commands': 'Slash Commands',
+  'slash-commands': 'Skills & Commands',
   guides: 'Guides',
   'recommended-tools': 'Recommended Tools',
   configuration: 'Configuration',

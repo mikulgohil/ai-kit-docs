@@ -42,9 +42,9 @@ The component uses Sitecore field helpers.
 
 The generated rules handle conventions; you provide task-specific context.
 
-### Use Slash Commands as Checklists
+### Use Skills as Checklists
 
-Even if you don't use the AI output directly, slash commands like `/review` and `/new-component` serve as checklists for what to cover.
+Even if you don't use the AI output directly, skills like `review` and `new-component` serve as checklists for what to cover. Invoke them explicitly with `/review` in Claude Code, or let the AI auto-apply them when your request matches.
 
 ---
 
@@ -167,19 +167,25 @@ No deep file scanning or AST parsing.
 
 ## Advanced Tips
 
-### Custom Slash Commands
+### Custom Skills
 
-Add your own slash commands alongside AI Kit's:
+Add your own skills alongside AI Kit's generated ones:
 
 ```
-.claude/commands/
-├── prompt-help.md       # AI Kit generated
-├── review.md            # AI Kit generated
-├── deploy.md            # Your custom command
-└── pr-template.md       # Your custom command
+.claude/skills/
+├── review/SKILL.md        # AI Kit generated
+├── new-component/SKILL.md # AI Kit generated
+├── deploy/SKILL.md        # Your custom skill
+└── pr-template/SKILL.md   # Your custom skill
+
+.cursor/skills/
+├── review/SKILL.md        # AI Kit generated
+├── deploy/SKILL.md        # Your custom skill (same file, works in Cursor too)
 ```
 
-AI Kit won't touch files it didn't create. Just add `.md` files to `.claude/commands/`.
+AI Kit won't touch skill directories it didn't create. Add a new subdirectory with a `SKILL.md` file and it's automatically available for auto-discovery in both Claude Code and Cursor.
+
+For Claude Code only, you can also still add legacy slash commands as `.md` files directly to `.claude/commands/`.
 
 ### Multiple Config Variants
 

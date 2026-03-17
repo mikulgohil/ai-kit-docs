@@ -16,8 +16,9 @@ A technical deep-dive into AI Kit's architecture and design decisions.
     └───────┬───┘ └────┬────┘ └──┬──────────┘
             │          │          │
     ┌───────▼───┐ ┌────▼────┐ ┌──▼──────────┐
-    │ 7 Detect  │ │Template │ │  Commands   │
-    │ Functions │ │Assembler│ │  Guides     │
+    │ 7 Detect  │ │Template │ │  Skills     │
+    │ Functions │ │Assembler│ │  Commands   │
+    │           │ │         │ │  Guides     │
     │           │ │         │ │  Docs       │
     └───────────┘ └─────────┘ └─────────────┘
 ```
@@ -145,11 +146,12 @@ Variables are built from the scan:
 
 Simple file copy operations with smart behavior:
 
-- **Commands**: Copy from `commands/` → `.claude/commands/`. Always overwrites.
+- **Skills**: Copy from `skills/` → `.claude/skills/[name]/SKILL.md` and `.cursor/skills/[name]/SKILL.md`. Always overwrites AI Kit-created skill directories.
+- **Commands**: Copy from `commands/` → `.claude/commands/`. Always overwrites. Legacy format kept for backward compatibility.
 - **Guides**: Copy from `guides/` → `ai-kit/guides/`. Always overwrites.
 - **Doc scaffolds**: Copy from `docs-scaffolds/` → `docs/`. **Never overwrites** existing files.
 
-The "never overwrite" behavior for docs is intentional — users add content to these files over time.
+The "never overwrite" behavior for docs is intentional — users add content to these files over time. Custom skill directories (those not created by AI Kit) are also never overwritten.
 
 ---
 

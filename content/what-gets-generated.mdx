@@ -108,19 +108,53 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ---
 
+## .claude/skills/ and .cursor/skills/
+
+26 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+
+```
+.claude/skills/
+  new-component/SKILL.md
+  review/SKILL.md
+  pre-pr/SKILL.md
+  test/SKILL.md
+  fix-bug/SKILL.md
+  ...
+
+.cursor/skills/
+  new-component/SKILL.md
+  review/SKILL.md
+  pre-pr/SKILL.md
+  test/SKILL.md
+  fix-bug/SKILL.md
+  ...
+```
+
+Skills are **auto-discovered** — the AI reads each skill's description at conversation start and applies the right one when your request matches, without you typing a command name. This works in both Claude Code and Cursor.
+
+| Category | Skills |
+|---|---|
+| **Getting Started** | `prompt-help`, `understand` |
+| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens` |
+| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix` |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` |
+| **Workflow** | `document`, `commit-msg`, `env-setup` |
+
 ## .claude/commands/
 
-25 slash commands for Claude Code organized into 5 categories:
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 26 workflows as the skills above, in the classic slash command format.
 
-| Category | Commands |
-|---|---|
-| **Getting Started** | `/prompt-help`, `/understand` |
-| **Building** | `/new-component`, `/new-page`, `/api-route`, `/error-boundary`, `/extract-hook`, `/figma-to-code`, `/design-tokens` |
-| **Quality & Review** | `/review`, `/pre-pr`, `/test`, `/accessibility-audit`, `/security-check`, `/responsive-check`, `/type-fix` |
-| **Maintenance** | `/fix-bug`, `/refactor`, `/optimize`, `/migrate`, `/dep-check`, `/sitecore-debug` |
-| **Workflow** | `/document`, `/commit-msg`, `/env-setup` |
+```
+.claude/commands/
+  new-component.md
+  review.md
+  pre-pr.md
+  ...
+```
 
-See [Slash Commands](/docs/slash-commands) for detailed usage of each command.
+If you already use `/review`, `/pre-pr`, or other slash commands, they continue to work exactly as before. The skills format is the recommended path for new usage.
+
+See [Skills & Commands](/docs/slash-commands) for detailed usage of each workflow.
 
 ---
 

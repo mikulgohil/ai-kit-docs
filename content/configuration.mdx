@@ -106,6 +106,26 @@ Cursor `.mdc` files in `.cursor/rules/` can be individually edited. Since `ai-ki
 └── custom-testing.mdc    # Your custom rules (preserved)
 ```
 
+### Adding Custom Skills
+
+Add your own skills alongside AI Kit's generated ones. Skills live in subdirectories with a `SKILL.md` file:
+
+```
+.claude/skills/
+├── review/SKILL.md        # AI Kit generated (will be overwritten on update)
+├── new-component/SKILL.md # AI Kit generated (will be overwritten on update)
+├── deploy/SKILL.md        # Your custom skill (preserved — AI Kit won't touch it)
+└── pr-template/SKILL.md   # Your custom skill (preserved)
+
+.cursor/skills/
+├── review/SKILL.md        # AI Kit generated
+├── deploy/SKILL.md        # Your custom skill (preserved)
+```
+
+AI Kit only overwrites skill directories it originally created. Any skill directory you add manually will be left untouched on `ai-kit update`.
+
+Legacy slash commands can also still be added to `.claude/commands/` — add any `.md` file there and AI Kit won't touch it.
+
 ---
 
 ## Template Fragments
@@ -151,6 +171,8 @@ Templates use `{{variable}}` placeholders that are replaced during generation:
 CLAUDE.md
 .cursorrules
 .cursor/rules/
+.claude/skills/
+.cursor/skills/
 .claude/commands/
 ai-kit.config.json
 ai-kit/guides/

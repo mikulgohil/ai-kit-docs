@@ -29,7 +29,9 @@ Yes. The source code is available at [github.com/mikulgohil/ai-kit](https://gith
 **Yes.** Commit all generated files so your entire team gets the same AI context:
 - `CLAUDE.md` and `.cursorrules` — AI rules
 - `.cursor/rules/*.mdc` — scoped Cursor rules
-- `.claude/commands/*.md` — slash commands
+- `.claude/skills/` — auto-discovered skills for Claude Code
+- `.cursor/skills/` — auto-discovered skills for Cursor
+- `.claude/commands/*.md` — legacy slash commands
 - `ai-kit/guides/*.md` — developer guides
 - `ai-kit.config.json` — configuration
 
@@ -95,19 +97,25 @@ You don't need to run it for routine code changes.
 
 ### Do slash commands work in Cursor?
 
-No. Slash commands (`.claude/commands/*.md`) are a Claude Code feature. Cursor uses `.cursorrules` and `.mdc` files instead.
+Slash commands (`.claude/commands/*.md`) are a Claude Code feature and don't work in Cursor natively. However, **skills do work in Cursor**. AI Kit generates `.cursor/skills/` with the same 26 workflows. The AI in Cursor reads skill descriptions and auto-applies them when your task matches — so Cursor users get the full workflow library without typing slash commands.
 
-### Can I add my own slash commands?
+### Can I add my own skills?
 
-Yes. Add `.md` files to `.claude/commands/`. AI Kit won't touch files it didn't create. Example:
+Yes. Create a subdirectory with a `SKILL.md` file in `.claude/skills/` and `.cursor/skills/`. AI Kit won't touch directories it didn't create:
 
 ```
-.claude/commands/
-├── prompt-help.md    # AI Kit (updated on ai-kit update)
-├── review.md         # AI Kit (updated on ai-kit update)
-├── deploy.md         # Your custom command (preserved)
-└── pr-template.md    # Your custom command (preserved)
+.claude/skills/
+├── review/SKILL.md        # AI Kit (updated on ai-kit update)
+├── new-component/SKILL.md # AI Kit (updated on ai-kit update)
+├── deploy/SKILL.md        # Your custom skill (preserved)
+└── pr-template/SKILL.md   # Your custom skill (preserved)
+
+.cursor/skills/
+├── review/SKILL.md        # AI Kit (updated on ai-kit update)
+├── deploy/SKILL.md        # Your custom skill (preserved)
 ```
+
+For Claude Code only, you can also still add legacy slash commands as `.md` files to `.claude/commands/`.
 
 ### Will AI Kit slow down my AI assistant?
 

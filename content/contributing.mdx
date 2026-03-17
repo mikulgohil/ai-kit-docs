@@ -51,14 +51,16 @@ ai-kit/
 │   │   ├── cursor-mdc.ts     # .cursor/rules/*.mdc generation
 │   │   └── config.ts         # ai-kit.config.json generation
 │   └── copier/
-│       ├── commands.ts       # Slash command copying
+│       ├── skills.ts         # Skill copying (Claude Code + Cursor)
+│       ├── commands.ts       # Legacy slash command copying
 │       ├── guides.ts         # Guide copying
 │       └── docs.ts           # Doc scaffold copying
 ├── templates/
 │   ├── header.md             # Shared header template
 │   ├── claude-md/            # 8 CLAUDE.md fragments
 │   └── cursorrules/          # 8 .cursorrules fragments
-├── commands/                 # 25 slash command files
+├── skills/                   # 26 skill directories (name/SKILL.md)
+├── commands/                 # 26 legacy slash command files
 ├── guides/                   # 5 developer guide files
 ├── docs-scaffolds/           # 3 doc scaffold templates
 ├── tests/                    # Vitest test files
@@ -95,7 +97,18 @@ export function detectYourTech(
 7. Add `.mdc` config in `src/generator/cursor-mdc.ts`
 8. Write tests in `tests/scanner/your-tech.test.ts`
 
-## Adding a New Slash Command
+## Adding a New Skill
+
+1. Create `skills/your-skill/SKILL.md` with the skill content. The file must include a `description:` field that the AI reads for auto-discovery.
+2. Add the skill name to `AVAILABLE_SKILLS` in `src/copier/skills.ts`
+
+The copier will generate both:
+- `.claude/skills/your-skill/SKILL.md` (Claude Code)
+- `.cursor/skills/your-skill/SKILL.md` (Cursor)
+
+### Adding a Legacy Slash Command (Backward Compatibility)
+
+If you also want a legacy slash command for explicit invocation in Claude Code:
 
 1. Create `commands/your-command.md` with the command content
 2. Add the command name to `AVAILABLE_COMMANDS` in `src/copier/commands.ts`

@@ -27,7 +27,9 @@ AI Kit scans your project, detects everything automatically, and generates:
 | `CLAUDE.md` | Rules and conventions for Claude Code |
 | `.cursorrules` | Rules for Cursor AI |
 | `.cursor/rules/*.mdc` | Scoped rules per technology (Cursor v2 format) |
-| `.claude/commands/` | 25 slash commands for common workflows |
+| `.claude/skills/` | 26 auto-discovered skills for Claude Code |
+| `.cursor/skills/` | 26 auto-discovered skills for Cursor |
+| `.claude/commands/` | 26 legacy slash commands (backward compatibility) |
 | `ai-kit/guides/` | 5 developer guides for effective AI usage |
 | `docs/` scaffolds | Structured logging templates |
 
@@ -39,7 +41,7 @@ This is the feature that sets AI Kit apart. The generated rules don't just give 
 
 - **Prompt Quality Guard** — When you write a vague request like "fix this", the AI doesn't guess. It asks: *"Which file? What's the expected vs actual behavior?"* One clarification prevents 10 minutes of wrong output.
 - **Self-Enforcement** — The AI auto-creates documentation for complex components, auto-adds regression tests for bug fixes, auto-updates change logs, and flags incomplete TODOs — even when you don't ask.
-- **Structured Commands** — All 25 slash commands use prompt engineering (role framing, mandatory steps, output templates, self-checks) so you get consistent, reviewable output every time, across every project.
+- **Structured Skills** — All 26 skills use prompt engineering (role framing, mandatory steps, output templates, self-checks) so you get consistent, reviewable output every time, across every project. Skills are auto-discovered — the AI applies the right one without you typing a command.
 
 [Read the full deep-dive on AI Self-Improvement](/docs/ai-self-improvement)
 
@@ -49,7 +51,7 @@ This is the feature that sets AI Kit apart. The generated rules don't just give 
 - **Stack-aware rules** — generates different rules for App Router vs Pages Router, Sitecore vs plain Next.js, Tailwind vs SCSS
 - **Safe updates** — `ai-kit update` preserves your manual edits using `AI-KIT:START/END` markers
 - **Two AI tools** — generates configs for both Claude Code and Cursor in one pass
-- **25 guided workflows** — slash commands for building, reviewing, debugging, migrating, and more — from `/prompt-help` to `/security-check`
+- **26 auto-discovered skills** — workflows for building, reviewing, debugging, migrating, and more — available in both Claude Code and Cursor, applied automatically when your task matches
 
 ## Quick Start
 
