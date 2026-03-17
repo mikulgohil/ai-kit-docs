@@ -1,5 +1,6 @@
 export default {
   index: 'Introduction',
+  'why-ai-kit': 'Why AI Kit',
   'ai-self-improvement': 'AI That Improves Itself',
   'getting-started': 'Getting Started',
   'cli-reference': 'CLI Reference',
