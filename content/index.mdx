@@ -1,57 +1,146 @@
 # AI Kit — Knowledge Hub
 
-**AI Kit** is a CLI tool that auto-detects your project's tech stack and generates tailored AI assistant configuration files — so Claude Code and Cursor understand your project from day one.
-
-## The Problem
-
-Every time you open an AI assistant in a new project, it starts from zero. It doesn't know your:
-- Framework (Next.js App Router? Pages Router? Sitecore XM Cloud?)
-- Coding conventions (naming, file structure, import order)
-- Design system (Tailwind v4 tokens? SCSS modules?)
-- Team standards (documentation rules, testing expectations, git practices)
-
-You end up re-explaining the same context in every conversation. AI output doesn't match your patterns. Code reviews catch AI-generated code that violates team standards.
-
-## The Solution
-
-Run one command:
+**AI Kit** is an open-source CLI that makes AI coding assistants actually useful. It auto-detects your project's tech stack and generates tailored rules, skills, and workflows for Claude Code and Cursor — so every AI interaction follows your standards, from the first conversation.
 
 ```bash
 npx @mikulgohil/ai-kit init
 ```
 
-AI Kit scans your project, detects everything automatically, and generates:
+One command. 30 seconds. Your AI assistant goes from generic to project-aware.
 
-| Generated File | Purpose |
+---
+
+## The Problem AI Kit Solves
+
+AI coding tools are powerful, but they start every project from zero. Without context, they:
+
+**Generate wrong patterns.** The AI creates a Pages Router component when you use App Router. It writes CSS classes when you use Tailwind. It uses default exports when your project uses named exports. Every AI-generated file needs manual fixing.
+
+**Ignore your standards.** No documentation gets created. No tests. No JSDoc. No error boundaries. The AI does exactly what you ask — nothing more. Your team's conventions exist in a wiki nobody reads, and the AI certainly doesn't.
+
+**Waste your time.** You explain the same context in every conversation. "We use Sitecore field helpers." "Import order is external, internal, local, types." "Components go in src/components." Multiply this by every developer, every project, every day.
+
+**Produce inconsistent output.** Developer A gets different AI output than Developer B on the same project. Code reviews become about formatting and conventions instead of logic and architecture. The AI is fast, but the rework makes it slow.
+
+**The result:** Teams using AI tools without configuration spend more time fixing AI output than they save generating it.
+
+---
+
+## What AI Kit Does
+
+AI Kit scans your project once and generates everything the AI needs to be a productive team member:
+
+### 1. Project-Aware Rules
+
+AI Kit reads your `package.json`, config files, and directory structure to detect your exact stack — then generates rules tailored to it.
+
+| What It Detects | What the AI Learns |
 |---|---|
-| `CLAUDE.md` | Rules and conventions for Claude Code |
-| `.cursorrules` | Rules for Cursor AI |
-| `.cursor/rules/*.mdc` | Scoped rules per technology (Cursor v2 format) |
-| `.claude/skills/` | 26 auto-discovered skills for Claude Code |
-| `.cursor/skills/` | 26 auto-discovered skills for Cursor |
-| `.claude/commands/` | 26 legacy slash commands (backward compatibility) |
-| `ai-kit/guides/` | 5 developer guides for effective AI usage |
-| `docs/` scaffolds | Structured logging templates |
+| Next.js 15 with App Router | Server Components, Server Actions, `app/` routing patterns |
+| Sitecore XM Cloud | `<Text>`, `<RichText>`, `<Image>` field helpers, placeholder patterns |
+| Tailwind CSS v4 | `@theme` tokens, utility class patterns, responsive prefixes |
+| TypeScript strict mode | No `any`, proper null checks, discriminated unions |
+| Turborepo monorepo | Workspace conventions, cross-package imports |
+| Figma + design tokens | Token mapping, design-to-code workflow |
 
-## Key Features
+Rules are generated for **both** Claude Code (`CLAUDE.md`) and Cursor (`.cursorrules` + `.cursor/rules/*.mdc`).
 
-### AI That Improves Itself
+### 2. 26 Auto-Discovered Skills
 
-This is the feature that sets AI Kit apart. The generated rules don't just give the AI context — they make it **actively better**:
+Skills are structured AI workflows that get applied automatically. You don't type a command — the AI recognizes what you're doing and loads the right skill.
 
-- **Prompt Quality Guard** — When you write a vague request like "fix this", the AI doesn't guess. It asks: *"Which file? What's the expected vs actual behavior?"* One clarification prevents 10 minutes of wrong output.
-- **Self-Enforcement** — The AI auto-creates documentation for complex components, auto-adds regression tests for bug fixes, auto-updates change logs, and flags incomplete TODOs — even when you don't ask.
-- **Structured Skills** — All 26 skills use prompt engineering (role framing, mandatory steps, output templates, self-checks) so you get consistent, reviewable output every time, across every project. Skills are auto-discovered — the AI applies the right one without you typing a command.
+**Example:** You say "create a ProductCard component." The AI auto-loads the `new-component` skill, which:
+- Asks 10 structured questions (props, Server/Client, data fetching, responsive needs...)
+- Reads an existing component to match your project's patterns
+- Generates: component + types + tests + docs (if complex)
+- Follows your exact conventions — because it read them
 
-[Read the full deep-dive on AI Self-Improvement](/docs/ai-self-improvement)
+**26 skills across 5 categories:**
 
-### Everything Else
+| Category | Skills | What They Do |
+|---|---|---|
+| **Getting Started** | `prompt-help`, `understand` | Help you write effective prompts, explain unfamiliar code |
+| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens` | Scaffold production-ready code that matches your patterns |
+| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix` | Catch issues before code review — a11y, security, types, responsive |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` | Debug, refactor, upgrade, and audit with structured workflows |
+| **Workflow** | `document`, `commit-msg`, `env-setup`, `token-tips` | Automate docs, git messages, env setup, and token optimization |
 
-- **Zero configuration** — detects your stack automatically from `package.json`, config files, and directory structure
-- **Stack-aware rules** — generates different rules for App Router vs Pages Router, Sitecore vs plain Next.js, Tailwind vs SCSS
-- **Safe updates** — `ai-kit update` preserves your manual edits using `AI-KIT:START/END` markers
-- **Two AI tools** — generates configs for both Claude Code and Cursor in one pass
-- **26 auto-discovered skills** — workflows for building, reviewing, debugging, migrating, and more — available in both Claude Code and Cursor, applied automatically when your task matches
+Skills work in **both Claude Code and Cursor** — same 26 workflows, both tools.
+
+### 3. AI That Enforces Standards Automatically
+
+This is what makes AI Kit different from a static config file. The generated rules include **active enforcement**:
+
+**Prompt Quality Guard** — When you write a vague request:
+```
+You: "fix the auth"
+AI:  "I want to help. Which file has the auth issue?
+      What's happening — login failing, session expiring, or an error?"
+```
+One clarification question prevents 10 minutes of wrong output.
+
+**Self-Enforcement** — The AI does these automatically, even when you don't ask:
+
+| What the AI Auto-Does | Why It Matters |
+|---|---|
+| Creates `.docs.md` for complex components | Complex components without docs become tribal knowledge |
+| Adds regression test before fixing bugs | Without a test, the same bug comes back |
+| Adds JSDoc to all exported functions | Exported functions without JSDoc are invisible in IDE tooltips |
+| Updates Change Log after modifying documented components | Prevents "who changed this and why?" questions |
+| Flags `// TODO` without ticket numbers | Untracked TODOs never get done |
+
+**Structured Output** — Every skill produces output in the same format, every time:
+- Role-specific expertise (security engineer for `/security-check`, a11y engineer for `/accessibility-audit`)
+- Mandatory numbered steps the AI cannot skip
+- Consistent output tables with file paths and line numbers
+- Self-check before responding ("Did I cover every section?")
+
+### 4. Safe Updates
+
+Your team adds custom rules above or below the generated content. When the stack changes, run `ai-kit update` — only the generated section refreshes, your custom rules stay untouched.
+
+```markdown
+# My Team's Custom Rules        ← preserved on update
+...
+
+<!-- AI-KIT:START -->
+[generated content]              ← refreshed on update
+<!-- AI-KIT:END -->
+
+# More Custom Rules              ← preserved on update
+```
+
+---
+
+## The Impact
+
+### Before AI Kit
+
+| What Happens | Time Cost |
+|---|---|
+| Re-explain project context every AI conversation | 5-10 min × 10 conversations/day |
+| Fix AI-generated code to match conventions | 15-30 min per component |
+| Code review catches convention violations | 2-4 review cycles per PR |
+| New developer onboarding | 1-2 weeks to learn conventions |
+| Bug fix without regression test | Bug returns in 2 weeks |
+| No documentation created | Technical debt compounds daily |
+
+### After AI Kit
+
+| What Happens | Time Cost |
+|---|---|
+| AI already knows your project | 0 min — context auto-loaded |
+| AI generates code matching your exact patterns | Ready for review, no fixing |
+| `/pre-pr` catches issues before review | 1-2 review cycles per PR |
+| New developer runs `ai-kit init`, AI knows everything | 2-3 days to productivity |
+| AI auto-adds regression test with every bug fix | Bug can't return |
+| AI auto-creates docs for complex components | Documentation stays current |
+
+**For a team of 5 developers:** ~50-75% reduction in code review cycles, ~60-70% faster component creation, documentation that actually exists.
+
+[See the full side-by-side comparison](/docs/why-ai-kit)
+
+---
 
 ## Quick Start
 
@@ -59,15 +148,57 @@ This is the feature that sets AI Kit apart. The generated rules don't just give 
 # Run in any project directory
 npx @mikulgohil/ai-kit init
 
-# Follow the interactive prompts
+# Follow the interactive prompts (30 seconds)
 # Done — your AI assistants now understand your project
 ```
 
-See [Getting Started](/docs/getting-started) for a detailed walkthrough, or read [Why AI Kit](/docs/why-ai-kit) for a side-by-side comparison of development with and without it.
+**What you get immediately:**
+- `CLAUDE.md` + `.cursorrules` — AI rules tailored to your stack
+- 26 skills in `.claude/skills/` + `.cursor/skills/` — auto-discovered workflows
+- 5 developer guides in `ai-kit/guides/` — effective AI usage playbooks
+- Documentation scaffolds in `docs/` — structured logging templates
+
+[Full setup walkthrough](/docs/getting-started) | [What gets generated](/docs/what-gets-generated)
+
+---
 
 ## Who Is This For?
 
-- **Developers** working on client projects (DPWorld, XCelerate, etc.)
-- **Teams using Claude Code or Cursor** who want consistent AI output across the org
-- **Tech leads** who want to enforce coding standards through AI tools
-- **Any developer** working with Next.js, Sitecore, Tailwind, or TypeScript who wants better AI assistance
+**Individual developers** — Stop re-explaining context. Let AI Kit teach the AI your project once. Every conversation starts informed.
+
+**Tech leads** — Enforce coding standards through AI tools instead of code review comments. Standards are followed automatically, not policed manually.
+
+**Teams** — Same AI experience across every developer and every project. New hires get the same AI context as senior engineers.
+
+**Open source maintainers** — Contributors get project-aware AI assistance from their first PR. Standards are in the repo, not in your head.
+
+---
+
+## Supported Tech Stacks
+
+AI Kit detects and generates tailored rules for:
+
+| Category | Technologies |
+|---|---|
+| **Frameworks** | Next.js (App Router, Pages Router, Hybrid), React |
+| **CMS** | Sitecore XM Cloud, Sitecore JSS |
+| **Styling** | Tailwind CSS (v3 + v4), SCSS, CSS Modules, styled-components |
+| **Language** | TypeScript (with strict mode detection) |
+| **Monorepos** | Turborepo, Nx, Lerna, pnpm workspaces |
+| **Design** | Figma MCP, design tokens, visual tests |
+| **Package Managers** | npm, pnpm, yarn, bun |
+
+[Full detection details](/docs/supported-stacks)
+
+---
+
+## Explore the Docs
+
+| Page | What You'll Learn |
+|---|---|
+| [Why AI Kit](/docs/why-ai-kit) | Side-by-side comparison: development with and without AI Kit |
+| [AI That Improves Itself](/docs/ai-self-improvement) | Deep-dive into Prompt Quality Guard, Self-Enforcement, and Structured Skills |
+| [Getting Started](/docs/getting-started) | Step-by-step setup walkthrough |
+| [Skills & Commands](/docs/slash-commands) | All 26 skills with usage guides |
+| [Recommended Tools](/docs/recommended-tools) | Free tools and MCPs that supercharge AI Kit |
+| [Token Tips](/docs/tips-and-tricks) | Optimize token usage on the $20 plan |
