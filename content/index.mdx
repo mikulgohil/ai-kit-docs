@@ -45,7 +45,7 @@ AI Kit reads your `package.json`, config files, and directory structure to detec
 
 Rules are generated for **both** Claude Code (`CLAUDE.md`) and Cursor (`.cursorrules` + `.cursor/rules/*.mdc`).
 
-### 2. 26 Auto-Discovered Skills
+### 2. 45 Auto-Discovered Skills
 
 Skills are structured AI workflows that get applied automatically. You don't type a command — the AI recognizes what you're doing and loads the right skill.
 
@@ -55,19 +55,31 @@ Skills are structured AI workflows that get applied automatically. You don't typ
 - Generates: component + types + tests + docs (if complex)
 - Follows your exact conventions — because it read them
 
-**26 skills across 5 categories:**
+**45 skills across 7 categories:**
 
 | Category | Skills | What They Do |
 |---|---|---|
 | **Getting Started** | `prompt-help`, `understand` | Help you write effective prompts, explain unfamiliar code |
-| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens` | Scaffold production-ready code that matches your patterns |
-| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix` | Catch issues before code review — a11y, security, types, responsive |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` | Debug, refactor, upgrade, and audit with structured workflows |
-| **Workflow** | `document`, `commit-msg`, `env-setup`, `token-tips` | Automate docs, git messages, env setup, and token optimization |
+| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` | Scaffold production-ready code that matches your patterns |
+| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` | Catch issues before code review — a11y, security, types, responsive, perf |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `docker-debug`, `ci-fix`, `db-migrate`, `dependency-graph` | Debug, refactor, upgrade, and audit with structured workflows |
+| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `visual-diff` | Automate docs, git messages, releases, and visual testing |
+| **Session** | `learn`, `save-session`, `resume-session`, `checkpoint` | Persist context across sessions, extract patterns, track quality |
+| **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` | Coordinate agents, run comprehensive checks, audit AI config |
 
-Skills work in **both Claude Code and Cursor** — same 26 workflows, both tools.
+Skills work in **both Claude Code and Cursor** — same 45 workflows, both tools.
 
-### 3. AI That Enforces Standards Automatically
+### 3. Hooks, Agents & Context Modes
+
+New in v1.2.0 — three systems that make the AI work more like a real teammate:
+
+**[Hooks](/docs/hooks)** — Automated quality checks that run as you code. Auto-format on save, TypeScript checks after edits, console.log warnings, and git push safety. Three profiles: minimal, standard, strict.
+
+**[Agents](/docs/agents)** — 8 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. Each agent has focused expertise and tools.
+
+**[Context Modes](/docs/context-modes)** — Switch between dev (build fast), review (check quality), and research (understand code) modes to change how the AI approaches your work.
+
+### 4. AI That Enforces Standards Automatically
 
 This is what makes AI Kit different from a static config file. The generated rules include **active enforcement**:
 
@@ -95,7 +107,7 @@ One clarification question prevents 10 minutes of wrong output.
 - Consistent output tables with file paths and line numbers
 - Self-check before responding ("Did I cover every section?")
 
-### 4. Safe Updates
+### 5. Safe Updates
 
 Your team adds custom rules above or below the generated content. When the stack changes, run `ai-kit update` — only the generated section refreshes, your custom rules stay untouched.
 

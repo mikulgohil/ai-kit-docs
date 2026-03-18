@@ -1,0 +1,163 @@
+# Agents
+
+Agents are specialized AI assistants that live in `.claude/agents/` and handle delegated tasks. Each agent has focused expertise, specific tools, and structured workflows for its domain.
+
+## Available Agents
+
+AI Kit generates up to 8 agents based on your project's detected stack:
+
+| Agent | Purpose | Tools |
+|---|---|---|
+| **planner** | Break features into implementation plans with file lists, steps, and risks | Read, Glob, Grep, Bash |
+| **code-reviewer** | Deep code review for quality, patterns, security, and accessibility | Read, Glob, Grep |
+| **security-reviewer** | Security-focused audit — XSS, CSRF, injection, OWASP Top 10 | Read, Glob, Grep, Bash |
+| **e2e-runner** | Generate and run Playwright E2E tests with Page Object Model | Read, Write, Edit, Glob, Grep, Bash |
+| **build-resolver** | Diagnose and fix Next.js, TypeScript, and Sitecore build errors | Read, Edit, Glob, Grep, Bash |
+| **doc-updater** | Keep documentation, README, and Storybook stories in sync with code | Read, Write, Edit, Glob, Grep |
+| **refactor-cleaner** | Find unused exports, dead code, and unnecessary complexity | Read, Edit, Glob, Grep, Bash |
+| **sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
+
+---
+
+## How to Use Agents
+
+In Claude Code, agents are automatically available for delegation. You can invoke them directly:
+
+```
+@planner Plan the implementation for adding dark mode support
+@code-reviewer Review the changes in src/components/Header.tsx
+@security-reviewer Run a security audit on the authentication flow
+@e2e-runner Write E2E tests for the checkout flow
+@build-resolver Fix the TypeScript build errors
+@doc-updater Update docs for the changes I just made
+@refactor-cleaner Find dead code in src/components/
+@sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
+```
+
+You can also use the `/orchestrate` skill to coordinate multiple agents on a complex task.
+
+---
+
+## Agent Details
+
+### Planner
+
+Breaks down feature requests into concrete implementation plans. Outputs:
+- Files to create and modify (with reasons)
+- Numbered implementation steps
+- Testing strategy
+- Risks and considerations
+
+Follows existing patterns in your codebase. Flags changes that touch more than 7 files for approval.
+
+### Code Reviewer
+
+Provides thorough reviews across multiple dimensions:
+- **Correctness** — logic errors, null handling, async patterns
+- **React patterns** — hooks rules, memoization, Server vs Client Components
+- **TypeScript** — no `any`, proper generics, strict null checks
+- **Performance** — unnecessary re-renders, bundle size, data fetching
+- **Accessibility** — semantic HTML, ARIA, keyboard nav, color contrast
+- **Sitecore** — JSS helpers, Experience Editor compatibility, GraphQL efficiency
+
+Rates each category as PASS / WARN / FAIL with specific line references.
+
+### Security Reviewer
+
+Focused exclusively on security vulnerabilities:
+- **XSS prevention** — `dangerouslySetInnerHTML`, URL params, `eval()`
+- **Injection** — SQL, NoSQL, command injection, path traversal
+- **Auth & session** — route protection, JWT validation, localStorage secrets
+- **Secrets** — hardcoded keys, `.env` in git, `NEXT_PUBLIC_` misuse
+- **API security** — rate limiting, input validation, CORS, HTTP methods
+- **Dependencies** — `npm audit`, known CVEs, typosquatting
+
+Outputs findings as CRITICAL / HIGH / MEDIUM / LOW with a score out of 100.
+
+### E2E Runner
+
+Generates and runs Playwright tests using Page Object Model:
+- Creates page objects in `tests/pages/`
+- Uses accessible selectors (`getByRole`, `getByLabel`, `getByText`)
+- Covers happy paths, error states, accessibility, and responsive viewports
+- Uses CLI only (`npx playwright test`) — never the Playwright MCP plugin
+
+### Build Resolver
+
+Diagnoses root causes of build failures:
+- **TypeScript errors** — type mismatches, missing declarations, module resolution
+- **Next.js errors** — Server/Client boundary, dynamic imports, image config
+- **Sitecore errors** — component factory, GraphQL schema, layout service
+- **Module resolution** — missing deps, circular imports, path aliases
+
+Follows the two-attempt rule: if an approach fails twice, tries a different strategy.
+
+### Doc Updater
+
+Keeps documentation in sync with code changes:
+- Updates JSDoc comments and component docs when props change
+- Creates documentation entries for new components
+- Updates README sections for new features or changed setup
+- Generates Storybook stories if Storybook is detected
+- Appends dated entries to `docs/decisions-log.md`
+
+### Refactor Cleaner
+
+Finds and removes dead code and unnecessary complexity:
+- **Unused exports** — uses Knip if available, otherwise manual search
+- **Unused imports** — including type-only import optimization
+- **Dead code** — unreferenced functions, commented-out blocks
+- **Over-abstraction** — wrappers that just pass through, single-use utilities
+
+Groups findings by severity: Remove / Simplify / Consider.
+
+### Sitecore Specialist
+
+Handles all Sitecore XM Cloud development patterns:
+- **Component development** — JSS field helpers, Experience Editor compatibility
+- **Field type mapping** — TextField, RichTextField, ImageField, LinkField, DateField
+- **GraphQL** — efficient queries, fragments, Experience Edge pagination
+- **Layout service** — rendering host config, placeholder nesting
+- **Personalization** — component variants, A/B testing rules
+- **Debugging** — component not rendering, empty fields, GraphQL errors, 404s
+
+---
+
+## Conditional Agents
+
+Some agents are only generated when their tools are detected in your project:
+
+| Agent | Condition |
+|---|---|
+| **e2e-runner** | Only if `@playwright/test` is in dependencies |
+| **sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
+
+All other agents are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+
+---
+
+## Agent File Format
+
+Each agent is a markdown file with YAML frontmatter in `.claude/agents/`:
+
+```markdown
+---
+name: planner
+description: Implementation planning agent — breaks features into tasks...
+tools: Read, Glob, Grep, Bash
+---
+
+# Implementation Planner
+
+[Agent instructions and workflow...]
+```
+
+The `tools` field controls which Claude Code tools the agent can use when delegated to. The `description` helps the main agent decide when to delegate.
+
+---
+
+## Customizing Agents
+
+You can modify any agent file in `.claude/agents/` to fit your team's workflow. Changes are preserved across `ai-kit update` since agent files are only added, not overwritten.
+
+To create a custom agent, add a new `.md` file to `.claude/agents/` with the same frontmatter format. Claude Code will discover it automatically.

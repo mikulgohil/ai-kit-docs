@@ -136,7 +136,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-38 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+45 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -164,10 +164,12 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 | **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` |
 | **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `docker-debug`, `ci-fix`, `db-migrate`, `dependency-graph` |
 | **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `visual-diff` |
+| **Session** | `learn`, `save-session`, `resume-session`, `checkpoint` |
+| **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` |
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 38 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 45 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/
@@ -183,9 +185,57 @@ See [Skills & Commands](/docs/slash-commands) for detailed usage of each workflo
 
 ---
 
+## .claude/agents/
+
+Up to 8 specialized AI agents for delegated tasks. Each agent is a markdown file with YAML frontmatter:
+
+| Agent | Purpose | Conditional |
+|---|---|---|
+| `planner.md` | Break features into implementation plans | No |
+| `code-reviewer.md` | Deep code review for quality, patterns, security | No |
+| `security-reviewer.md` | Security-focused audit (OWASP Top 10) | No |
+| `e2e-runner.md` | Playwright E2E tests with Page Object Model | Yes — only if Playwright installed |
+| `build-resolver.md` | Diagnose and fix build/type errors | No |
+| `doc-updater.md` | Keep documentation in sync with code | No |
+| `refactor-cleaner.md` | Find and remove dead code | No |
+| `sitecore-specialist.md` | Sitecore XM Cloud patterns and debugging | Yes — only if Sitecore detected |
+
+Each agent has a `name`, `description`, and `tools` field in frontmatter that controls its capabilities. See [Agents](/docs/agents) for detailed descriptions.
+
+---
+
+## .claude/contexts/
+
+Three context modes that change how the AI approaches work:
+
+| File | Mode | Focus |
+|---|---|---|
+| `dev.md` | Development | Building features — implementation over perfection |
+| `review.md` | Review | Quality — security, accessibility, types, performance |
+| `research.md` | Research | Understanding — read-only exploration and analysis |
+
+See [Context Modes](/docs/context-modes) for usage details.
+
+---
+
+## .claude/settings.local.json
+
+Automated hooks generated based on your chosen profile (minimal, standard, or strict). This file is **gitignored by default** to keep hook preferences local.
+
+Hooks include:
+- **Auto-format** on file edit (Prettier or Biome, auto-detected)
+- **TypeScript type-check** after `.ts/.tsx` edits
+- **Console.log warning** detection
+- **Git push safety** reminder
+- **ESLint check** (strict profile only)
+
+See [Hooks](/docs/hooks) for profile comparison and configuration.
+
+---
+
 ## ai-kit/guides/
 
-Five developer guides for effective AI-assisted development:
+Six developer guides for effective AI-assisted development:
 
 | Guide | Content |
 |---|---|
@@ -194,6 +244,7 @@ Five developer guides for effective AI-assisted development:
 | `when-to-use-ai.md` | Decision framework for AI vs manual coding |
 | `token-saving-tips.md` | How to reduce token usage and costs |
 | `figma-workflow.md` | End-to-end Figma-to-code with AI assistance |
+| `hooks-and-agents.md` | Guide to hooks, agents, and context modes |
 
 ---
 
@@ -217,8 +268,9 @@ Configuration file that tracks what AI Kit generated:
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "1.2.0",
   "strictness": "standard",
+  "hookProfile": "standard",
   "customFragments": [],
   "scanResult": {
     "framework": "nextjs",
@@ -231,10 +283,13 @@ Configuration file that tracks what AI Kit generated:
     "packageManager": "npm",
     "projectName": "my-project"
   },
-  "generatedAt": "2026-03-17T10:00:00.000Z",
+  "generatedAt": "2026-03-18T10:00:00.000Z",
   "templates": ["CLAUDE.md", ".cursorrules"],
   "commands": ["prompt-help", "review", "fix-bug", ...],
-  "guides": ["getting-started", "prompt-playbook", ...]
+  "guides": ["getting-started", "prompt-playbook", ...],
+  "agents": ["planner", "code-reviewer", "security-reviewer", ...],
+  "contexts": ["dev", "review", "research"],
+  "hooks": "standard"
 }
 ```
 

@@ -4,6 +4,82 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.2.0 — 2026-03-18
+
+### Hooks System (Automated Quality Checks)
+
+Hooks run automatically as you code — no manual invocation needed.
+
+- **Auto-format on file edit** — detects Prettier or Biome and generates the right hook
+- **TypeScript type-check** after `.ts/.tsx` edits
+- **Console.log warning** detection in edited files
+- **Git push safety reminder** before pushing
+- **Three hook profiles**: minimal, standard, strict
+- Generated in `.claude/settings.local.json` (gitignored by default)
+
+See [Hooks](/docs/hooks) for full details.
+
+### Specialized Agents (8 agents)
+
+Agents live in `.claude/agents/` and handle delegated tasks:
+
+| Agent | Purpose |
+|---|---|
+| `planner` | Break features into implementation plans |
+| `code-reviewer` | Deep quality and security review |
+| `security-reviewer` | OWASP Top 10, XSS, CSRF, secrets |
+| `e2e-runner` | Playwright tests with Page Object Model (conditional) |
+| `build-resolver` | Diagnose and fix build/type errors |
+| `doc-updater` | Keep documentation in sync with code |
+| `refactor-cleaner` | Find and remove dead code |
+| `sitecore-specialist` | Sitecore XM Cloud patterns (conditional) |
+
+Conditional agents are only generated when their tools are detected. See [Agents](/docs/agents) for details.
+
+### Context Modes (3 modes)
+
+| Mode | Focus |
+|---|---|
+| `dev` | Building features — implementation over perfection |
+| `review` | Checking quality — security, a11y, types, performance |
+| `research` | Read-only exploration and analysis |
+
+See [Context Modes](/docs/context-modes) for details.
+
+### New Skills (7)
+
+Session management and orchestration skills:
+
+| Skill | Category | Description |
+|---|---|---|
+| `/learn` | Session | Extract reusable patterns from the current session |
+| `/save-session` | Session | Persist session state for later resumption |
+| `/resume-session` | Session | Restore context from a saved session |
+| `/checkpoint` | Session | Run all quality checks and record a verification snapshot |
+| `/orchestrate` | Orchestration | Coordinate multiple agents on complex tasks |
+| `/quality-gate` | Orchestration | Comprehensive pass/fail quality checks |
+| `/harness-audit` | Orchestration | AI configuration health check |
+
+### New CLI Command: `ai-kit audit`
+
+Security and configuration health audit with A-F grading. Checks for secrets in CLAUDE.md, hook validity, agent config, MCP security, and more.
+
+```bash
+npx @mikulgohil/ai-kit audit
+```
+
+See [CLI Reference](/docs/cli-reference#ai-kit-audit-path) for details.
+
+### Other Improvements
+
+- **Biome formatter detection** — scanner now detects Biome alongside Prettier
+- **Conditional agent generation** — e2e-runner only if Playwright, sitecore-specialist only if Sitecore
+- **Updated init/update commands** — now generate hooks, agents, and contexts
+- **New guide**: `hooks-and-agents.md` added to generated guides (6 total)
+- Total skills expanded from 38 to 45
+
+---
+
 ## v1.1.0 — 2026-03-17
 
 ### New CLI Commands

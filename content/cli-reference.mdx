@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides eight commands: `init`, `update`, `reset`, `tokens`, `doctor`, `diff`, `export`, and `stats`.
+AI Kit provides nine commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, and `stats`.
 
 ## `ai-kit init [path]`
 
@@ -27,6 +27,7 @@ npx @mikulgohil/ai-kit init ./path/to/project
 | Re-initialize? | `ai-kit.config.json` already exists |
 | Router type? | Next.js detected but router ambiguous |
 | Which AI tools? | Always — choose Claude, Cursor, or both |
+| Hook profile? | Always — choose minimal, standard, or strict |
 | Conflict strategy? | Existing `CLAUDE.md` or `.cursorrules` found |
 
 ### Generated Files
@@ -39,6 +40,9 @@ npx @mikulgohil/ai-kit init ./path/to/project
 | `.claude/skills/*/SKILL.md` | Claude Code selected |
 | `.cursor/skills/*/SKILL.md` | Cursor selected |
 | `.claude/commands/*.md` | Claude Code selected (legacy, backward compat) |
+| `.claude/agents/*.md` | Claude Code selected — up to 8 specialized agents |
+| `.claude/contexts/*.md` | Claude Code selected — 3 context modes |
+| `.claude/settings.local.json` | Claude Code selected — automated hooks |
 | `ai-kit/guides/*.md` | Always |
 | `docs/*.md` | Always (won't overwrite existing) |
 | `ai-kit.config.json` | Always |
@@ -61,7 +65,7 @@ npx @mikulgohil/ai-kit update ./path/to/project
 3. Re-scans the project for tech stack changes
 4. Updates `CLAUDE.md` and `.cursorrules` using **safe merge** — only content between `AI-KIT:START/END` markers is replaced, preserving your manual edits
 5. Updates `.cursor/rules/*.mdc` files
-6. Refreshes slash commands and guides
+6. Refreshes slash commands, guides, agents, contexts, and hooks
 7. Updates `ai-kit.config.json`
 
 ### Safe Merge Behavior
@@ -117,6 +121,68 @@ npx @mikulgohil/ai-kit reset ./path/to/project
 - Requires explicit confirmation (`Are you sure? This cannot be undone.`)
 - Only removes files that AI Kit created — your source code and other configs are untouched
 - **Does NOT remove** `docs/` scaffolds (mistakes-log, decisions-log, time-log) since you may have added content to them
+
+---
+
+## `ai-kit audit [path]`
+
+Run a security and configuration health audit on your AI setup.
+
+```bash
+npx @mikulgohil/ai-kit audit
+npx @mikulgohil/ai-kit audit ./path/to/project
+```
+
+### What it checks
+
+| Check | What It Verifies |
+|---|---|
+| Config file | `ai-kit.config.json` exists |
+| CLAUDE.md | File exists with AI-KIT markers |
+| Secrets in CLAUDE.md | Scans for API keys, tokens, passwords, GitHub/Slack tokens |
+| Hooks | `.claude/settings.local.json` exists with hooks configured |
+| Agents | `.claude/agents/` has valid agent files with YAML frontmatter |
+| Contexts | `.claude/contexts/` has context mode files |
+| Skills | `.claude/skills/` has skill directories |
+| .env gitignore | `.env` files are in `.gitignore` |
+| Settings gitignore | `settings.local.json` is in `.gitignore` |
+| MCP secrets | No hardcoded secrets in `.claude/settings.json` |
+
+### Output
+
+```
+AI Kit — Security & Configuration Audit
+ℹ Auditing: /Users/you/projects/my-app
+
+  ✓ Config file: ai-kit.config.json found
+  ✓ CLAUDE.md: CLAUDE.md has AI-KIT markers
+  ✓ Secrets in CLAUDE.md: No secrets detected
+  ✓ Hooks: Hooks configured in settings.local.json
+  ✓ Agents: 8 agent(s) configured
+  ✓ Contexts: 3 context mode(s) available
+  ✓ Skills: 45 skill(s) installed
+  ✓ .env gitignore: .env files are gitignored
+  ⚠ Settings gitignore: settings.local.json not in .gitignore
+  ✓ MCP secrets: No hardcoded secrets in settings
+
+Score
+  A (95/100)
+  10 passed · 1 warnings · 0 failures
+```
+
+### Scoring
+
+The audit produces a letter grade based on checks passed:
+
+| Grade | Score |
+|---|---|
+| **A** | 90–100 |
+| **B** | 80–89 |
+| **C** | 70–79 |
+| **D** | 60–69 |
+| **F** | Below 60 |
+
+Warnings count as half a point. Failures count as zero. Fix all failures before proceeding.
 
 ---
 
@@ -282,6 +348,7 @@ ai-kit stats ./path/to/project
 ai-kit --version      # Show version number
 ai-kit --help         # Show help
 ai-kit init --help    # Show command-specific help
+ai-kit audit --help   # Show audit command help
 ai-kit tokens --help  # Show tokens command help
 ai-kit doctor --help  # Show doctor command help
 ai-kit diff --help    # Show diff command help

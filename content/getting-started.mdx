@@ -58,7 +58,18 @@ If you already have a `CLAUDE.md` or `.cursorrules`:
   Skip — keep existing files, only add missing ones
 ```
 
-## Step 5: Review Generated Files
+## Step 5: Choose Hook Profile
+
+```
+? Which hook profile would you like?
+❯ Standard — auto-format + typecheck + console.log warnings
+  Minimal — auto-format + git push safety only
+  Strict — standard + ESLint + stop-time audit
+```
+
+Hooks run automatically as you code. See [Hooks](/docs/hooks) for details on each profile.
+
+## Step 6: Review Generated Files
 
 After generation, you'll see a summary:
 
@@ -66,9 +77,12 @@ After generation, you'll see a summary:
 Setup Complete
 ✓ CLAUDE.md generated
 ✓ .cursorrules generated
-✓ 26 skills generated (Claude Code + Cursor)
-✓ 26 legacy commands copied (.claude/commands/)
-✓ 5 guides added to ai-kit/guides/
+✓ 45 skills generated (Claude Code + Cursor)
+✓ 45 legacy commands copied (.claude/commands/)
+✓ 8 agents generated (.claude/agents/)
+✓ 3 context modes generated (.claude/contexts/)
+✓ Hooks configured (standard profile)
+✓ 6 guides added to ai-kit/guides/
 ✓ 3 doc scaffolds created in docs/
 ```
 
@@ -83,23 +97,34 @@ your-project/
 │   ├── nextjs-app-router.mdc
 │   ├── tailwind.mdc
 │   └── ...
-├── .claude/skills/                    # Auto-discovered skills (Claude Code)
-│   ├── new-component/SKILL.md
-│   ├── review/SKILL.md
-│   └── ...
+├── .claude/
+│   ├── skills/                        # Auto-discovered skills (Claude Code)
+│   │   ├── new-component/SKILL.md
+│   │   ├── review/SKILL.md
+│   │   └── ...
+│   ├── commands/                      # Legacy slash commands (backward compat)
+│   │   ├── prompt-help.md
+│   │   ├── new-component.md
+│   │   └── ...
+│   ├── agents/                        # Specialized AI agents
+│   │   ├── planner.md
+│   │   ├── code-reviewer.md
+│   │   ├── security-reviewer.md
+│   │   └── ...
+│   ├── contexts/                      # Context modes
+│   │   ├── dev.md
+│   │   ├── review.md
+│   │   └── research.md
+│   └── settings.local.json            # Automated hooks (gitignored)
 ├── .cursor/skills/                    # Auto-discovered skills (Cursor)
 │   ├── new-component/SKILL.md
 │   ├── review/SKILL.md
-│   └── ...
-├── .claude/commands/                  # Legacy slash commands (backward compat)
-│   ├── prompt-help.md
-│   ├── new-component.md
-│   ├── review.md
 │   └── ...
 ├── ai-kit/
 │   └── guides/                        # Developer guides
 │       ├── getting-started.md
 │       ├── prompt-playbook.md
+│       ├── hooks-and-agents.md
 │       └── ...
 ├── docs/                              # Doc scaffolds (won't overwrite existing)
 │   ├── mistakes-log.md
@@ -108,7 +133,7 @@ your-project/
 └── ai-kit.config.json                 # AI Kit configuration
 ```
 
-## Step 6: Start Using AI
+## Step 7: Start Using AI
 
 Open your project in Claude Code or Cursor. The AI assistant will automatically read the generated config files and follow your project's conventions.
 
@@ -129,6 +154,8 @@ This launches the prompt-help workflow — a great way to verify everything is w
 ## Next Steps
 
 - Read [What Gets Generated](/docs/what-gets-generated) to understand each file in detail
-- Check [Skills & Commands](/docs/slash-commands) to see all 26 available workflows
+- Check [Skills & Commands](/docs/slash-commands) to see all 45 available workflows
+- Learn about [Hooks](/docs/hooks), [Agents](/docs/agents), and [Context Modes](/docs/context-modes)
+- Run `ai-kit audit` to verify your setup health — see [CLI Reference](/docs/cli-reference#ai-kit-audit-path)
 - See [Tips & Tricks](/docs/tips-and-tricks) for productivity shortcuts
 - Read [Troubleshooting](/docs/troubleshooting) if something went wrong

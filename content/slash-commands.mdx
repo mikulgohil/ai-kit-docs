@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 38 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 45 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -73,6 +73,13 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/changelog` | Workflow | Generates formatted changelogs from git history |
 | `/release` | Workflow | Guided release workflow with versioning and tagging |
 | `/visual-diff` | Workflow | Visual regression testing plan for UI changes |
+| `/learn` | Session | Extracts reusable patterns from the current coding session |
+| `/save-session` | Session | Persists current session state and decisions for later |
+| `/resume-session` | Session | Restores context from a previously saved session |
+| `/checkpoint` | Session | Runs all quality checks and records a verification snapshot |
+| `/orchestrate` | Orchestration | Coordinates multiple specialized agents on complex tasks |
+| `/quality-gate` | Orchestration | Comprehensive pass/fail quality checks (types, lint, format, tests, a11y, security) |
+| `/harness-audit` | Orchestration | Audits AI configuration health with A-F grade |
 
 ---
 
@@ -928,3 +935,129 @@ Most commands work best with a target file or argument:
 Skills and commands work best when you provide context. The more specific you are about the file, behavior, and constraints, the more useful the output.
 
 If you're ever unsure what to reach for, run `/prompt-help` first — it will guide you to the right workflow.
+
+---
+
+## Session Skills (v1.2.0)
+
+### `/learn`
+
+**Category**: Session
+
+Extract reusable patterns from the current coding session.
+
+**When to use**: At the end of a productive session to capture what worked, what failed, and what patterns emerged.
+
+**What it does**:
+1. Reviews session activity — files created, modified, deleted
+2. Extracts patterns with confidence ratings (high/medium/low)
+3. Categorizes as: code patterns, debugging insights, architecture decisions, anti-patterns, tool usage
+4. Saves findings to `ai-kit/learnings/[date]-[topic].md`
+5. Suggests promoting high-confidence patterns to permanent project rules
+
+### `/save-session`
+
+**Category**: Session
+
+Save the current session state so it can be resumed later.
+
+**When to use**: When you need to stop working but want to pick up exactly where you left off.
+
+**What it captures**:
+- Session summary (goal, progress, completion state)
+- Files modified with descriptions
+- Architectural and design decisions made
+- Pending work checklist
+- Current state (uncommitted changes, build status, blockers)
+
+Saves to `ai-kit/sessions/[date]-[time]-[topic].md`.
+
+### `/resume-session`
+
+**Category**: Session
+
+Restore context from a saved session and continue where you left off.
+
+**When to use**: When starting a new conversation and want to continue previous work.
+
+**What it does**:
+1. Lists available sessions from `ai-kit/sessions/` (most recent first)
+2. Presents a summary: what was done, what's pending, key decisions
+3. Verifies current file state matches expectations
+4. Picks up from the first unchecked pending item
+
+### `/checkpoint`
+
+**Category**: Session
+
+Run all quality checks and record a verification snapshot.
+
+**When to use**: Before committing, after a major change, or to track project health over time.
+
+**Checks performed**:
+- TypeScript (`tsc --noEmit`)
+- Lint (ESLint)
+- Format (Prettier or Biome)
+- Tests (`npm test`)
+- Build (`npm run build`)
+- Security (`npm audit`)
+
+Saves results to `ai-kit/checkpoints/[date]-[time].md` and compares against the previous checkpoint to flag regressions.
+
+---
+
+## Orchestration Skills (v1.2.0)
+
+### `/orchestrate`
+
+**Category**: Orchestration
+
+Coordinate multiple specialized agents to tackle complex tasks.
+
+**When to use**: Tasks spanning multiple concerns (feature + tests + docs + review), large changes requiring parallel analysis, or comprehensive audits.
+
+**What it does**:
+1. Breaks the task into independent subtasks
+2. Maps each subtask to the right [agent](/docs/agents) (planner, code-reviewer, security-reviewer, etc.)
+3. Launches agents in parallel where possible
+4. Collects results, identifies conflicts, and creates a unified action plan
+
+### `/quality-gate`
+
+**Category**: Orchestration
+
+Run all quality checks and present a pass/fail summary.
+
+**When to use**: Before merging a PR or cutting a release. More comprehensive than `/checkpoint` — includes accessibility and bundle size checks.
+
+**Checks performed**:
+- TypeScript type check (zero errors)
+- ESLint (zero warnings)
+- Format (all files formatted)
+- Unit tests (all passing)
+- Build (succeeds)
+- Bundle size (no significant increase)
+- Accessibility (no critical violations)
+- Security (no high/critical vulnerabilities)
+- Console.log audit (none in production code)
+
+**Gate policy**: All PASS = safe to merge. Any WARN = merge with acknowledgment. Any FAIL = fix before merge.
+
+### `/harness-audit`
+
+**Category**: Orchestration
+
+Audit the AI agent configuration for completeness and correctness.
+
+**When to use**: After initial setup, after updating AI Kit, or when something feels off with AI behavior.
+
+**What it checks**:
+- CLAUDE.md exists with AI-KIT markers, no stale info, no secrets
+- Hooks are syntactically correct and reference installed tools
+- Agent frontmatter is valid, no duplicates or conflicts
+- Context modes are present and actionable
+- Skills directories are populated and valid
+- MCP servers are relevant with no hardcoded credentials
+- Config version matches installed AI Kit version
+
+Outputs an overall health grade (A-F) with specific recommendations.

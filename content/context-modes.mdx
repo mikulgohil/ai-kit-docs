@@ -1,0 +1,138 @@
+# Context Modes
+
+Context modes change how the AI approaches your work. They live in `.claude/contexts/` and provide different behavioral priorities depending on what you're doing — building, reviewing, or researching.
+
+## Available Modes
+
+| Mode | Focus | Best For |
+|---|---|---|
+| **dev** | Building features — implementation over perfection | Writing new code, adding features, prototyping |
+| **review** | Checking quality — security, accessibility, types, performance | PR reviews, pre-merge checks, quality audits |
+| **research** | Understanding code — read-only exploration and analysis | Investigating bugs, onboarding, architecture mapping |
+
+---
+
+## Dev Mode
+
+**Focus**: Get working code, then refine.
+
+### Behavior
+- Suggests patterns from the existing codebase rather than inventing new ones
+- Runs type checks after making changes
+- Defaults to Server Components unless interactivity is needed
+- Matches existing file naming, component structure, and design tokens
+
+### Priorities (in order)
+1. Working correctly
+2. Type-safe
+3. Following project patterns
+4. Readable
+5. Performant
+
+### What it won't do
+- Refactor unrelated code while building a feature
+- Add tests during initial development (do it after the feature works)
+- Over-engineer solutions for hypothetical future requirements
+
+---
+
+## Review Mode
+
+**Focus**: Quality, correctness, and standards compliance.
+
+### Review Checklist
+
+**Security (CRITICAL)**
+- No XSS vectors (`dangerouslySetInnerHTML`, unsanitized input)
+- No hardcoded secrets or API keys
+- API routes validate and sanitize input
+- Authentication checks on protected routes
+- CSRF protection on forms
+
+**Accessibility (HIGH)**
+- Semantic HTML elements (nav, main, article, button vs div)
+- ARIA labels on interactive elements
+- Keyboard navigation works
+- Color contrast meets WCAG 2.1 AA (4.5:1)
+- Images have alt text
+
+**TypeScript (HIGH)**
+- No `any` types — use `unknown` with type guards
+- Null/undefined handled explicitly
+- Function return types on public APIs
+
+**React Patterns (MEDIUM)**
+- Hooks rules followed (no conditional hooks)
+- `useEffect` dependencies complete and correct
+- Memoization justified, not premature
+- Props interfaces minimal and well-typed
+
+**Performance (MEDIUM)**
+- No unnecessary re-renders
+- Large dependencies dynamically imported
+- Images use `next/image` with proper sizing
+- No N+1 query patterns
+
+**Sitecore (when applicable)**
+- JSS field helpers used correctly
+- Experience Editor compatibility maintained
+- GraphQL queries efficient and paginated
+
+### Output
+Rates each finding as CRITICAL / HIGH / MEDIUM / LOW with file:line references and suggested fixes.
+
+---
+
+## Research Mode
+
+**Focus**: Understanding and discovery — no code changes.
+
+### Investigation Process
+1. **Scope** — Define what you're investigating and why
+2. **Explore** — Read files, trace data flow, check dependencies
+3. **Map** — Build a mental model of how the system works
+4. **Report** — Summarize findings with evidence (file references)
+5. **Recommend** — Suggest next steps (but don't implement yet)
+
+### What it documents
+- Architecture overview of the area being investigated
+- Data flow: where data originates, transforms, and is consumed
+- Dependency map: what depends on what
+- Patterns in use: design patterns, naming conventions, file structure
+- Potential issues: tech debt, inconsistencies, security concerns
+
+### What it won't do
+- Make code changes
+- Propose solutions before understanding the problem fully
+- Skip reading test files (they reveal intent and edge cases)
+
+---
+
+## How to Use Context Modes
+
+Reference the context in your prompt to activate a mode:
+
+```
+Using dev context, build a new ProductCard component
+```
+
+```
+Using review context, check the authentication flow in src/lib/auth.ts
+```
+
+```
+Using research context, map how data flows from Sitecore to the Hero component
+```
+
+The AI reads the context file and adjusts its behavior accordingly — prioritizing speed in dev mode, thoroughness in review mode, and breadth in research mode.
+
+---
+
+## Customizing Modes
+
+Each context mode is a markdown file in `.claude/contexts/`. You can:
+
+- **Edit existing modes** — adjust priorities, add team-specific checklists
+- **Create new modes** — add a new `.md` file (e.g., `hotfix.md` for emergency bug fixes)
+
+Changes are preserved across `ai-kit update`.

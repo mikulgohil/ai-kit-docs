@@ -1,0 +1,146 @@
+# Hooks
+
+Hooks are automated quality checks that run as you code — no manual invocation needed. AI Kit generates hooks in `.claude/settings.local.json` based on your detected tools and chosen profile.
+
+## How They Work
+
+Hooks fire on specific events during your Claude Code session:
+
+| Event | When It Fires | Example |
+|---|---|---|
+| **PreToolUse** | Before a tool runs | Warning before `git push` |
+| **PostToolUse** | After a file is edited or written | Auto-format, type-check |
+| **Stop** | After each AI response completes | Audit modified files for `console.log` |
+
+Hooks are configured in `.claude/settings.local.json`, which is **gitignored by default** — your hook preferences are local and won't affect teammates.
+
+---
+
+## Hook Profiles
+
+During `ai-kit init`, you choose a hook profile that controls what automated checks run:
+
+### Minimal
+
+Best for: fast iteration, prototyping, or when you want minimal friction.
+
+| Hook | Event | What It Does |
+|---|---|---|
+| Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
+| Git push safety | PreToolUse | Reminder to review changes before pushing |
+
+### Standard (default)
+
+Best for: everyday development with a safety net.
+
+| Hook | Event | What It Does |
+|---|---|---|
+| Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
+| TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
+| Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
+| Git push safety | PreToolUse | Reminder to review changes before pushing |
+
+### Strict
+
+Best for: production code, pre-merge reviews, or teams with high quality bars.
+
+| Hook | Event | What It Does |
+|---|---|---|
+| Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
+| TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
+| ESLint check | PostToolUse | Runs ESLint with zero warnings on edited files |
+| Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
+| Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
+| Git push safety | PreToolUse | Reminder to review changes before pushing |
+
+---
+
+## Formatter Auto-Detection
+
+AI Kit detects your project's formatter and generates the right hook:
+
+| Formatter | Detection | Hook Command |
+|---|---|---|
+| **Biome** | `@biomejs/biome` in dependencies | `npx @biomejs/biome check --write --unsafe` |
+| **Prettier** | `prettier` in dependencies | `npx prettier --write` |
+
+If both are detected, Biome takes priority. If neither is found, the auto-format hook is skipped.
+
+---
+
+## Changing Your Profile
+
+### Option 1: Re-run init
+
+```bash
+npx @mikulgohil/ai-kit init
+```
+
+Select a different hook profile during the prompts.
+
+### Option 2: Edit directly
+
+Edit `.claude/settings.local.json` to add, remove, or modify hooks manually. The file follows this structure:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git push*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '⚠️  Review your changes before pushing.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx prettier --write \"$CLAUDE_FILE_PATH\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Disabling a Hook
+
+Remove or comment out the hook entry in `.claude/settings.local.json`. Since the file is gitignored, your changes are local only.
+
+---
+
+## Hook Behavior Details
+
+### Auto-Format
+
+Runs immediately after every `Edit` or `Write` tool call. Uses `$CLAUDE_FILE_PATH` to format only the changed file. Errors are silenced (`2>/dev/null || true`) so a format failure never blocks your work.
+
+### TypeScript Check
+
+Runs `tsc --noEmit` after `.ts` or `.tsx` files are edited. Output is truncated to the first 20 lines to avoid flooding the context. Only available in **standard** and **strict** profiles.
+
+### Console.log Warning
+
+Uses `grep -n` to find `console.log` statements in the edited file and prints a warning. This is a soft check — it doesn't block anything, just makes you aware.
+
+### ESLint Check
+
+Runs ESLint with `--max-warnings 0` on the edited file. Only available in **strict** profile. Output is truncated to 15 lines.
+
+### Git Push Safety
+
+Fires before any `git push` command, printing a reminder to run tests and type-check first. Available in all profiles.
+
+---
+
+## Security Note
+
+`.claude/settings.local.json` is automatically added to `.gitignore` by AI Kit. This prevents local hook configurations (which may contain machine-specific paths) from being committed. If you want to share hooks across your team, move them to `.claude/settings.json` instead.
