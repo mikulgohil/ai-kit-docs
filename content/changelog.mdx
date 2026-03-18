@@ -46,13 +46,12 @@ Conditional agents are only generated when their tools are detected. See [Agents
 
 See [Context Modes](/docs/context-modes) for details.
 
-### New Skills (7)
+### New Skills (6)
 
 Session management and orchestration skills:
 
 | Skill | Category | Description |
 |---|---|---|
-| `/learn` | Session | Extract reusable patterns from the current session |
 | `/save-session` | Session | Persist session state for later resumption |
 | `/resume-session` | Session | Restore context from a saved session |
 | `/checkpoint` | Session | Run all quality checks and record a verification snapshot |
@@ -76,7 +75,7 @@ See [CLI Reference](/docs/cli-reference#ai-kit-audit-path) for details.
 - **Conditional agent generation** — e2e-runner only if Playwright, sitecore-specialist only if Sitecore
 - **Updated init/update commands** — now generate hooks, agents, and contexts
 - **New guide**: `hooks-and-agents.md` added to generated guides (6 total)
-- Total skills expanded from 38 to 45
+- Total skills expanded from 38 to 39
 
 ---
 
@@ -93,9 +92,9 @@ Four new commands for deeper project insights and cross-tool compatibility:
 | `ai-kit export` | Export rules to Windsurf (`.windsurfrules`), Aider (`.aider.conf.yml`), and Cline (`.clinerules`) |
 | `ai-kit stats` | Project analytics — stack complexity score, skills breakdown, tools and MCP status |
 
-### New Skills (12)
+### New Skills (7)
 
-Expanded the skills library from 26 to 38:
+Expanded the skills library from 26 to 33:
 
 | Skill | Category | Description |
 |---|---|---|
@@ -104,13 +103,8 @@ Expanded the skills library from 26 to 38:
 | `/i18n-check` | Quality & Review | Internationalization audit — hardcoded strings, missing keys, RTL support |
 | `/schema-gen` | Building | Generate TypeScript types and Zod schemas from API responses or JSON |
 | `/storybook-gen` | Building | Generate Storybook stories with controls, play functions, and visual states |
-| `/docker-debug` | Maintenance | Analyze Dockerfiles for security, efficiency, and best practices |
-| `/ci-fix` | Maintenance | Debug CI/CD pipeline failures and optimize build performance |
-| `/db-migrate` | Maintenance | Create safe database migrations with rollback plans |
-| `/dependency-graph` | Maintenance | Map module dependencies, find circular imports, analyze coupling |
 | `/changelog` | Workflow | Generate formatted changelogs from git history |
 | `/release` | Workflow | Guided release workflow with versioning, tagging, and release notes |
-| `/visual-diff` | Workflow | Visual regression test plan for UI changes |
 
 ### Template System Improvements
 

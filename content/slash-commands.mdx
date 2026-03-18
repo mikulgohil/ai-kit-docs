@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 45 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 39 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -63,17 +63,11 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/migrate` | Maintenance | Migrates code to a new API, pattern, or version |
 | `/dep-check` | Maintenance | Audits dependencies for issues and updates |
 | `/sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
-| `/docker-debug` | Maintenance | Analyzes Dockerfiles for security and efficiency |
-| `/ci-fix` | Maintenance | Debugs CI/CD pipeline failures and optimizations |
-| `/db-migrate` | Maintenance | Creates safe database migrations with rollback plans |
-| `/dependency-graph` | Maintenance | Maps module dependencies and finds circular imports |
 | `/document` | Workflow | Generates JSDoc, README, and component docs |
 | `/commit-msg` | Workflow | Writes a conventional commit message for staged changes |
 | `/env-setup` | Workflow | Sets up local environment variables and configuration |
 | `/changelog` | Workflow | Generates formatted changelogs from git history |
 | `/release` | Workflow | Guided release workflow with versioning and tagging |
-| `/visual-diff` | Workflow | Visual regression testing plan for UI changes |
-| `/learn` | Session | Extracts reusable patterns from the current coding session |
 | `/save-session` | Session | Persists current session state and decisions for later |
 | `/resume-session` | Session | Restores context from a previously saved session |
 | `/checkpoint` | Session | Runs all quality checks and records a verification snapshot |
@@ -683,90 +677,6 @@ Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in 
 
 ---
 
-### /docker-debug
-
-Analyzes Dockerfiles and docker-compose configurations for security risks, build inefficiencies, image size issues, and best practice violations.
-
-**Usage**
-```
-/docker-debug
-/docker-debug Dockerfile.production
-```
-
-**When to use**: When building or optimizing Docker images, debugging container issues, or reviewing container security.
-
-**What it checks**
-- Multi-stage build opportunities
-- Layer caching optimization
-- Security issues (running as root, exposed secrets)
-- Image size reduction opportunities
-- Docker Compose health checks and dependencies
-
----
-
-### /ci-fix
-
-Debugs CI/CD pipeline failures, identifies caching opportunities, and suggests performance optimizations for GitHub Actions and other CI systems.
-
-**Usage**
-```
-/ci-fix
-/ci-fix .github/workflows/ci.yml
-```
-
-**When to use**: When a CI pipeline is failing, running slowly, or needs optimization.
-
-**What it checks**
-- Failure root cause analysis
-- Caching configuration (node_modules, build cache)
-- Parallel job opportunities
-- Security best practices (pinned actions, scoped permissions)
-- Missing steps (lint, test, build verification)
-
----
-
-### /db-migrate
-
-Creates safe database migrations with rollback strategies for Prisma, Drizzle, or raw SQL, with data loss risk assessment and backward compatibility checking.
-
-**Usage**
-```
-/db-migrate add column email to users
-/db-migrate rename column name to full_name in customers
-```
-
-**When to use**: When making schema changes, before deploying database modifications, or when planning zero-downtime migrations.
-
-**What it covers**
-- Data loss risk assessment
-- Backward compatibility analysis
-- Forward and rollback migration code
-- Index and foreign key recommendations
-- Multi-step strategy for destructive changes
-
----
-
-### /dependency-graph
-
-Maps module import relationships, finds circular dependencies, analyzes coupling metrics, and identifies architectural boundary violations.
-
-**Usage**
-```
-/dependency-graph src/features/
-/dependency-graph src/components/
-```
-
-**When to use**: When the codebase feels tangled, during architecture reviews, or when planning a refactoring initiative.
-
-**What it analyzes**
-- Circular dependency detection (direct and indirect)
-- Afferent/efferent coupling metrics and instability ratios
-- Cross-feature import violations
-- Hub modules (high-risk bottlenecks)
-- Recommended extraction points
-
----
-
 ## Workflow
 
 Commands that support day-to-day development process rather than specific code tasks.
@@ -877,27 +787,6 @@ Guided release workflow that walks through version decision, changelog generatio
 
 ---
 
-### /visual-diff
-
-Creates a visual regression test plan for changed components, mapping impact radius and identifying specific states and breakpoints to check.
-
-**Usage**
-```
-/visual-diff
-/visual-diff src/components/Button.tsx
-```
-
-**When to use**: After making UI changes, before merging visual PRs, or during QA review.
-
-**What it covers**
-- Changed component identification
-- Impact radius mapping (parent and consumer components)
-- Visual test matrix (states x breakpoints)
-- CSS side effect warnings
-- Manual and automated test recommendations
-
----
-
 ## Using Skills and Commands
 
 ### Auto-Discovery (Recommended)
@@ -939,21 +828,6 @@ If you're ever unsure what to reach for, run `/prompt-help` first — it will gu
 ---
 
 ## Session Skills (v1.2.0)
-
-### `/learn`
-
-**Category**: Session
-
-Extract reusable patterns from the current coding session.
-
-**When to use**: At the end of a productive session to capture what worked, what failed, and what patterns emerged.
-
-**What it does**:
-1. Reviews session activity — files created, modified, deleted
-2. Extracts patterns with confidence ratings (high/medium/low)
-3. Categorizes as: code patterns, debugging insights, architecture decisions, anti-patterns, tool usage
-4. Saves findings to `ai-kit/learnings/[date]-[topic].md`
-5. Suggests promoting high-confidence patterns to permanent project rules
 
 ### `/save-session`
 

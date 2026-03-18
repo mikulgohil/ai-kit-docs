@@ -136,7 +136,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-45 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+39 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -162,14 +162,14 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 |---|---|
 | **Building** | `prompt-help`, `understand`, `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` |
 | **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `docker-debug`, `ci-fix`, `db-migrate`, `dependency-graph` |
-| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `visual-diff` |
-| **Session** | `learn`, `save-session`, `resume-session`, `checkpoint` |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` |
+| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release` |
+| **Session** | `save-session`, `resume-session`, `checkpoint` |
 | **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` |
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 45 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 39 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/
