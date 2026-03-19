@@ -4,6 +4,41 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.3.0 — 2026-03-19
+
+### New Agents (2)
+
+| Agent | Purpose |
+|---|---|
+| `architect` | System design — rendering strategy, component hierarchy, data flow |
+| `tdd-guide` | Test-driven development guide — red-green-refactor workflow |
+
+Both agents are generated for every project. See [Agents](/docs/agents) for details.
+
+### New Skills (4)
+
+| Skill | Category | Description |
+|---|---|---|
+| `/server-action` | Building | Scaffolds type-safe Server Actions with Zod validation |
+| `/middleware` | Building | Creates Next.js middleware for auth, redirects, i18n, preview mode |
+| `/quality-gate-check` | Quality & Review | Post-implementation quality checklist with pass/fail grading |
+| `/search-first` | Maintenance | Research-first development — always search before coding |
+
+### Sitecore Content SDK v2.x Support
+
+- **New CMS type**: `sitecore-xmc-v2` — detected via `@sitecore-content-sdk/nextjs` in deps
+- **Updated scanner**: Detection priority is now Content SDK v2.x → JSS Next.js → JSS React
+- **Updated agent**: `sitecore-specialist` now covers Content SDK v2.x patterns, Experience Edge connectivity, and image optimization
+- **Updated skill**: `/sitecore-debug` adds checks for Content SDK v2.x migration issues, Experience Edge connectivity, and image optimization
+
+### Expanded Templates
+
+- Next.js App Router — Server Action and middleware scaffolding skills
+- Sitecore XM Cloud — Content SDK v2.x fragment with new SDK patterns
+- TypeScript — stricter Zod validation patterns in generated skills
+
+---
+
 ## v1.2.0 — 2026-03-18
 
 ### Hooks System (Automated Quality Checks)

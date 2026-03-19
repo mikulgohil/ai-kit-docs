@@ -45,7 +45,7 @@ AI Kit reads your `package.json`, config files, and directory structure to detec
 
 Rules are generated for **both** Claude Code (`CLAUDE.md`) and Cursor (`.cursorrules` + `.cursor/rules/*.mdc`).
 
-### 2. 45 Auto-Discovered Skills
+### 2. 43 Auto-Discovered Skills
 
 Skills are structured AI workflows that get applied automatically. You don't type a command — the AI recognizes what you're doing and loads the right skill.
 
@@ -55,19 +55,19 @@ Skills are structured AI workflows that get applied automatically. You don't typ
 - Generates: component + types + tests + docs (if complex)
 - Follows your exact conventions — because it read them
 
-**39 skills across 7 categories:**
+**43 skills across 7 categories:**
 
 | Category | Skills | What They Do |
 |---|---|---|
 | **Getting Started** | `prompt-help`, `understand` | Help you write effective prompts, explain unfamiliar code |
-| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` | Scaffold production-ready code that matches your patterns |
-| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` | Catch issues before code review — a11y, security, types, responsive, perf |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` | Debug, refactor, upgrade, and audit with structured workflows |
+| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen`, `server-action`, `middleware` | Scaffold production-ready code that matches your patterns |
+| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check`, `quality-gate-check` | Catch issues before code review — a11y, security, types, responsive, perf |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `search-first` | Debug, refactor, upgrade, and audit with structured workflows |
 | **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release` | Automate docs, git messages, and releases |
 | **Session** | `save-session`, `resume-session`, `checkpoint` | Persist context across sessions and track quality |
 | **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` | Coordinate agents, run comprehensive checks, audit AI config |
 
-Skills work in **both Claude Code and Cursor** — same 39 workflows, both tools.
+Skills work in **both Claude Code and Cursor** — same 43 workflows, both tools.
 
 ### 3. Hooks, Agents & Context Modes
 
@@ -75,7 +75,7 @@ New in v1.2.0 — three systems that make the AI work more like a real teammate:
 
 **[Hooks](/docs/hooks)** — Automated quality checks that run as you code. Auto-format on save, TypeScript checks after edits, console.log warnings, and git push safety. Three profiles: minimal, standard, strict.
 
-**[Agents](/docs/agents)** — 8 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. Each agent has focused expertise and tools.
+**[Agents](/docs/agents)** — 10 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. Want system design guidance? Ask `@architect`. Each agent has focused expertise and tools.
 
 **[Context Modes](/docs/context-modes)** — Switch between dev (build fast), review (check quality), and research (understand code) modes to change how the AI approaches your work.
 
@@ -193,7 +193,7 @@ AI Kit detects and generates tailored rules for:
 | Category | Technologies |
 |---|---|
 | **Frameworks** | Next.js (App Router, Pages Router, Hybrid), React |
-| **CMS** | Sitecore XM Cloud, Sitecore JSS |
+| **CMS** | Sitecore XM Cloud (Content SDK v2.x + JSS), Sitecore JSS |
 | **Styling** | Tailwind CSS (v3 + v4), SCSS, CSS Modules, styled-components |
 | **Language** | TypeScript (with strict mode detection) |
 | **Monorepos** | Turborepo, Nx, Lerna, pnpm workspaces |
@@ -211,6 +211,6 @@ AI Kit detects and generates tailored rules for:
 | [Why AI Kit](/docs/why-ai-kit) | Side-by-side comparison: development with and without AI Kit |
 | [AI That Improves Itself](/docs/ai-self-improvement) | Deep-dive into Prompt Quality Guard, Self-Enforcement, and Structured Skills |
 | [Getting Started](/docs/getting-started) | Step-by-step setup walkthrough |
-| [Skills & Commands](/docs/slash-commands) | All 26 skills with usage guides |
+| [Skills & Commands](/docs/slash-commands) | All 43 skills with usage guides |
 | [Recommended Tools](/docs/recommended-tools) | Free tools and MCPs that supercharge AI Kit |
 | [Token Tips](/docs/tips-and-tricks) | Optimize token usage on the $20 plan |

@@ -28,17 +28,31 @@ AI Kit detects seven technology dimensions from your project. Here's how each de
 
 ## CMS
 
-### Sitecore XM Cloud
+### Sitecore XM Cloud (Content SDK v2.x)
 
-**Detection**: `@sitecore-content-sdk/nextjs` or `@sitecore-jss/sitecore-jss-nextjs` in deps
+**Detection**: `@sitecore-content-sdk/nextjs` in deps
 
-**Rules generated**: Sitecore component patterns, field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`), GraphQL patterns, placeholder usage, and common XM Cloud mistakes.
+**CMS type**: `sitecore-xmc-v2`
+
+**Rules generated**: Content SDK v2.x patterns, new SDK component data binding, Experience Edge queries, image optimization, field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`), GraphQL patterns, placeholder usage, and common XM Cloud mistakes.
+
+### Sitecore XM Cloud (JSS)
+
+**Detection**: `@sitecore-jss/sitecore-jss-nextjs` in deps (without Content SDK v2.x)
+
+**CMS type**: `sitecore-xmc`
+
+**Rules generated**: Sitecore component patterns, JSS field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`), GraphQL patterns, placeholder usage, and common XM Cloud mistakes.
 
 ### Sitecore JSS (Legacy)
 
 **Detection**: `@sitecore-jss/sitecore-jss-react` in deps (without the XM Cloud packages)
 
+**CMS type**: `sitecore-jss`
+
 **Rules generated**: Same Sitecore fragment with JSS-specific guidance.
+
+> **Detection priority**: Content SDK v2.x → JSS Next.js → JSS React. The first match determines the CMS type.
 
 ---
 

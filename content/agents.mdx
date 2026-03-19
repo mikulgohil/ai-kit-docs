@@ -4,7 +4,7 @@ Agents are specialized AI assistants that live in `.claude/agents/` and handle d
 
 ## Available Agents
 
-AI Kit generates up to 8 agents based on your project's detected stack:
+AI Kit generates up to 10 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
@@ -15,7 +15,9 @@ AI Kit generates up to 8 agents based on your project's detected stack:
 | **build-resolver** | Diagnose and fix Next.js, TypeScript, and Sitecore build errors | Read, Edit, Glob, Grep, Bash |
 | **doc-updater** | Keep documentation, README, and Storybook stories in sync with code | Read, Write, Edit, Glob, Grep |
 | **refactor-cleaner** | Find unused exports, dead code, and unnecessary complexity | Read, Edit, Glob, Grep, Bash |
-| **sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
+| **architect** | System design (rendering strategy, component hierarchy, data flow) | Read, Glob, Grep, Bash |
+| **tdd-guide** | Test-driven development guide (red-green-refactor workflow) | Read, Write, Edit, Glob, Grep, Bash |
+| **sitecore-specialist** | Sitecore XM Cloud expert — JSS, Content SDK v2.x, Experience Edge, GraphQL | Read, Write, Edit, Glob, Grep, Bash |
 
 ---
 
@@ -32,6 +34,8 @@ In Claude Code, agents are automatically available for delegation. You can invok
 @doc-updater Update docs for the changes I just made
 @refactor-cleaner Find dead code in src/components/
 @sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
+@architect Design the rendering strategy for the product catalog
+@tdd-guide Guide me through TDD for the shopping cart feature
 ```
 
 You can also use the `/orchestrate` skill to coordinate multiple agents on a complex task.
@@ -111,15 +115,40 @@ Finds and removes dead code and unnecessary complexity:
 
 Groups findings by severity: Remove / Simplify / Consider.
 
+### Architect
+
+Provides system design guidance for your project:
+- **Rendering strategy** — Server Components vs Client Components, streaming, static generation
+- **Component hierarchy** — composition patterns, prop drilling vs context, shared layouts
+- **Data flow** — fetching strategies, caching, revalidation, optimistic updates
+- **Module boundaries** — feature slicing, shared libraries, barrel exports
+- **Performance architecture** — code splitting points, lazy loading boundaries, prefetching
+
+Read-only agent — analyzes and recommends but does not modify code.
+
+### TDD Guide
+
+Guides you through test-driven development using the red-green-refactor workflow:
+- **Red** — write a failing test that defines the expected behavior
+- **Green** — write the minimum code to make the test pass
+- **Refactor** — clean up the code while keeping tests green
+- **Iteration** — repeat for the next behavior, building up incrementally
+- **Coverage** — ensures edge cases, error states, and boundary conditions are tested
+
+Works with Jest, Vitest, React Testing Library, and Playwright.
+
 ### Sitecore Specialist
 
 Handles all Sitecore XM Cloud development patterns:
+- **Content SDK v2.x** — migration from JSS, new SDK patterns, component data binding
+- **Experience Edge** — GraphQL queries, edge caching, CDN configuration, connectivity debugging
 - **Component development** — JSS field helpers, Experience Editor compatibility
 - **Field type mapping** — TextField, RichTextField, ImageField, LinkField, DateField
+- **Image optimization** — next/image with Sitecore media, responsive images, lazy loading
 - **GraphQL** — efficient queries, fragments, Experience Edge pagination
 - **Layout service** — rendering host config, placeholder nesting
 - **Personalization** — component variants, A/B testing rules
-- **Debugging** — component not rendering, empty fields, GraphQL errors, 404s
+- **Debugging** — component not rendering, empty fields, GraphQL errors, 404s, v2.x migration issues
 
 ---
 
@@ -130,7 +159,7 @@ Some agents are only generated when their tools are detected in your project:
 | Agent | Condition |
 |---|---|
 | **e2e-runner** | Only if `@playwright/test` is in dependencies |
-| **sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
+| **sitecore-specialist** | Only if Sitecore XM Cloud, Content SDK v2.x, or JSS is detected |
 
 All other agents are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 

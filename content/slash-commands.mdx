@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 39 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 43 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -47,6 +47,8 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/design-tokens` | Building | Audits and manages your design token system |
 | `/schema-gen` | Building | Generates TypeScript types and Zod schemas from data |
 | `/storybook-gen` | Building | Generates Storybook stories with controls and play functions |
+| `/server-action` | Building | Scaffolds type-safe Server Actions with Zod validation |
+| `/middleware` | Building | Creates Next.js middleware for auth, redirects, i18n, preview mode |
 | `/review` | Quality & Review | Deep code review following project standards |
 | `/pre-pr` | Quality & Review | Full pre-PR checklist before you open a pull request |
 | `/test` | Quality & Review | Generates unit and integration tests for any file |
@@ -57,12 +59,14 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/perf-audit` | Quality & Review | Lighthouse-style performance audit with Core Web Vitals |
 | `/bundle-check` | Quality & Review | Analyzes bundle size and suggests optimizations |
 | `/i18n-check` | Quality & Review | Finds hardcoded strings and internationalization gaps |
+| `/quality-gate-check` | Quality & Review | Post-implementation quality checklist with pass/fail grading |
 | `/fix-bug` | Maintenance | Guided systematic debugging workflow |
 | `/refactor` | Maintenance | Refactors code while preserving behavior |
 | `/optimize` | Maintenance | Performance analysis and optimization |
 | `/migrate` | Maintenance | Migrates code to a new API, pattern, or version |
 | `/dep-check` | Maintenance | Audits dependencies for issues and updates |
 | `/sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
+| `/search-first` | Maintenance | Research-first development — always search before coding |
 | `/document` | Workflow | Generates JSDoc, README, and component docs |
 | `/commit-msg` | Workflow | Writes a conventional commit message for staged changes |
 | `/env-setup` | Workflow | Sets up local environment variables and configuration |
@@ -317,6 +321,52 @@ Generates comprehensive Storybook stories for a component with typed controls, p
 
 ---
 
+### /server-action
+
+Scaffolds a type-safe Next.js Server Action with Zod input validation, error handling, and revalidation logic.
+
+**Usage**
+```
+/server-action
+/server-action createOrder
+/server-action updateProfile
+```
+
+**When to use**: When adding a new Server Action for form submissions, mutations, or any server-side logic triggered from Client Components.
+
+**What it generates**
+- Server Action function with `"use server"` directive
+- Zod schema for input validation
+- Typed return value with success/error discrimination
+- `revalidatePath` or `revalidateTag` call where appropriate
+- Error handling with user-friendly messages
+- Test file for the action
+
+---
+
+### /middleware
+
+Creates Next.js middleware with support for common patterns like authentication guards, redirects, internationalization, and preview mode.
+
+**Usage**
+```
+/middleware
+/middleware auth
+/middleware i18n
+/middleware preview
+```
+
+**When to use**: When you need request-level logic that runs before page rendering — auth checks, locale detection, A/B testing, or preview mode toggling.
+
+**What it generates**
+- `middleware.ts` at the project root (or `src/`)
+- Matcher configuration for targeted routes
+- Pattern-specific logic (auth redirect, locale detection, preview cookies)
+- Type-safe request/response helpers
+- Documentation comments explaining the middleware chain
+
+---
+
 ## Quality & Review
 
 Commands for catching problems before they reach production or a reviewer.
@@ -542,6 +592,32 @@ Finds hardcoded user-facing strings, missing translation keys, and international
 
 ---
 
+### /quality-gate-check
+
+Post-implementation quality checklist that grades your work across multiple dimensions with a pass/fail score.
+
+**Usage**
+```
+/quality-gate-check
+/quality-gate-check src/features/checkout/
+/quality-gate-check src/components/ProductCard.tsx
+```
+
+**When to use**: After finishing an implementation, before requesting code review. More targeted than `/pre-pr` — focuses on the quality of what you just built rather than PR readiness.
+
+**What it checks**
+- **Type safety** — no `any`, proper null handling, strict generics
+- **Error handling** — error boundaries, try/catch, user-facing error states
+- **Testing** — test file exists, covers happy path and edge cases
+- **Accessibility** — semantic HTML, ARIA labels, keyboard navigation
+- **Performance** — no unnecessary re-renders, proper memoization, lazy loading
+- **Security** — no XSS vectors, validated inputs, no exposed secrets
+- **Documentation** — JSDoc on exports, doc file for complex components
+
+Each dimension is graded PASS / WARN / FAIL. Overall grade: all PASS = ship it, any WARN = review, any FAIL = fix first.
+
+---
+
 ## Maintenance
 
 Commands for improving, fixing, and managing existing code.
@@ -674,6 +750,32 @@ Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in 
 - Rendering host environment variables and proxy config
 - Personalization and variant rendering issues
 - Edge Config and preview mode setup
+- Content SDK v2.x migration issues (deprecated APIs, new SDK patterns)
+- Experience Edge connectivity (endpoint config, auth tokens, CDN caching)
+- Image optimization (next/image with Sitecore media URLs, responsive sizes)
+
+---
+
+### /search-first
+
+Research-first development workflow — ensures you always search and understand existing code before writing new code.
+
+**Usage**
+```
+/search-first
+/search-first add user authentication
+/search-first implement product filtering
+```
+
+**When to use**: Before starting any implementation task. Prevents the common mistake of building something that already exists, conflicts with existing patterns, or duplicates logic.
+
+**What it does**
+- Searches the codebase for related implementations, utilities, and patterns
+- Identifies existing abstractions that can be reused
+- Maps the dependency graph for the area you're about to modify
+- Surfaces relevant tests, docs, and decision log entries
+- Produces a research summary before any code is written
+- Flags potential conflicts with existing code
 
 ---
 
