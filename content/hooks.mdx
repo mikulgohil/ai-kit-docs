@@ -38,6 +38,7 @@ Best for: everyday development with a safety net.
 | Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
 | TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
+| Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
 ### Strict
@@ -50,6 +51,7 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 | TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
 | ESLint check | PostToolUse | Runs ESLint with zero warnings on edited files |
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
+| Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
@@ -134,6 +136,36 @@ Uses `grep -n` to find `console.log` statements in the edited file and prints a 
 ### ESLint Check
 
 Runs ESLint with `--max-warnings 0` on the edited file. Only available in **strict** profile. Output is truncated to 15 lines.
+
+### Mistakes Auto-Capture
+
+Fires after every `Bash` tool call. When the command exits with a non-zero exit code, the hook checks if the output matches common build/lint error patterns:
+
+| Pattern | Catches |
+|---|---|
+| `error TS`, `tsc` | TypeScript compilation errors |
+| `ESLint`, `eslint`, `Lint error` | Linting failures |
+| `Build error`, `build failed`, `ELIFECYCLE` | Build failures |
+| `Module not found`, `Cannot find module` | Missing dependency errors |
+| `SyntaxError`, `TypeError` | Runtime-detectable code errors |
+
+When a match is found, the hook auto-appends a timestamped entry to `docs/mistakes-log.md`:
+
+```markdown
+### 2026-03-25 14:30 — Build/lint failure (auto-captured)
+- **What happened**: Command exited with code 2
+- **Error preview**:
+\`\`\`
+  src/components/Hero.tsx(12,5): error TS2322: Type 'string' is not assignable...
+\`\`\`
+- **Root cause**: <!-- TODO: Fill in after investigating -->
+- **Fix**: <!-- TODO: How was it resolved? -->
+- **Lesson**: <!-- TODO: What to do differently -->
+```
+
+The error preview shows the first 3 lines containing "error" from the output. The TODO fields are left for you to fill in — this is where the real learning happens. Over time, your mistakes log builds organically without any manual effort.
+
+Available in **standard** and **strict** profiles. Requires `docs/mistakes-log.md` to exist (scaffolded by `ai-kit init`).
 
 ### Git Push Safety
 

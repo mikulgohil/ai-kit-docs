@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides nine commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, and `stats`.
+AI Kit provides ten commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, and `health`.
 
 ## `ai-kit init [path]`
 
@@ -342,6 +342,95 @@ ai-kit stats ./path/to/project
 
 ---
 
+## `ai-kit health [path]`
+
+One-glance project health dashboard — combines setup integrity, security, stack detection, tools, and documentation checks into a single view.
+
+```bash
+ai-kit health
+ai-kit health ./path/to/project
+```
+
+### What it checks
+
+The health command runs five diagnostic sections:
+
+| Section | What It Checks |
+|---|---|
+| **Setup Integrity** | Config version, CLAUDE.md with markers, .cursorrules, skills, agents, hooks |
+| **Security** | Secrets in CLAUDE.md, .env gitignored, hardcoded secrets in MCP config |
+| **Stack Detection** | Framework, CMS, TypeScript, styling, monorepo |
+| **Tools & MCP** | Playwright, ESLint, Prettier, axe-core, Knip, Bundle Analyzer, Storybook, GitHub/Figma/Context7/Perplexity MCPs |
+| **Documentation** | Mistakes log, decisions log, time log — checks if they have entries or are empty |
+
+### Output
+
+```
+AI Kit — Project Health
+  /Users/you/projects/my-app
+
+  Setup Integrity
+    ✓ Version: v1.3.0
+    ✓ CLAUDE.md: Present with markers
+    ✓ .cursorrules: Present
+    ✓ Skills: 39 installed
+    ✓ Agents: 8 configured
+    ✓ Hooks: Configured
+
+  Security
+    ✓ Secrets in CLAUDE.md: Clean
+    ✓ .env gitignore: Protected
+    ✓ MCP config: No hardcoded secrets
+
+  Stack Detection
+    ✓ Framework: Next.js 15.1.0 (App Router)
+    ✓ CMS: Sitecore XM Cloud (Content SDK v2)
+    ✓ TypeScript: Enabled (strict)
+    ✓ Styling: tailwind
+
+  Tools & MCP
+    ✓ Playwright: Detected
+    ✓ ESLint: Detected
+    ⚠ Knip: Missing — npm i -D knip
+    ⚠ Perplexity MCP: Not configured
+
+  Documentation
+    ✓ Mistakes Log: Has entries
+    ⚠ Decisions Log: Scaffolded but empty
+    ⚠ Time Log: Scaffolded but empty
+
+  Overall: B (82/100)
+  ████████████████░░░░ 18 passed · 4 warnings · 0 failures
+
+  Recommendations:
+    → Improve: Knip — Missing — npm i -D knip
+    → Improve: Perplexity MCP — Not configured
+    → Improve: Decisions Log — Scaffolded but empty
+```
+
+### Scoring
+
+The health check produces a letter grade based on all checks across all sections:
+
+| Grade | Score |
+|---|---|
+| **A** | 90–100 |
+| **B** | 80–89 |
+| **C** | 70–79 |
+| **D** | 60–69 |
+| **F** | Below 60 |
+
+Passed checks count as 1 point, warnings as 0.5, failures as 0. The top 3 actionable recommendations are shown at the bottom.
+
+### When to use
+
+- **After `ai-kit init`** — verify everything was set up correctly
+- **Before a PR** — quick health check that your AI setup is intact
+- **During onboarding** — show a new developer the project's AI health at a glance
+- **Instead of running `doctor` + `audit` + `stats` separately** — `health` combines the most useful checks from each
+
+---
+
 ## Global Options
 
 ```bash
@@ -354,4 +443,5 @@ ai-kit doctor --help  # Show doctor command help
 ai-kit diff --help    # Show diff command help
 ai-kit export --help  # Show export command help
 ai-kit stats --help   # Show stats command help
+ai-kit health --help  # Show health command help
 ```

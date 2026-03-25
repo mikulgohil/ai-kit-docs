@@ -73,7 +73,7 @@ Skills work in **both Claude Code and Cursor** — same 39 workflows, both tools
 
 New in v1.2.0 — three systems that make the AI work more like a real teammate:
 
-**[Hooks](/docs/hooks)** — Automated quality checks that run as you code. Auto-format on save, TypeScript checks after edits, console.log warnings, and git push safety. Three profiles: minimal, standard, strict.
+**[Hooks](/docs/hooks)** — Automated quality checks that run as you code. Auto-format on save, TypeScript checks after edits, console.log warnings, git push safety, and **mistakes auto-capture** that logs build/lint failures to `docs/mistakes-log.md`. Three profiles: minimal, standard, strict.
 
 **[Agents](/docs/agents)** — 8 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. Each agent has focused expertise and tools.
 
@@ -166,9 +166,12 @@ npx @mikulgohil/ai-kit init
 
 **What you get immediately:**
 - `CLAUDE.md` + `.cursorrules` — AI rules tailored to your stack
-- 26 skills in `.claude/skills/` + `.cursor/skills/` — auto-discovered workflows
-- 5 developer guides in `ai-kit/guides/` — effective AI usage playbooks
+- 39 skills in `.claude/skills/` + `.cursor/skills/` — auto-discovered workflows
+- 8 specialized agents + 3 context modes — delegation and focus control
+- Hooks with mistakes auto-capture — quality checks that build your mistakes log
+- 6 developer guides in `ai-kit/guides/` — effective AI usage playbooks
 - Documentation scaffolds in `docs/` — structured logging templates
+- `ai-kit health` — one-glance project health dashboard
 
 [Full setup walkthrough](/docs/getting-started) | [What gets generated](/docs/what-gets-generated)
 

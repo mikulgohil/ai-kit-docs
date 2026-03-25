@@ -4,6 +4,49 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.3.0 — 2026-03-25
+
+### New CLI Command: `ai-kit health`
+
+One-glance project health dashboard that combines setup integrity, security, stack detection, tools/MCP status, and documentation checks into a single view with an A-F grade.
+
+```bash
+npx @mikulgohil/ai-kit health
+```
+
+Five diagnostic sections: Setup Integrity, Security, Stack Detection, Tools & MCP, and Documentation. Produces a letter grade with actionable recommendations. Replaces running `doctor` + `audit` + `stats` separately.
+
+See [CLI Reference](/docs/cli-reference#ai-kit-health-path) for details.
+
+### Component Scanner & Docs Generator
+
+Two new modules that bring component-level intelligence to AI Kit:
+
+- **Component scanner** (`src/scanner/components.ts`) — discovers all React components and extracts metadata: props, Sitecore integration (fields, params, placeholders, GraphQL), dependencies, test/story coverage, and auto-categorization
+- **Component docs generator** (`src/generator/component-docs.ts`) — produces `.ai.md` files per component with YAML frontmatter, health scores (0-100), props tables, usage examples, and Sitecore integration details
+- **Smart merge** — updates only auto-generated sections when `.ai.md` files already exist, preserving manual edits
+
+See [What Gets Generated](/docs/what-gets-generated#component-scanner--docs-generator) for details.
+
+### Mistakes Auto-Capture Hook
+
+New PostToolUse hook that automatically logs build and lint failures into `docs/mistakes-log.md`:
+
+- Fires after every `Bash` command with a non-zero exit code
+- Pattern-matches against TypeScript errors, ESLint failures, build errors, missing modules, and syntax/type errors
+- Auto-appends timestamped entries with error preview pre-filled
+- Available in **standard** and **strict** hook profiles
+- The mistakes log builds itself — no manual effort required
+
+See [Hooks](/docs/hooks#mistakes-auto-capture) for details.
+
+### Other Improvements
+
+- Total CLI commands expanded from 9 to 10
+- Feature overview document added to `docs/feature-overview.md`
+
+---
+
 ## v1.2.0 — 2026-03-18
 
 ### Hooks System (Automated Quality Checks)

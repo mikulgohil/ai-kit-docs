@@ -226,6 +226,7 @@ Hooks include:
 - **Auto-format** on file edit (Prettier or Biome, auto-detected)
 - **TypeScript type-check** after `.ts/.tsx` edits
 - **Console.log warning** detection
+- **Mistakes auto-capture** — logs build/lint failures to `docs/mistakes-log.md` (standard + strict)
 - **Git push safety** reminder
 - **ESLint check** (strict profile only)
 
@@ -245,6 +246,45 @@ Six developer guides for effective AI-assisted development:
 | `token-saving-tips.md` | How to reduce token usage and costs |
 | `figma-workflow.md` | End-to-end Figma-to-code with AI assistance |
 | `hooks-and-agents.md` | Guide to hooks, agents, and context modes |
+
+---
+
+## Component Scanner & Docs Generator
+
+AI Kit includes a **component scanner** that discovers and analyzes all React components in your project, and a **component docs generator** that produces `.ai.md` documentation files for each one.
+
+### What it scans
+
+The scanner looks for `.tsx` files in standard component directories (`src/components/`, `components/`, `headapps/`, `app/`) and extracts:
+
+| Data | How It's Extracted |
+|---|---|
+| **Component name** | Parsed from export statement or filename |
+| **Props & types** | Extracted from `interface XxxProps` or `type XxxProps` |
+| **Export type** | Default, named, or both |
+| **Sitecore integration** | `useSitecoreContext`, datasource fields, rendering params, placeholders, GraphQL queries |
+| **Dependencies** | Local component imports (PascalCase relative imports) |
+| **Test coverage** | Checks for `.test.tsx`, `.spec.tsx`, or `__tests__/` files |
+| **Storybook coverage** | Checks for `.stories.tsx` files |
+| **Existing AI docs** | Checks for `.ai.md` files |
+| **Category** | Auto-categorized: layout, page, form, navigation, ui, feature, marketing, content, general |
+
+### What it generates
+
+For each component, a `ComponentName.ai.md` file is created alongside the component with:
+
+- **YAML frontmatter** — name, category, path, Sitecore fields, health score
+- **Health score** (0–100) — weighted by tests (25pts), stories (20pts), props (15pts), AI docs (15pts), Sitecore integration (10pts), exports (10pts), dependencies (5pts)
+- **Props table** with types and required flags
+- **Usage example** with correct import style
+- **Sitecore integration section** (if applicable) — datasource fields, rendering params, placeholders, GraphQL queries
+- **Dependencies** — which other components it uses
+- **States** — loading, error, empty (TODO fields for manual completion)
+- **Design decisions and edge cases** — TODO fields for the developer
+
+### Smart merge
+
+If a `.ai.md` file already exists with `<!-- AI-KIT:COMPONENT-START -->` / `<!-- AI-KIT:COMPONENT-END -->` markers, only the auto-generated section is updated. Manual edits outside the markers are preserved.
 
 ---
 
