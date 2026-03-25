@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides thirteen commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, `health`, `patterns`, `dead-code`, and `drift`.
+AI Kit provides fourteen commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, `health`, `patterns`, `dead-code`, `drift`, and `component-registry`.
 
 ## `ai-kit init [path]`
 
@@ -13,22 +13,38 @@ npx @mikulgohil/ai-kit init ./path/to/project
 
 ### What it does
 
-1. Scans the project directory for tech stack indicators
-2. Shows detected stack and asks clarification questions if needed
-3. Asks which AI tools to generate configs for (Claude Code, Cursor, or both)
-4. Asks how to handle existing files (overwrite or skip)
-5. Generates all configuration files
-6. Writes `ai-kit.config.json` to track what was generated
+1. Scans the project directory for tech stack indicators (including design tokens, static site, and .aiignore)
+2. **Checks for existing config** — if found, shows saved profile and offers: Update (reuse settings), Re-configure, or Cancel
+3. Shows detected stack and asks clarification questions if needed (skipped in Update mode)
+4. Asks which AI tools to generate configs for — or reuses saved choice
+5. Asks strictness and hook profile — or reuses saved choices
+6. Generates all configuration files
+7. Writes `ai-kit.config.json` to track what was generated **including your tool/strictness/hook choices**
 
 ### Interactive Prompts
 
 | Prompt | When it appears |
 |---|---|
-| Re-initialize? | `ai-kit.config.json` already exists |
-| Router type? | Next.js detected but router ambiguous |
-| Which AI tools? | Always — choose Claude, Cursor, or both |
-| Hook profile? | Always — choose minimal, standard, or strict |
-| Conflict strategy? | Existing `CLAUDE.md` or `.cursorrules` found |
+| What would you like to do? | `ai-kit.config.json` already exists — Update, Re-configure, or Cancel |
+| Router type? | Next.js detected but router ambiguous (skipped in Update mode) |
+| Which AI tools? | Fresh init or Re-configure — choose Claude, Cursor, or both |
+| Strictness level? | Fresh init or Re-configure |
+| Hook profile? | Fresh init or Re-configure — choose minimal, standard, or strict |
+| Conflict strategy? | Existing `CLAUDE.md` or `.cursorrules` found (auto-overwrite in Update mode) |
+
+### Profile Persistence (v1.5.0+)
+
+Your choices are saved in `ai-kit.config.json` under the `tools` field:
+
+```json
+{
+  "tools": { "claude": true, "cursor": true },
+  "strictness": "standard",
+  "hookProfile": "standard"
+}
+```
+
+When a teammate clones the project and runs `ai-kit init`, they see the saved profile and can accept it with one keypress. This ensures consistent AI configuration across the team.
 
 ### Generated Files
 
@@ -537,6 +553,58 @@ AI Kit — Drift Report
 | **In sync** | Component code matches `.ai.md` documentation |
 | **Drifted** | Component has changed since docs were last generated |
 | **Outdated** | No `.ai.md` file exists for this component |
+
+---
+
+## `ai-kit component-registry [path]`
+
+Generate a component registry for AI agent discovery.
+
+```bash
+ai-kit component-registry
+ai-kit component-registry ./path/to/project
+```
+
+### What it does
+
+Scans all React components in the project and generates two files:
+
+| File | Format | Purpose |
+|---|---|---|
+| `ai-kit/component-registry.json` | JSON | Machine-readable catalog with props, dependencies, Sitecore metadata, health scores |
+| `ai-kit/component-registry.md` | Markdown | Human-readable summary grouped by category, with health metrics |
+
+### Output
+
+```
+AI Kit — Component Registry
+  /Users/you/projects/my-app
+
+  Found 84 components in 12 directories
+
+  Categories:
+    28 ui
+    18 feature
+    14 content
+     9 navigation
+     8 layout
+     7 general
+
+  Health:
+    Average score: 62/100
+    With tests: 34/84
+    With stories: 22/84
+    With .ai.md docs: 15/84
+
+✓ Registry written to ai-kit/component-registry.json
+✓ Summary written to ai-kit/component-registry.md
+```
+
+### When to use
+
+- After creating new components — regenerate to keep the registry current
+- Before asking AI to create a component — it checks the registry to avoid duplicates
+- During project audits — the health scores highlight under-documented components
 
 ---
 

@@ -4,6 +4,77 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.5.0 — 2026-03-25
+
+### Remember My Choices (Profile Persistence)
+
+`ai-kit init` now **saves your configuration choices** (tools, strictness, hook profile) into `ai-kit.config.json`. When you or a teammate runs `ai-kit init` again on the same project:
+
+- Shows the saved profile (tools, strictness, hooks, version)
+- Offers three options: **Update** (re-scan, keep settings), **Re-configure** (fresh start), or **Cancel**
+- In "Update" mode, zero questions are asked — the saved choices are reused automatically
+
+This means every developer on the project gets the same AI configuration without answering questions independently.
+
+### Design Token Scanner
+
+New scanner that extracts design tokens from your Tailwind config or CSS variables and injects them into generated rules:
+
+- **Tailwind v4**: Parses `@theme { }` blocks in `globals.css` for `--color-*`, `--font-*`, `--spacing-*`, `--breakpoint-*` tokens
+- **Tailwind v3**: Parses `tailwind.config.ts/js` for `colors`, `fontFamily`, `spacing`, and `screens` keys
+- **CSS Variables**: Detects custom properties in `globals.css` and categorizes them
+
+Detected tokens are shown during `ai-kit init` and included as template variables so the AI knows your exact design system — no more inventing arbitrary colors.
+
+### Static Site / SSG Detection
+
+New scanner and template fragment for static Next.js sites:
+
+- Detects `output: 'export'` in `next.config.*`
+- Detects `generateStaticParams()`, `getStaticPaths()`, `revalidate` patterns
+- Detects server actions and API routes to determine output mode: `export`, `isr`, `ssr`, or `hybrid`
+- Generates a `static-site` template fragment with SSG-specific rules (no server-only features, build-time data, performance targets)
+
+### `.aiignore` File Support
+
+Create a `.aiignore` file in your project root (gitignore-like syntax) to tell AI agents and scanners to skip certain files:
+
+```
+# Legacy code — don't touch
+legacy/
+*.generated.ts
+src/old-components/
+```
+
+Loaded during scanning and displayed in `ai-kit init` output.
+
+### Component Registry Command
+
+New CLI command: `ai-kit component-registry`
+
+Generates `ai-kit/component-registry.json` and `ai-kit/component-registry.md` — a catalog of all components with props, categories, dependencies, Sitecore metadata, and health scores. AI agents can reference this to discover existing components before creating new ones.
+
+```bash
+npx @mikulgohil/ai-kit component-registry
+```
+
+### Health Dashboard Enhancements
+
+The `ai-kit health` command now checks:
+
+- **Design Tokens** — warns if Tailwind is detected but no custom tokens are found
+- **Static Site** — shows the detected output mode
+- **.aiignore** — confirms patterns are loaded
+
+### Other Improvements
+
+- **Tools selection saved** — `ai-kit.config.json` now stores `tools: { claude: true, cursor: true }` so `ai-kit update` knows which tool configs to regenerate
+- **Update command** shows saved profile info before regenerating
+- Total template fragments: **9** (was 8, added `static-site`)
+- Total CLI commands: **14** (was 13, added `component-registry`)
+
+---
+
 ## v1.4.0 — 2026-03-25
 
 ### New Skills (7)

@@ -1,6 +1,6 @@
 # Supported Tech Stacks
 
-AI Kit detects seven technology dimensions from your project. Here's how each detection works and what it triggers.
+AI Kit detects ten technology dimensions from your project. Here's how each detection works and what it triggers.
 
 ## Frameworks
 
@@ -120,6 +120,53 @@ AI Kit detects five Figma-related indicators:
 | **npm** | Default fallback |
 
 The detected package manager is used in generated scripts section (e.g., `npm run dev` vs `pnpm run dev`).
+
+---
+
+## Design Tokens (v1.5.0+)
+
+AI Kit scans for design tokens so the AI knows your exact color palette, fonts, spacing, and breakpoints — preventing it from inventing arbitrary values.
+
+| Source | Detection Method |
+|---|---|
+| **Tailwind v4** | `@theme { }` block in `src/app/globals.css` — extracts `--color-*`, `--font-*`, `--spacing-*`, `--breakpoint-*` |
+| **Tailwind v3** | `tailwind.config.ts/js` — extracts `colors`, `fontFamily`, `spacing`, `screens` keys |
+| **CSS Variables** | Custom properties in `globals.css` — categorizes by naming convention |
+
+Detected tokens are included as template variables in generated rules.
+
+---
+
+## Static Site Detection (v1.5.0+)
+
+AI Kit detects whether your project is a static site and adjusts rules accordingly.
+
+| Indicator | Detection Method |
+|---|---|
+| **Static Export** | `output: 'export'` in `next.config.*` |
+| **Static Params** | `generateStaticParams()` or `getStaticPaths()` in source files |
+| **ISR** | `revalidate` patterns in app directory |
+| **Server Actions** | `'use server'` directive in source files |
+| **API Routes** | `app/api/` or `pages/api/` directories |
+
+Output modes: `export` (fully static), `isr` (incremental static regeneration), `ssr` (server-rendered), `hybrid` (mix of static and server).
+
+When a static site is detected, a `static-site` template fragment is included with SSG-specific rules.
+
+---
+
+## `.aiignore` File (v1.5.0+)
+
+Create a `.aiignore` file in your project root to tell AI agents and scanners to skip certain files or directories. Uses gitignore-like syntax:
+
+```
+# Legacy code the AI shouldn't touch
+legacy/
+*.generated.ts
+src/old-components/
+```
+
+Patterns are loaded during scanning and displayed in `ai-kit init` output.
 
 ---
 

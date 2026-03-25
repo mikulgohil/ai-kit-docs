@@ -8,7 +8,7 @@ This file tracks what AI Kit generated and the scan results. It's created by `ai
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "1.5.0",
   "scanResult": {
     "framework": "nextjs",
     "nextjsVersion": "15.1.0",
@@ -28,14 +28,37 @@ This file tracks what AI Kit generated and the scan results. It's created by `ai
       "tokenFormat": "tailwind-v4",
       "visualTests": false
     },
+    "designTokens": {
+      "detected": true,
+      "colors": ["primary", "secondary", "accent"],
+      "fonts": ["sans", "mono"],
+      "spacing": [],
+      "breakpoints": ["sm", "md", "lg", "xl"],
+      "source": "tailwind-config"
+    },
+    "staticSite": {
+      "isStatic": true,
+      "outputMode": "isr",
+      "hasGenerateStaticParams": true,
+      "hasRevalidate": true,
+      "hasStaticExport": false
+    },
+    "aiIgnorePatterns": ["legacy/", "*.generated.ts"],
     "packageManager": "npm",
     "projectName": "my-project",
     "scripts": { "dev": "next dev", "build": "next build" }
   },
-  "generatedAt": "2026-03-17T10:00:00.000Z",
+  "generatedAt": "2026-03-25T10:00:00.000Z",
   "templates": ["CLAUDE.md", ".cursorrules"],
   "commands": ["prompt-help", "review", "fix-bug"],
-  "guides": ["getting-started", "prompt-playbook"]
+  "guides": ["getting-started", "prompt-playbook"],
+  "agents": ["planner", "code-reviewer"],
+  "contexts": ["dev", "review", "research"],
+  "hooks": true,
+  "hookProfile": "standard",
+  "strictness": "standard",
+  "customFragments": [],
+  "tools": { "claude": true, "cursor": true }
 }
 ```
 
@@ -49,6 +72,13 @@ This file tracks what AI Kit generated and the scan results. It's created by `ai
 | `templates` | Which template files were generated |
 | `commands` | Which slash commands were copied |
 | `guides` | Which guides were copied |
+| `agents` | Which agents were generated |
+| `contexts` | Which context modes were generated |
+| `hooks` | Whether hooks are configured |
+| `hookProfile` | Hook automation profile (minimal/standard/strict) |
+| `strictness` | Rule enforcement level (relaxed/standard/strict) |
+| `tools` | **v1.5.0+** Saved tool selection — reused on `ai-kit init` and `ai-kit update` |
+| `customFragments` | User-provided custom rule fragments |
 
 ---
 

@@ -1,7 +1,7 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
+import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
-import './custom.css'
 
 const navbar = (
   <Navbar
@@ -48,29 +48,14 @@ const navbar = (
 
 const footer = (
   <Footer>
-    <span
-      style={{
-        fontSize: '0.8rem',
-        color: '#5c5c6a',
-      }}
-    >
+    <span>
       MIT {new Date().getFullYear()} &copy; Mikul Gohil
       &nbsp;&middot;&nbsp;
-      <a
-        href="https://www.npmjs.com/package/@mikulgohil/ai-kit"
-        target="_blank"
-        rel="noreferrer"
-        style={{ color: '#9494a0', textDecoration: 'none' }}
-      >
+      <a href="https://www.npmjs.com/package/@mikulgohil/ai-kit" target="_blank" rel="noreferrer">
         npm
       </a>
       &nbsp;&middot;&nbsp;
-      <a
-        href="/"
-        style={{ color: '#9494a0', textDecoration: 'none' }}
-      >
-        Home
-      </a>
+      <a href="/">Home</a>
     </span>
   </Footer>
 )
@@ -88,9 +73,10 @@ export default async function DocsLayout({
       footer={footer}
       sidebar={{ defaultMenuCollapseLevel: 1 }}
       editLink="Edit this page on GitHub"
-      darkMode={false}
-      nextThemes={{ defaultTheme: 'dark', forcedTheme: 'dark' }}
     >
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       {children}
     </Layout>
   )
