@@ -136,7 +136,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-39 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+46 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -160,16 +160,16 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 
 | Category | Skills |
 |---|---|
-| **Building** | `prompt-help`, `understand`, `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen` |
-| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check` |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug` |
-| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release` |
+| **Building** | `prompt-help`, `understand`, `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen`, `scaffold-spec` |
+| **Quality & Review** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check`, `test-gaps` |
+| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `upgrade` |
+| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `pr-description`, `standup`, `learn-from-pr`, `release-notes` |
 | **Session** | `save-session`, `resume-session`, `checkpoint` |
 | **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` |
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 39 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 46 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/
@@ -187,7 +187,7 @@ See [Skills & Commands](/docs/slash-commands) for detailed usage of each workflo
 
 ## .claude/agents/
 
-Up to 8 specialized AI agents for delegated tasks. Each agent is a markdown file with YAML frontmatter:
+Up to 10 specialized AI agents for delegated tasks. Each agent is a markdown file with YAML frontmatter:
 
 | Agent | Purpose | Conditional |
 |---|---|---|
@@ -198,6 +198,8 @@ Up to 8 specialized AI agents for delegated tasks. Each agent is a markdown file
 | `build-resolver.md` | Diagnose and fix build/type errors | No |
 | `doc-updater.md` | Keep documentation in sync with code | No |
 | `refactor-cleaner.md` | Find and remove dead code | No |
+| `tdd-guide.md` | Test-driven development guidance and workflow | No |
+| `ci-debugger.md` | CI/CD failure debugger — analyzes logs and suggests fixes | No |
 | `sitecore-specialist.md` | Sitecore XM Cloud patterns and debugging | Yes — only if Sitecore detected |
 
 Each agent has a `name`, `description`, and `tools` field in frontmatter that controls its capabilities. See [Agents](/docs/agents) for detailed descriptions.
@@ -227,8 +229,10 @@ Hooks include:
 - **TypeScript type-check** after `.ts/.tsx` edits
 - **Console.log warning** detection
 - **Mistakes auto-capture** — logs build/lint failures to `docs/mistakes-log.md` (standard + strict)
+- **Bundle impact warning** — warns when new dependencies are added to `package.json` (standard + strict)
 - **Git push safety** reminder
 - **ESLint check** (strict profile only)
+- **Pre-commit AI review** — scans staged files for `any` types, `console.log`, and TODOs without tickets (strict profile only)
 
 See [Hooks](/docs/hooks) for profile comparison and configuration.
 

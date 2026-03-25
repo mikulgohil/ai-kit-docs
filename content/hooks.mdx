@@ -39,6 +39,7 @@ Best for: everyday development with a safety net.
 | TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
+| Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
 ### Strict
@@ -52,7 +53,9 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 | ESLint check | PostToolUse | Runs ESLint with zero warnings on edited files |
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
+| Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
 | Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
+| Pre-commit AI review | PreToolUse | Checks staged files for `any` types, console.log, TODOs without tickets |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
 ---
@@ -166,6 +169,46 @@ When a match is found, the hook auto-appends a timestamped entry to `docs/mistak
 The error preview shows the first 3 lines containing "error" from the output. The TODO fields are left for you to fill in — this is where the real learning happens. Over time, your mistakes log builds organically without any manual effort.
 
 Available in **standard** and **strict** profiles. Requires `docs/mistakes-log.md` to exist (scaffolded by `ai-kit init`).
+
+### Bundle Impact Warning
+
+Fires after any edit to `package.json`. Uses `git diff` to detect newly added dependency lines and prints a warning listing the package names.
+
+```
+⚠ New dependencies detected in package.json:
+  + lodash
+  + date-fns
+  Check bundle impact before committing — run /bundle-check to analyze.
+```
+
+This is a soft check — it does not block any action, just surfaces new additions at the moment they're added so you can evaluate bundle impact early. Available in **standard** and **strict** profiles.
+
+### Pre-Commit AI Review
+
+Fires before any `git commit` command. Scans all staged `.ts`, `.tsx`, `.js`, and `.jsx` files for common quality issues:
+
+| Check | What It Finds |
+|---|---|
+| `any` types | TypeScript `any` annotations that weaken type safety |
+| `console.log` | Debug logging left in staged code |
+| TODOs without tickets | `// TODO` comments that have no issue/ticket reference |
+
+Output is file-by-file:
+
+```
+⚠ Pre-commit review found issues in staged files:
+
+  src/components/CheckoutForm.tsx
+    line 14: any type — consider a specific type
+    line 42: console.log — remove before committing
+
+  src/lib/api.ts
+    line 8: TODO without ticket — add a ticket reference or resolve
+
+  Review and fix before committing, or run with --no-verify to skip.
+```
+
+The hook does not block the commit — it prints the findings and lets you decide. Available in **strict** profile only.
 
 ### Git Push Safety
 

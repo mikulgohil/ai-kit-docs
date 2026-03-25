@@ -4,6 +4,67 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.4.0 — 2026-03-25
+
+### New Skills (7)
+
+Seven new skills bring the total to **46 skills** across all categories:
+
+| Skill | Category | Description |
+|---|---|---|
+| `/pr-description` | Workflow | Generate a structured PR description from staged changes and branch diff |
+| `/release-notes` | Workflow | Generate user-facing release notes from a git range or version tag |
+| `/standup` | Workflow | Summarize yesterday's AI session activity for a daily standup |
+| `/learn-from-pr` | Workflow | Extract lessons and patterns from a merged PR into the decisions log |
+| `/test-gaps` | Quality & Review | Identify untested code paths and suggest missing test cases |
+| `/upgrade` | Maintenance | Guided major dependency upgrade with breaking change analysis |
+| `/scaffold-spec` | Building | Generate a feature specification document before writing code |
+
+### New Agent: ci-debugger
+
+A new `ci-debugger` agent is generated in `.claude/agents/` for every project. It specializes in diagnosing CI/CD pipeline failures:
+
+- Reads CI logs (GitHub Actions, GitLab CI, CircleCI, and others)
+- Identifies root causes: failing tests, type errors, lint failures, build errors, environment issues
+- Suggests targeted fixes with file and line references
+- Distinguishes flaky failures from genuine regressions
+
+Invoke with: `@ci-debugger Diagnose the failing GitHub Actions workflow`
+
+Total agents: **10** (was 9).
+
+### New Hooks (2)
+
+**Bundle Impact Warning** (standard + strict profiles) — fires after edits to `package.json`, detects newly added dependencies via `git diff`, and prints a warning with the package names. Prompts you to run `/bundle-check` to evaluate impact before committing.
+
+**Pre-Commit AI Review** (strict profile only) — fires before `git commit`, scans all staged `.ts/.tsx/.js/.jsx` files for `any` types, `console.log` statements, and TODO comments without ticket references. Reports findings file-by-file without blocking the commit.
+
+See [Hooks](/docs/hooks) for full behavior details.
+
+### New CLI Commands (3)
+
+Three new commands bring the total to **13 CLI commands** (was 10):
+
+| Command | Description |
+|---|---|
+| `ai-kit patterns [path]` | Scans for recurring code patterns and generates `ai-kit/patterns.md` — covers data fetching, error handling, forms, auth, state, and API routes |
+| `ai-kit dead-code [path]` | Finds unused components using the component scanner — reports each as used, unused, or test-only |
+| `ai-kit drift [path]` | Compares component source code against `.ai.md` docs — reports in-sync, drifted, or outdated status |
+
+See [CLI Reference](/docs/cli-reference) for full usage.
+
+### GitHub Action Template
+
+A new template is available at `templates/github-action-ai-review.yml` — a ready-to-use GitHub Actions workflow that runs an AI-powered PR review on every pull request. Copy it to `.github/workflows/` to enable automated PR feedback in CI.
+
+### Other Improvements
+
+- Total skills: **46** (was 39)
+- Total agents: **10** (was 9)
+- Total CLI commands: **13** (was 10)
+
+---
+
 ## v1.3.0 — 2026-03-25
 
 ### New CLI Command: `ai-kit health`

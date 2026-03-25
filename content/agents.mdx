@@ -4,7 +4,7 @@ Agents are specialized AI assistants that live in `.claude/agents/` and handle d
 
 ## Available Agents
 
-AI Kit generates up to 8 agents based on your project's detected stack:
+AI Kit generates up to 10 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
@@ -15,6 +15,8 @@ AI Kit generates up to 8 agents based on your project's detected stack:
 | **build-resolver** | Diagnose and fix Next.js, TypeScript, and Sitecore build errors | Read, Edit, Glob, Grep, Bash |
 | **doc-updater** | Keep documentation, README, and Storybook stories in sync with code | Read, Write, Edit, Glob, Grep |
 | **refactor-cleaner** | Find unused exports, dead code, and unnecessary complexity | Read, Edit, Glob, Grep, Bash |
+| **tdd-guide** | Test-driven development guidance — red/green/refactor workflow | Read, Write, Edit, Glob, Grep, Bash |
+| **ci-debugger** | CI/CD failure debugger — analyzes pipeline logs and suggests fixes | Read, Glob, Grep, Bash |
 | **sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
 
 ---
@@ -31,6 +33,8 @@ In Claude Code, agents are automatically available for delegation. You can invok
 @build-resolver Fix the TypeScript build errors
 @doc-updater Update docs for the changes I just made
 @refactor-cleaner Find dead code in src/components/
+@tdd-guide Walk me through adding tests for the cart feature using TDD
+@ci-debugger Diagnose the failing GitHub Actions workflow
 @sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
 ```
 
@@ -111,6 +115,26 @@ Finds and removes dead code and unnecessary complexity:
 
 Groups findings by severity: Remove / Simplify / Consider.
 
+### TDD Guide
+
+Coaches you through the red/green/refactor cycle for test-driven development:
+- **Red** — writes a failing test that captures the desired behavior before implementation
+- **Green** — implements the minimal code needed to make the test pass
+- **Refactor** — cleans up the implementation while keeping tests passing
+- Suggests test structure using React Testing Library, Vitest, or Jest depending on your stack
+- Helps design testable interfaces before writing the implementation
+
+### CI Debugger
+
+Diagnoses CI/CD pipeline failures and suggests targeted fixes:
+- Reads CI log output (GitHub Actions, GitLab CI, CircleCI, Bitbucket Pipelines)
+- Identifies root cause categories: failing tests, TypeScript errors, lint failures, build errors, missing environment variables, or flaky infrastructure
+- Distinguishes genuine code regressions from flaky test failures or environment issues
+- Provides specific file and line references where relevant
+- Suggests the minimal fix to unblock the pipeline without over-engineering
+
+Invoke with: `@ci-debugger Diagnose the failing workflow — here's the log output: [paste log]`
+
 ### Sitecore Specialist
 
 Handles all Sitecore XM Cloud development patterns:
@@ -132,7 +156,7 @@ Some agents are only generated when their tools are detected in your project:
 | **e2e-runner** | Only if `@playwright/test` is in dependencies |
 | **sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
 
-All other agents are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+All other agents (planner, code-reviewer, security-reviewer, build-resolver, doc-updater, refactor-cleaner, tdd-guide, ci-debugger) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 
 ---
 

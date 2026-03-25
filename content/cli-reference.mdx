@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides ten commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, and `health`.
+AI Kit provides thirteen commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, `health`, `patterns`, `dead-code`, and `drift`.
 
 ## `ai-kit init [path]`
 
@@ -40,7 +40,7 @@ npx @mikulgohil/ai-kit init ./path/to/project
 | `.claude/skills/*/SKILL.md` | Claude Code selected |
 | `.cursor/skills/*/SKILL.md` | Cursor selected |
 | `.claude/commands/*.md` | Claude Code selected (legacy, backward compat) |
-| `.claude/agents/*.md` | Claude Code selected — up to 8 specialized agents |
+| `.claude/agents/*.md` | Claude Code selected — up to 10 specialized agents |
 | `.claude/contexts/*.md` | Claude Code selected — 3 context modes |
 | `.claude/settings.local.json` | Claude Code selected — automated hooks |
 | `ai-kit/guides/*.md` | Always |
@@ -158,9 +158,9 @@ AI Kit — Security & Configuration Audit
   ✓ CLAUDE.md: CLAUDE.md has AI-KIT markers
   ✓ Secrets in CLAUDE.md: No secrets detected
   ✓ Hooks: Hooks configured in settings.local.json
-  ✓ Agents: 8 agent(s) configured
+  ✓ Agents: 10 agent(s) configured
   ✓ Contexts: 3 context mode(s) available
-  ✓ Skills: 39 skill(s) installed
+  ✓ Skills: 46 skill(s) installed
   ✓ .env gitignore: .env files are gitignored
   ⚠ Settings gitignore: settings.local.json not in .gitignore
   ✓ MCP secrets: No hardcoded secrets in settings
@@ -373,8 +373,8 @@ AI Kit — Project Health
     ✓ Version: v1.3.0
     ✓ CLAUDE.md: Present with markers
     ✓ .cursorrules: Present
-    ✓ Skills: 39 installed
-    ✓ Agents: 8 configured
+    ✓ Skills: 46 installed
+    ✓ Agents: 10 configured
     ✓ Hooks: Configured
 
   Security
@@ -431,17 +431,129 @@ Passed checks count as 1 point, warnings as 0.5, failures as 0. The top 3 action
 
 ---
 
+## `ai-kit patterns [path]`
+
+Generate a pattern library from recurring code patterns found in your project.
+
+```bash
+ai-kit patterns
+ai-kit patterns ./path/to/project
+```
+
+### What it does
+
+Scans your codebase for recurring code patterns and generates `ai-kit/patterns.md` — a reference document the AI uses to match new code to your established conventions.
+
+### Patterns detected
+
+| Pattern Category | What It Finds |
+|---|---|
+| Data fetching | Repeated fetch/query patterns, SWR or React Query usage |
+| Error handling | Error boundary placements, try/catch conventions |
+| Forms | Form library usage, validation patterns, submission flows |
+| Auth | Auth guards, session checks, redirect patterns |
+| State | State management patterns, context usage, store shapes |
+| API routes | Handler conventions, response shapes, middleware patterns |
+
+### Output
+
+Writes `ai-kit/patterns.md` with categorized code pattern examples. The AI reads this file to ensure new code follows your project's established conventions.
+
+---
+
+## `ai-kit dead-code [path]`
+
+Find unused components and dead code across your project.
+
+```bash
+ai-kit dead-code
+ai-kit dead-code ./path/to/project
+```
+
+### What it does
+
+Runs the component scanner and cross-references all exports against import usage to identify code that is no longer referenced.
+
+### Output
+
+```
+AI Kit — Dead Code Report
+  /Users/you/projects/my-app
+
+  Components scanned: 84
+
+  UNUSED (never imported):
+    src/components/OldBanner.tsx
+    src/components/legacy/PromoWidget.tsx
+
+  TEST-ONLY (only imported in test files):
+    src/components/MockProvider.tsx
+
+  IN USE: 81 components
+
+  Summary: 2 unused · 1 test-only · 81 in use
+```
+
+Reports each component as `used`, `unused`, or `test-only`. Does not delete anything — review output and remove manually.
+
+---
+
+## `ai-kit drift [path]`
+
+Detect drift between component source code and their `.ai.md` documentation files.
+
+```bash
+ai-kit drift
+ai-kit drift ./path/to/project
+```
+
+### What it does
+
+Compares each component's current source code against its `.ai.md` documentation. Flags components where the props, exports, or Sitecore integration no longer match the documented state.
+
+### Output
+
+```
+AI Kit — Drift Report
+  /Users/you/projects/my-app
+
+  Components checked: 42
+
+  DRIFTED (code changed, docs not updated):
+    src/components/ProductCard.tsx — props added: discount, badge
+    src/components/Header.tsx — props removed: logoVariant
+
+  OUTDATED (no .ai.md file):
+    src/components/NewWidget.tsx
+
+  IN SYNC: 39 components
+
+  Summary: 2 drifted · 1 outdated · 39 in sync
+  Run `ai-kit update` to regenerate docs for drifted components.
+```
+
+| Status | Meaning |
+|---|---|
+| **In sync** | Component code matches `.ai.md` documentation |
+| **Drifted** | Component has changed since docs were last generated |
+| **Outdated** | No `.ai.md` file exists for this component |
+
+---
+
 ## Global Options
 
 ```bash
-ai-kit --version      # Show version number
-ai-kit --help         # Show help
-ai-kit init --help    # Show command-specific help
-ai-kit audit --help   # Show audit command help
-ai-kit tokens --help  # Show tokens command help
-ai-kit doctor --help  # Show doctor command help
-ai-kit diff --help    # Show diff command help
-ai-kit export --help  # Show export command help
-ai-kit stats --help   # Show stats command help
-ai-kit health --help  # Show health command help
+ai-kit --version          # Show version number
+ai-kit --help             # Show help
+ai-kit init --help        # Show command-specific help
+ai-kit audit --help       # Show audit command help
+ai-kit tokens --help      # Show tokens command help
+ai-kit doctor --help      # Show doctor command help
+ai-kit diff --help        # Show diff command help
+ai-kit export --help      # Show export command help
+ai-kit stats --help       # Show stats command help
+ai-kit health --help      # Show health command help
+ai-kit patterns --help    # Show patterns command help
+ai-kit dead-code --help   # Show dead-code command help
+ai-kit drift --help       # Show drift command help
 ```
