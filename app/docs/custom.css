@@ -1,15 +1,20 @@
 /* ============================================
-   AI Kit Docs — Custom Nextra Theme Overrides
-   Matches landing page dark aesthetic
+   AI Kit Docs — Nextra Theme Overrides
+   ONLY colors, fonts, borders — NO spacing.
+   Let Nextra handle its own layout/spacing.
    ============================================ */
 
-/* --- Primary Color: Amber (matching landing --accent: #e8a84c) --- */
+/* --- Theme Variables --- */
 :root {
   color-scheme: dark;
   --nextra-primary-hue: 36deg;
   --nextra-primary-saturation: 78%;
   --nextra-primary-lightness: 50%;
   --nextra-bg: 10, 10, 12;
+  --x-font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --x-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 html.dark {
@@ -19,146 +24,21 @@ html.dark {
   --nextra-bg: 10, 10, 12;
 }
 
-/* Force dark background */
 html, body {
   background: #0a0a0c !important;
-  color: #ededef;
 }
 
-/* --- Typography: Match landing page fonts --- */
-:root {
-  --x-font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --x-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, 'Liberation Mono', 'Courier New', monospace;
+/* --- Border Color Override (global) --- */
+.nextra-border {
+  border-color: #222228 !important;
 }
 
-/* --- Headings: Use Instrument Sans --- */
-article h1,
-article h2,
-article h3,
-article h4,
-article h5,
-article h6 {
+/* --- Headings: Instrument Sans --- */
+article h1, article h2, article h3, article h4, article h5, article h6 {
   font-family: 'Instrument Sans', var(--x-font-sans) !important;
-  letter-spacing: -0.025em;
 }
 
-article h1 {
-  font-weight: 750 !important;
-  letter-spacing: -0.035em;
-  margin-top: 1.5rem !important;
-  margin-bottom: 1rem !important;
-}
-
-article h2 {
-  font-weight: 700 !important;
-  letter-spacing: -0.03em;
-  margin-top: 3rem !important;
-  padding-bottom: 0.75rem !important;
-  border-bottom-color: #222228 !important;
-}
-
-article h3 {
-  margin-top: 2.5rem !important;
-  margin-bottom: 0.75rem !important;
-}
-
-article h4 {
-  margin-top: 2rem !important;
-  margin-bottom: 0.5rem !important;
-}
-
-/* ============================================
-   SPACING — breathing room between elements
-   ============================================ */
-
-/* Paragraphs */
-article p {
-  margin-top: 1.25em !important;
-  margin-bottom: 0.25em !important;
-  line-height: 1.75 !important;
-}
-
-/* First paragraph after heading — less top margin */
-article h1 + p,
-article h2 + p,
-article h3 + p,
-article h4 + p {
-  margin-top: 0.75em !important;
-}
-
-/* Code blocks — generous spacing */
-article pre {
-  margin-top: 1.5em !important;
-  margin-bottom: 1.5em !important;
-}
-
-/* Lists */
-article ul,
-article ol {
-  margin-top: 1em !important;
-  margin-bottom: 1em !important;
-  padding-left: 1.5em !important;
-}
-
-article li {
-  margin-top: 0.35em !important;
-  margin-bottom: 0.35em !important;
-  line-height: 1.7 !important;
-}
-
-/* Tables — spacing and padding */
-article table {
-  margin-top: 1.5em !important;
-  margin-bottom: 1.5em !important;
-  width: 100% !important;
-}
-
-article th,
-article td {
-  padding: 0.75rem 1rem !important;
-  text-align: left !important;
-}
-
-/* HR — clear section breaks */
-article hr {
-  margin-top: 2.5em !important;
-  margin-bottom: 2.5em !important;
-}
-
-/* Blockquotes — spacing */
-article blockquote {
-  margin-top: 1.5em !important;
-  margin-bottom: 1.5em !important;
-}
-
-/* Strong/bold sections in content */
-article strong {
-  color: #ededef;
-}
-
-/* ============================================
-   VISUAL STYLING — colors, borders, effects
-   ============================================ */
-
-/* --- Code Blocks --- */
-article pre {
-  background: #111114 !important;
-  border: 1px solid #222228 !important;
-  border-radius: 12px !important;
-  ring: none !important;
-  --tw-ring-shadow: none !important;
-  box-shadow: none !important;
-}
-
-pre code {
-  font-family: var(--x-font-mono) !important;
-  font-size: 0.85rem !important;
-  line-height: 1.7 !important;
-}
-
-/* Inline code */
+/* --- Inline Code: Amber tint --- */
 :not(pre) > code {
   background: rgba(232, 168, 76, 0.08) !important;
   color: #e8a84c !important;
@@ -166,48 +46,31 @@ pre code {
   border-radius: 6px !important;
   padding: 2px 6px !important;
   font-size: 0.85em !important;
-  font-family: var(--x-font-mono) !important;
 }
 
-/* --- Tables --- */
-article table {
-  border-color: #222228 !important;
+/* --- Code Blocks: Dark background, subtle border --- */
+pre[class*="x:ring"] {
+  --tw-ring-color: #222228 !important;
 }
 
+/* --- Tables: Dark header --- */
 article thead th {
   background: #16161a !important;
   border-color: #222228 !important;
-  font-family: 'Instrument Sans', var(--x-font-sans) !important;
-  font-weight: 650 !important;
-  font-size: 0.875rem !important;
-  color: #9494a0 !important;
 }
 
 article tbody td {
   border-color: #1c1c21 !important;
-  font-size: 0.875rem !important;
-  line-height: 1.6 !important;
 }
 
 article tbody tr:hover td {
   background: rgba(232, 168, 76, 0.03) !important;
 }
 
-/* --- Blockquotes --- */
+/* --- Blockquotes: Amber accent --- */
 article blockquote {
   border-left-color: #e8a84c !important;
   background: rgba(232, 168, 76, 0.04) !important;
-  border-radius: 0 8px 8px 0 !important;
-  padding: 12px 16px !important;
-}
-
-/* --- Links --- */
-article a {
-  text-decoration-color: rgba(232, 168, 76, 0.3) !important;
-}
-
-article a:hover {
-  text-decoration-color: #e8a84c !important;
 }
 
 /* --- HR --- */
@@ -222,24 +85,13 @@ article hr {
 }
 
 /* ============================================
-   LAYOUT ELEMENTS — navbar, sidebar, TOC, footer
+   NAVBAR
    ============================================ */
-
-/* --- Navbar --- */
-.nextra-navbar {
-  background: rgba(10, 10, 12, 0.85) !important;
-  backdrop-filter: blur(16px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-}
-
 .nextra-navbar-blur {
   background: rgba(10, 10, 12, 0.85) !important;
-  border-bottom: 1px solid #222228 !important;
-}
-
-/* Navbar logo and links text */
-.nextra-navbar a {
-  color: #ededef !important;
+  border-bottom-color: #222228 !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
 }
 
 /* Search input */
@@ -258,31 +110,23 @@ article hr {
   box-shadow: 0 0 0 2px rgba(232, 168, 76, 0.1) !important;
 }
 
-/* Search keyboard shortcut badge */
-.nextra-navbar kbd,
-.nextra-navbar [class*="font-mono"] {
-  border-color: #2a2a32 !important;
-  color: #5c5c6a !important;
-}
-
-/* --- Left Sidebar --- */
+/* ============================================
+   LEFT SIDEBAR
+   ============================================ */
 .nextra-sidebar {
-  border-right: 1px solid #1c1c21;
-  background: #0d0d0f;
-  scrollbar-color: #2a2a32 transparent;
+  border-right: 1px solid #1c1c21 !important;
+  background: #0d0d0f !important;
 }
 
-/* Sidebar footer (theme switch area) */
 .nextra-sidebar-footer {
   border-top-color: #1c1c21 !important;
   background: #0d0d0f !important;
 }
 
-/* Sidebar links — normal state */
+/* Sidebar links — normal */
 .nextra-sidebar a,
 .nextra-sidebar button {
   color: #8a8a96 !important;
-  font-size: 0.875rem !important;
 }
 
 /* Sidebar links — hover */
@@ -292,47 +136,23 @@ article hr {
   background: rgba(232, 168, 76, 0.05) !important;
 }
 
-/* Sidebar links — active page */
-.nextra-sidebar a[class*="bg-primary"],
-.nextra-sidebar a.active {
+/* Sidebar links — active */
+.nextra-sidebar a[class*="bg-primary"] {
   color: #e8a84c !important;
   background: rgba(232, 168, 76, 0.08) !important;
-  font-weight: 600 !important;
 }
 
-/* Sidebar section headers */
-.nextra-sidebar [class*="font-semibold"][class*="tracking-tight"] {
-  color: #ededef !important;
-  font-size: 0.8rem !important;
-  letter-spacing: 0.02em !important;
-  text-transform: uppercase !important;
-  margin-top: 1.25rem !important;
-}
-
-/* --- Right TOC (Table of Contents) --- */
+/* ============================================
+   RIGHT TOC (Table of Contents)
+   ============================================ */
 .nextra-toc {
-  border-left: 1px solid #1c1c21;
-  padding-left: 1rem;
-}
-
-/* TOC header "On This Page" */
-.nextra-toc p {
-  color: #9494a0 !important;
-  font-family: 'Instrument Sans', var(--x-font-sans) !important;
-  font-weight: 650 !important;
-  font-size: 0.8rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  margin-bottom: 0.75rem !important;
+  border-left: 1px solid #1c1c21 !important;
 }
 
 /* TOC links — normal */
-.nextra-toc a,
-.nextra-toc li {
+.nextra-toc a {
   color: #5c5c6a !important;
   font-size: 0.8rem !important;
-  line-height: 1.6 !important;
-  transition: color 0.15s !important;
 }
 
 /* TOC links — hover */
@@ -341,81 +161,30 @@ article hr {
 }
 
 /* TOC links — active */
-.nextra-toc a[class*="text-primary"],
-.nextra-toc li[class*="text-primary"] a {
+.nextra-toc a[class*="text-primary"] {
   color: #e8a84c !important;
-  font-weight: 500 !important;
 }
 
-/* TOC "Question? Give us feedback" + Edit link */
+/* TOC bottom links (feedback, edit) */
 .nextra-toc > div:last-child a {
   color: #5c5c6a !important;
-  font-size: 0.8rem !important;
 }
 
 .nextra-toc > div:last-child a:hover {
   color: #e8a84c !important;
 }
 
-/* --- Breadcrumb --- */
-nav[aria-label="breadcrumb"],
-[class*="breadcrumb"] {
-  color: #5c5c6a !important;
-  font-size: 0.8rem !important;
-}
+/* ============================================
+   MISC
+   ============================================ */
 
-/* --- "Copy page" button --- */
-button[class*="copy"] {
-  color: #5c5c6a !important;
-}
-
-/* --- Prev/Next navigation --- */
-a[class*="nextra-focus"][class*="border"] {
-  border-color: #222228 !important;
-  border-radius: 10px !important;
-}
-
-a[class*="nextra-focus"][class*="border"]:hover {
-  border-color: rgba(232, 168, 76, 0.3) !important;
-  background: rgba(232, 168, 76, 0.03) !important;
-}
-
-/* --- Footer --- */
+/* Footer */
 footer {
-  border-top: 1px solid #1c1c21 !important;
-  background: #0a0a0c !important;
+  border-top-color: #1c1c21 !important;
 }
 
-/* --- nextra-border utility override --- */
-.nextra-border {
-  border-color: #1c1c21 !important;
-}
-
-/* --- Scrollbar Styling --- */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2a2a32;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3a44;
-}
-
-/* --- Smooth transitions --- */
-a, button, input {
-  transition-duration: 200ms;
-}
-
-/* --- Nextra code block ring override --- */
-pre[class*="x:ring"] {
-  --tw-ring-color: #222228 !important;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a32; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a44; }
