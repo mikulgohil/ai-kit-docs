@@ -3,16 +3,16 @@
    Dark developer-tool aesthetic with warm accents
    ============================================ */
 
-/* --- Reset & Base --- */
-*,
-*::before,
-*::after {
+/* --- Reset & Base (scoped to landing page only) --- */
+.landing-page *,
+.landing-page *::before,
+.landing-page *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root {
+.landing-page {
   --bg-primary: #0a0a0c;
   --bg-secondary: #111114;
   --bg-card: #16161a;
@@ -49,9 +49,8 @@
 
   --max-width: 1120px;
   --section-gap: 120px;
-}
 
-.landing-page {
+
   background: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
