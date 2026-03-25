@@ -10,19 +10,34 @@ One command. 30 seconds. Your AI assistant goes from generic to project-aware.
 
 ---
 
-## The Problem AI Kit Solves
+## 20 Problems AI Kit Solves
 
-AI coding tools are powerful, but they start every project from zero. Without context, they:
+Every team using AI coding assistants hits these problems. AI Kit solves each one.
 
-**Generate wrong patterns.** The AI creates a Pages Router component when you use App Router. It writes CSS classes when you use Tailwind. It uses default exports when your project uses named exports. Every AI-generated file needs manual fixing.
+| # | Problem | How AI Kit Solves It |
+|---|---------|---------------------|
+| 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
+| 2 | **AI generates wrong framework patterns** — Writes Pages Router code when you use App Router. Uses CSS when you use Tailwind. Creates default exports when your project uses named exports. | Auto-detects your exact stack (framework, router, CMS, styling, TypeScript config) and generates rules specific to your setup. The AI can't use the wrong patterns. |
+| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **39 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
+| 4 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same build failures and lint errors. | Generates a **mistakes log** (`docs/mistakes-log.md`) with **auto-capture hook** that logs every build/lint failure automatically. The AI references it to avoid repeating them. |
+| 5 | **Every developer gets different AI behavior** — No consistency in how the team uses AI tools, leading to inconsistent code quality and style. | One `ai-kit init` command generates the same rules for the entire team — everyone's AI follows identical project standards. Commit the generated files to the repo. |
+| 6 | **No quality checks on AI-generated code** — AI output goes straight to PR without type checking, linting, or security review. | Automated **hooks** run formatting, type-checking, linting, and git safety checks in real-time as the AI writes code. **Quality gate** runs everything before merge. |
+| 7 | **AI generates insecure code** — No guardrails for secrets exposure, XSS, SQL injection, or other vulnerabilities. AI doesn't scan its own output. | Built-in **security audit** scans for exposed secrets, OWASP risks, and misconfigurations. **Security review agent** catches issues at development time, not production. |
+| 8 | **AI can't handle multi-file reasoning** — Changes to one component break related files. AI loses context across linked models and shared types. | **8 specialized agents** with focused expertise — planner, code-reviewer, build-resolver, doc-updater, refactor-cleaner — each maintains context for their domain. |
+| 9 | **No decision trail** — Nobody remembers why a technical decision was made 3 months ago. Knowledge walks out the door when developers leave. | Auto-scaffolds a **decisions log** (`docs/decisions-log.md`) to capture what was decided, why, and by whom — fully searchable and traceable. |
+| 10 | **Onboarding takes too long** — New developers spend days understanding the project and its AI setup before they can contribute. | AI Kit generates developer guides and project-aware configurations — new team members get productive AI assistance from day one with zero manual setup. |
+| 11 | **Context gets repeated every conversation** — You explain the same conventions in every session: import order, naming, component structure, testing patterns. | All conventions are encoded in the generated rules file. The AI reads them automatically at session start. You explain once, it remembers forever. |
+| 12 | **AI doesn't improve over time** — The AI makes the same wrong suggestions regardless of past feedback, team patterns, or previous failures. | The system **learns as you use it** — mistakes log, decisions log, and updated rules mean the AI gets smarter with every session. Mistakes auto-capture builds the log organically. |
+| 13 | **Complex tasks need multiple manual AI passes** — Developers manually coordinate review + test + docs updates across separate conversations. | **Multi-agent orchestration** runs multiple specialized agents in parallel — review, test, document, and refactor in one command with `/orchestrate`. |
+| 14 | **Switching AI tools means starting over** — Moving from Cursor to Claude Code (or vice versa) loses all configuration and project context. | Generates configs for **5+ AI tools** (Claude Code, Cursor, Windsurf, Aider, Cline) from a single source — switch tools without losing project knowledge. |
+| 15 | **AI creates components without tests, docs, or types** — Every AI-generated file needs manual follow-up to add what was missed. | Skills like `/new-component` enforce a structured workflow: asks 10 questions, reads existing patterns, generates component + types + tests + docs together. |
+| 16 | **No visibility into AI usage costs** — Management has no idea how many tokens the team is consuming or which projects cost the most. | Built-in **token tracking** provides daily/weekly/monthly usage summaries, per-project cost breakdown, budget alerts, and ROI estimates. |
+| 17 | **Cursor copies entire modules instead of targeted edits** — AI bloats the repo with unnecessary file duplication, especially in CMS and monorepo setups. | Generated rules include explicit instructions for editing patterns — update in place, respect package boundaries, follow existing structure. |
+| 18 | **No component-level AI awareness** — AI doesn't know which components have tests, stories, Sitecore integration, or documentation gaps. | **Component scanner** discovers all React components and generates `.ai.md` docs with health scores, props tables, Sitecore field mappings, and dependency trees. |
+| 19 | **Setup is manual and error-prone** — Configuring AI assistants requires deep knowledge of each tool's config format. Most teams skip it entirely. | **Zero manual configuration** — one command auto-detects your stack and generates everything. Update with one command when the project evolves. |
+| 20 | **AI hallucinates framework-specific APIs** — Generates incorrect hook usage, wrong data fetching patterns, or non-existent component APIs for your framework version. | Stack-specific template fragments include exact API patterns for your detected framework version (e.g., Next.js 15 App Router, Sitecore Content SDK v2). |
 
-**Ignore your standards.** No documentation gets created. No tests. No JSDoc. No error boundaries. The AI does exactly what you ask — nothing more. Your team's conventions exist in a wiki nobody reads, and the AI certainly doesn't.
-
-**Waste your time.** You explain the same context in every conversation. "We use Sitecore field helpers." "Import order is external, internal, local, types." "Components go in src/components." Multiply this by every developer, every project, every day.
-
-**Produce inconsistent output.** Developer A gets different AI output than Developer B on the same project. Code reviews become about formatting and conventions instead of logic and architecture. The AI is fast, but the rework makes it slow.
-
-**The result:** Teams using AI tools without configuration spend more time fixing AI output than they save generating it.
+**The result without AI Kit:** Teams spend more time fixing AI output than they save generating it.
 
 ---
 
