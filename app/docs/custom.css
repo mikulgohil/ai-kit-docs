@@ -4,7 +4,6 @@
    ============================================ */
 
 /* --- Primary Color: Amber (matching landing --accent: #e8a84c) --- */
-/* Applied to both light AND dark so the amber accent is always active */
 :root {
   color-scheme: dark;
   --nextra-primary-hue: 36deg;
@@ -20,7 +19,7 @@ html.dark {
   --nextra-bg: 10, 10, 12;
 }
 
-/* Force dark background even in light mode (we want dark-only) */
+/* Force dark background */
 html, body {
   background: #0a0a0c !important;
   color: #ededef;
@@ -48,18 +47,109 @@ article h6 {
 article h1 {
   font-weight: 750 !important;
   letter-spacing: -0.035em;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1rem !important;
 }
 
 article h2 {
   font-weight: 700 !important;
   letter-spacing: -0.03em;
+  margin-top: 3rem !important;
+  padding-bottom: 0.75rem !important;
+  border-bottom-color: #222228 !important;
 }
 
+article h3 {
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+article h4 {
+  margin-top: 2rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* ============================================
+   SPACING — breathing room between elements
+   ============================================ */
+
+/* Paragraphs */
+article p {
+  margin-top: 1.25em !important;
+  margin-bottom: 0.25em !important;
+  line-height: 1.75 !important;
+}
+
+/* First paragraph after heading — less top margin */
+article h1 + p,
+article h2 + p,
+article h3 + p,
+article h4 + p {
+  margin-top: 0.75em !important;
+}
+
+/* Code blocks — generous spacing */
+article pre {
+  margin-top: 1.5em !important;
+  margin-bottom: 1.5em !important;
+}
+
+/* Lists */
+article ul,
+article ol {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+  padding-left: 1.5em !important;
+}
+
+article li {
+  margin-top: 0.35em !important;
+  margin-bottom: 0.35em !important;
+  line-height: 1.7 !important;
+}
+
+/* Tables — spacing and padding */
+article table {
+  margin-top: 1.5em !important;
+  margin-bottom: 1.5em !important;
+  width: 100% !important;
+}
+
+article th,
+article td {
+  padding: 0.75rem 1rem !important;
+  text-align: left !important;
+}
+
+/* HR — clear section breaks */
+article hr {
+  margin-top: 2.5em !important;
+  margin-bottom: 2.5em !important;
+}
+
+/* Blockquotes — spacing */
+article blockquote {
+  margin-top: 1.5em !important;
+  margin-bottom: 1.5em !important;
+}
+
+/* Strong/bold sections in content */
+article strong {
+  color: #ededef;
+}
+
+/* ============================================
+   VISUAL STYLING — colors, borders, effects
+   ============================================ */
+
 /* --- Code Blocks --- */
-pre {
+article pre {
   background: #111114 !important;
   border: 1px solid #222228 !important;
   border-radius: 12px !important;
+  ring: none !important;
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
 }
 
 pre code {
@@ -80,27 +170,31 @@ pre code {
 }
 
 /* --- Tables --- */
-table {
+article table {
   border-color: #222228 !important;
 }
 
-thead th {
+article thead th {
   background: #16161a !important;
   border-color: #222228 !important;
   font-family: 'Instrument Sans', var(--x-font-sans) !important;
   font-weight: 650 !important;
+  font-size: 0.875rem !important;
+  color: #9494a0 !important;
 }
 
-tbody td {
+article tbody td {
   border-color: #1c1c21 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.6 !important;
 }
 
-tbody tr:hover td {
+article tbody tr:hover td {
   background: rgba(232, 168, 76, 0.03) !important;
 }
 
 /* --- Blockquotes --- */
-blockquote {
+article blockquote {
   border-left-color: #e8a84c !important;
   background: rgba(232, 168, 76, 0.04) !important;
   border-radius: 0 8px 8px 0 !important;
@@ -116,15 +210,34 @@ article a:hover {
   text-decoration-color: #e8a84c !important;
 }
 
+/* --- HR --- */
+article hr {
+  border-color: #222228 !important;
+}
+
 /* --- Selection --- */
 ::selection {
   background: rgba(232, 168, 76, 0.2) !important;
   color: #ededef !important;
 }
 
-/* --- HR --- */
-hr {
-  border-color: #222228 !important;
+/* ============================================
+   LAYOUT ELEMENTS — sidebar, nav, footer, TOC
+   ============================================ */
+
+/* Sidebar border */
+aside {
+  scrollbar-color: #2a2a32 transparent;
+}
+
+/* Navbar glass effect */
+.nextra-navbar-blur {
+  border-bottom-color: #222228 !important;
+}
+
+/* Footer */
+footer {
+  border-top-color: #222228 !important;
 }
 
 /* --- Scrollbar Styling --- */
@@ -149,4 +262,9 @@ hr {
 /* --- Smooth transitions --- */
 a, button, input {
   transition-duration: 200ms;
+}
+
+/* --- Nextra code block ring override (remove white ring) --- */
+pre[class*="x:ring"] {
+  --tw-ring-color: #222228 !important;
 }
