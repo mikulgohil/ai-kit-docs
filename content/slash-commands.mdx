@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 46 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 48 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -81,6 +81,8 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/orchestrate` | Orchestration | Coordinates multiple specialized agents on complex tasks |
 | `/quality-gate` | Orchestration | Comprehensive pass/fail quality checks (types, lint, format, tests, a11y, security) |
 | `/harness-audit` | Orchestration | Audits AI configuration health with A-F grade |
+| `/deep-interview` | Requirements | Socratic requirements gathering — structured interview before coding |
+| `/clarify-requirements` | Requirements | Quick task clarification — identify gaps in under 5 minutes |
 
 ---
 
@@ -1097,3 +1099,41 @@ Audit the AI agent configuration for completeness and correctness.
 - Config version matches installed AI Kit version
 
 Outputs an overall health grade (A-F) with specific recommendations.
+
+---
+
+## Requirements Skills (v1.7.0)
+
+### `/deep-interview`
+
+**Category**: Requirements
+
+Socratic requirements gathering — a structured interview that transforms vague ideas into detailed specifications before any code is written.
+
+**When to use**: Before starting a significant new feature, when requirements are unclear, or when you want to avoid building the wrong thing.
+
+**What it does**:
+1. Asks problem-space questions (what problem, who experiences it, cost of inaction)
+2. Establishes scope boundaries (MVP, explicit out-of-scope items)
+3. Identifies users and stakeholders
+4. Systematically explores edge cases (empty states, errors, accessibility, performance, security)
+5. Validates understanding with the developer
+6. Generates a complete feature specification document
+
+Output can be saved to `docs/specs/[feature-name].md`.
+
+### `/clarify-requirements`
+
+**Category**: Requirements
+
+Quick task clarification — identifies gaps and ambiguities in a task description in under 5 minutes.
+
+**When to use**: Before starting any task where the requirements feel slightly vague or incomplete. Much faster than `/deep-interview` — asks a maximum of 5 targeted questions.
+
+**What it does**:
+1. Analyzes the task for ambiguity across 6 dimensions (what, where, who, when, edge cases, scope)
+2. Asks only the highest-impact questions (max 5, multiple choice when possible)
+3. Provides best guesses with each question for quick confirmation
+4. Produces a concise task brief with acceptance criteria
+
+If the task is already clear, it skips questions and produces the brief immediately.

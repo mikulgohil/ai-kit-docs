@@ -4,7 +4,7 @@ Agents are specialized AI assistants that live in `.claude/agents/` and handle d
 
 ## Available Agents
 
-AI Kit generates up to 10 agents based on your project's detected stack:
+AI Kit generates up to 16 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
@@ -18,6 +18,12 @@ AI Kit generates up to 10 agents based on your project's detected stack:
 | **tdd-guide** | Test-driven development guidance — red/green/refactor workflow | Read, Write, Edit, Glob, Grep, Bash |
 | **ci-debugger** | CI/CD failure debugger — analyzes pipeline logs and suggests fixes | Read, Glob, Grep, Bash |
 | **sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
+| **architect** | System design — SSR/SSG/ISR strategy, component hierarchy, data flow | Read, Glob, Grep, Bash |
+| **data-scientist** | ML pipelines, model evaluation, data analysis, experiment tracking | Read, Glob, Grep, Bash |
+| **performance-profiler** | Core Web Vitals, bundle analysis, runtime profiling, rendering optimization | Read, Glob, Grep, Bash |
+| **migration-specialist** | Framework upgrades, breaking change detection, codemods, incremental adoption | Read, Glob, Grep, Bash |
+| **dependency-auditor** | Outdated packages, vulnerability scanning, license compliance, bundle impact | Read, Glob, Grep, Bash |
+| **api-designer** | REST/GraphQL API design, schema validation, versioning, error handling | Read, Glob, Grep, Bash |
 
 ---
 
@@ -36,6 +42,12 @@ In Claude Code, agents are automatically available for delegation. You can invok
 @tdd-guide Walk me through adding tests for the cart feature using TDD
 @ci-debugger Diagnose the failing GitHub Actions workflow
 @sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
+@architect Design the rendering strategy for the new product pages
+@data-scientist Profile this dataset and recommend a modeling approach
+@performance-profiler Audit the homepage for Core Web Vitals issues
+@migration-specialist Plan the upgrade from Next.js 14 to 15
+@dependency-auditor Run a full dependency audit with license check
+@api-designer Design the REST API for the orders resource
 ```
 
 You can also use the `/orchestrate` skill to coordinate multiple agents on a complex task.
@@ -145,6 +157,66 @@ Handles all Sitecore XM Cloud development patterns:
 - **Personalization** — component variants, A/B testing rules
 - **Debugging** — component not rendering, empty fields, GraphQL errors, 404s
 
+### Architect
+
+Makes high-level design decisions for Next.js, Sitecore XM Cloud, and Tailwind projects:
+- **Rendering strategy** — SSR, SSG, ISR, and client-side rendering decisions per route
+- **Component hierarchy** — Server vs Client Component boundaries, composition patterns
+- **Data flow** — Sitecore Layout Service, Experience Edge GraphQL, caching layers
+- **State management** — URL params, server state, React state, global store (minimal approach)
+
+Outputs Architecture Decision Records with rendering strategy tables, component hierarchies, and trade-offs.
+
+### Data Scientist
+
+Handles ML pipelines, data analysis, and model evaluation:
+- **Data analysis** — profiling, quality assessment, feature engineering
+- **ML pipeline design** — end-to-end pipeline architecture, feature stores
+- **Model evaluation** — metric selection, evaluation harnesses, distribution shift detection
+- **Experiment tracking** — structured experiments with reproducibility
+
+Starts with exploratory analysis before modeling. Reports confidence intervals and statistical significance.
+
+### Performance Profiler
+
+Diagnoses and fixes web performance bottlenecks:
+- **Core Web Vitals** — LCP, INP, CLS analysis with specific element identification
+- **Bundle analysis** — heavy dependencies, tree-shaking opportunities, code splitting
+- **Runtime profiling** — unnecessary re-renders, memory leaks, network waterfalls
+- **Rendering optimization** — Server/Client Component boundaries, Suspense placement
+
+Follows a measure-first approach: baseline → identify bottleneck → fix → verify → repeat.
+
+### Migration Specialist
+
+Plans and executes safe, incremental framework and library migrations:
+- **Breaking change detection** — scans for deprecated APIs, removed features, behavior changes
+- **Migration planning** — phased plans with rollback points, minimum viable upgrade paths
+- **Codemod execution** — applies official codemods, writes custom transforms for edge cases
+- **Incremental adoption** — adapter patterns, feature flags, mixed-state app support
+
+Never upgrades multiple major versions in one step. Keeps the app deployable at every step.
+
+### Dependency Auditor
+
+Audits project dependencies for security, compliance, and hygiene:
+- **Vulnerability scanning** — classifies by severity, checks reachability of vulnerable code paths
+- **Outdated detection** — prioritizes security fixes over feature updates, flags abandoned packages
+- **License compliance** — flags copyleft in proprietary projects, generates license reports
+- **Bundle impact** — measures install/bundle size contribution, finds lighter alternatives
+
+Distinguishes direct vs transitive vulnerabilities. Never recommends `npm audit fix --force` blindly.
+
+### API Designer
+
+Designs, reviews, and improves REST and GraphQL APIs:
+- **API design** — resource endpoints, HTTP methods, status codes, pagination strategies
+- **Schema validation** — Zod/JSON Schema definitions, naming conventions, nullable/required fields
+- **Versioning** — backward-compatible changes, deprecation workflows, sunset headers
+- **Error handling** — consistent error format, actionable messages, rate limit responses
+
+Outputs endpoint tables, request/response examples, Zod schemas, and error response catalogs.
+
 ---
 
 ## Conditional Agents
@@ -156,7 +228,7 @@ Some agents are only generated when their tools are detected in your project:
 | **e2e-runner** | Only if `@playwright/test` is in dependencies |
 | **sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
 
-All other agents (planner, code-reviewer, security-reviewer, build-resolver, doc-updater, refactor-cleaner, tdd-guide, ci-debugger) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+All other agents (planner, code-reviewer, security-reviewer, build-resolver, doc-updater, refactor-cleaner, architect, tdd-guide, ci-debugger, data-scientist, performance-profiler, migration-specialist, dependency-auditor, api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 
 ---
 
