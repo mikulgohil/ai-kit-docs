@@ -42,7 +42,7 @@ export default function LandingPage() {
         <div className="landing-hero-glow" />
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          v1.6.0 — Extension catalog &amp; presets coming soon
+          v1.7.0 — 5 new agents &amp; requirements skills
         </div>
         <h1>
           Make AI assistants<br />
