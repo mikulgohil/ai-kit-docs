@@ -6,7 +6,7 @@ Frequently asked questions about AI Kit.
 
 ### What is AI Kit?
 
-AI Kit is a CLI tool that scans your project's tech stack and generates AI assistant configuration files (CLAUDE.md, .cursorrules, slash commands, guides) tailored to your specific setup. It ensures Claude Code and Cursor follow your team's coding standards from the first interaction.
+AI Kit is a CLI tool that scans your project's tech stack and generates AI assistant configuration files (CLAUDE.md, .cursorrules, slash commands, agents, guides) tailored to your specific setup. It ensures Claude Code and Cursor follow your team's coding standards from the first interaction.
 
 ### Do I need to install AI Kit globally?
 
@@ -18,7 +18,63 @@ No. AI Kit only creates configuration files (CLAUDE.md, .cursorrules, etc.) and 
 
 ### Is AI Kit open source?
 
-Yes. The source code is available at [github.com/mikulgohil/ai-kit](https://github.com/mikulgohil/ai-kit) under the MIT license.
+Yes. The source code is available at [github.com/mikulgohil/ai-kit](https://github.com/mikulgohil/ai-kit) under the MIT license. It's free for personal and commercial use.
+
+### How is AI Kit different from just writing a CLAUDE.md manually?
+
+AI Kit auto-detects your exact stack and generates rules you wouldn't think to write — framework-specific patterns, Sitecore field helpers, monorepo conventions, TypeScript strict mode rules. It also generates 48 structured skills, 16 specialized agents, automated hooks, context modes, and developer guides. Writing all of this manually would take hours and require deep knowledge of each tool's config format.
+
+### How is AI Kit different from oh-my-claudecode?
+
+They're complementary, not competitive. AI Kit answers "what should the AI know about my project?" (config generation). oh-my-claudecode answers "how should multiple AI agents work together?" (runtime orchestration). AI Kit generates the project context that tools like oh-my-claudecode need to orchestrate effectively.
+
+---
+
+## Pricing & Plans
+
+### Does AI Kit cost anything?
+
+No. AI Kit is 100% free and open source. It works with every pricing tier of every supported AI tool.
+
+### Does AI Kit work with the Claude Code $20/month (Pro) plan?
+
+Yes — and this is where AI Kit provides the highest ROI. The Pro plan gives you ~100+ messages per 5-hour window with access to Opus and Sonnet models. AI Kit eliminates wasted tokens on context re-explanation, so every message goes to productive work instead of setup.
+
+### Does AI Kit work with the Claude Code $100/month (Max) plan?
+
+Yes. With Max you get 5x the Pro limits and priority access. AI Kit ensures your extra capacity produces higher-quality output. Multi-agent orchestration and the 16 specialized agents become especially valuable when you're running complex, multi-file tasks.
+
+### Does AI Kit work with the Claude Code $200/month (Max 20x) plan?
+
+Yes. Same benefits as the $100 plan, but with 20x Pro limits. At this spend level, quality matters even more — AI Kit's quality hooks, security audit, and structured skills ensure your high-volume output maintains standards.
+
+### Does AI Kit work with Claude Team plans?
+
+Yes. Team plans ($25-150/user/month) benefit the most from AI Kit because it ensures every developer on the team gets identical, project-aware AI configuration. One `ai-kit init`, commit the files, and the entire team is aligned.
+
+### Does AI Kit work with the free Claude plan?
+
+Claude Code (the CLI) requires a paid Claude plan. However, the generated CLAUDE.md and skills can still be referenced by other tools.
+
+### Does AI Kit work with Cursor Pro ($20/month)?
+
+Yes. AI Kit generates `.cursorrules` + `.cursor/rules/*.mdc` + `.cursor/skills/` for Cursor. All 48 skills work via auto-discovery — the AI reads skill descriptions and applies the right one when your task matches.
+
+### Does AI Kit work with Cursor's free plan?
+
+Yes, but with limited premium requests (50/month on Hobby). AI Kit makes each of those 50 requests more productive by pre-loading project context.
+
+### Does AI Kit work with GitHub Copilot?
+
+AI Kit doesn't generate Copilot-specific config files, but the CLAUDE.md and skills files are plain markdown that any AI tool can reference. Copilot users benefit from the project documentation, component registry, and developer guides.
+
+### What about Aider and Cline — aren't those free?
+
+Aider and Cline are free and open source, but they use your own API keys (BYOK), so you pay per token. AI Kit is even more important with BYOK tools — every wasted API call is money lost. The generated rules ensure your AI gets it right the first time instead of needing multiple correction rounds.
+
+### Which plan gets the most value from AI Kit?
+
+The $20/month plans (Claude Pro or Cursor Pro) are the sweet spot. You have enough tokens to be productive but not enough to waste. AI Kit turns a budget plan into a power tool by eliminating context re-explanation, enforcing patterns, and providing 48 structured workflows.
 
 ---
 
@@ -32,6 +88,8 @@ Yes. The source code is available at [github.com/mikulgohil/ai-kit](https://gith
 - `.claude/skills/` — auto-discovered skills for Claude Code
 - `.cursor/skills/` — auto-discovered skills for Cursor
 - `.claude/commands/*.md` — legacy slash commands
+- `.claude/agents/*.md` — specialized agents
+- `.claude/contexts/*.md` — context modes
 - `ai-kit/guides/*.md` — developer guides
 - `ai-kit.config.json` — configuration
 
@@ -54,6 +112,17 @@ Both files contain equivalent rules formatted for their respective tools.
 ### Can I use AI Kit with only Claude Code or only Cursor?
 
 Yes. During `ai-kit init`, you choose which tools to generate configs for. Selecting "Claude Code only" skips `.cursorrules` and `.cursor/rules/` generation, and vice versa.
+
+### What is ai-kit.config.json?
+
+This file stores your configuration choices (tools, strictness, hook profile, detected stack). When you or a teammate runs `ai-kit init` again, the saved profile is shown and can be reused — zero questions asked.
+
+### What strictness levels are available?
+
+Three levels during `ai-kit init`:
+- **Relaxed** — minimal rules, maximum flexibility
+- **Standard** (default) — balanced rules that enforce conventions without being restrictive
+- **Strict** — maximum enforcement including ESLint checks, console.log audits, and pre-commit review hooks
 
 ---
 
@@ -81,9 +150,176 @@ Run `ai-kit update` after significant migration steps. For example, during a Pag
 1. Both directories exist → AI Kit includes both router rule sets
 2. After removing `pages/` → Run `ai-kit update` to drop Pages Router rules
 
+### Does AI Kit support React without Next.js?
+
+Yes. AI Kit detects standalone React projects (Create React App, Vite, custom setups) and generates React-specific rules without Next.js patterns.
+
+### Does AI Kit support Vue, Angular, or Svelte?
+
+Not currently. AI Kit is focused on the React/Next.js ecosystem. The base rules (TypeScript, testing, git, docs) still apply to any project, but you won't get framework-specific fragments for Vue, Angular, or Svelte.
+
 ---
 
-## Usage
+## Skills & Commands
+
+### What's the difference between skills and commands?
+
+Skills (`.claude/skills/[name]/SKILL.md`) are auto-discovered by the AI — it reads descriptions and applies the right one automatically. Commands (`.claude/commands/[name].md`) are legacy slash commands you invoke explicitly with `/command-name`. Both contain the same 48 workflows. Skills work in both Claude Code and Cursor; commands are Claude Code only.
+
+### Do I need to memorize 48 command names?
+
+No. Skills are auto-discovered — just describe what you want and the AI applies the right skill. If you say "review my code before I open a PR", the AI auto-loads the `pre-pr` skill. You never need to type `/pre-pr`.
+
+### Can I add my own custom skills?
+
+Yes. Create a subdirectory with a `SKILL.md` file in `.claude/skills/` and `.cursor/skills/`. AI Kit won't overwrite directories it didn't create:
+
+```
+.claude/skills/
+├── review/SKILL.md        # AI Kit (updated on ai-kit update)
+├── deploy/SKILL.md        # Your custom skill (preserved)
+└── pr-template/SKILL.md   # Your custom skill (preserved)
+```
+
+### Do slash commands work in Cursor?
+
+Slash commands (`.claude/commands/*.md`) are a Claude Code feature. However, **skills work in Cursor** via auto-discovery. AI Kit generates `.cursor/skills/` with the same 48 workflows. Cursor users get the full library without typing commands.
+
+### What are the new requirements skills?
+
+Two skills added in v1.7.0:
+- **`/deep-interview`** — Socratic requirements gathering. Walks through a structured interview to transform vague ideas into detailed specifications before coding begins.
+- **`/clarify-requirements`** — Quick task clarification. Asks max 5 targeted questions to identify gaps in under 5 minutes.
+
+---
+
+## Agents
+
+### What are agents?
+
+Agents are specialized AI assistants in `.claude/agents/` that handle delegated tasks. Each has focused expertise, specific tools, and structured workflows. You invoke them with `@agent-name` in Claude Code.
+
+### How many agents does AI Kit generate?
+
+Up to 16 agents. 14 are universal (generated for every project) and 2 are conditional:
+- **e2e-runner** — only if Playwright is detected
+- **sitecore-specialist** — only if Sitecore XM Cloud is detected
+
+### What are the 16 agents?
+
+| Agent | Purpose |
+|---|---|
+| `planner` | Break features into implementation plans |
+| `code-reviewer` | Deep code review for quality and patterns |
+| `security-reviewer` | OWASP Top 10, XSS, CSRF, secrets detection |
+| `build-resolver` | Diagnose and fix build/type errors |
+| `doc-updater` | Keep documentation in sync with code |
+| `refactor-cleaner` | Find and remove dead code |
+| `architect` | System design — SSR/SSG/ISR, component hierarchy |
+| `tdd-guide` | Test-driven development guidance |
+| `ci-debugger` | CI/CD failure analysis and resolution |
+| `data-scientist` | ML pipelines, model evaluation, data analysis |
+| `performance-profiler` | Core Web Vitals, bundle analysis, profiling |
+| `migration-specialist` | Framework upgrades, breaking changes, codemods |
+| `dependency-auditor` | Vulnerability scanning, license compliance |
+| `api-designer` | REST/GraphQL API design, schema validation |
+| `e2e-runner` | Playwright tests (conditional) |
+| `sitecore-specialist` | Sitecore XM Cloud patterns (conditional) |
+
+### Can I create custom agents?
+
+Yes. Add a new `.md` file to `.claude/agents/` with the same frontmatter format (name, description, tools). Claude Code discovers custom agents automatically.
+
+### Do agents work in Cursor?
+
+Agents are a Claude Code feature (the `@agent-name` delegation pattern). Cursor doesn't support agent delegation in the same way, but the agent markdown files can still be referenced as context.
+
+### When should I use agents vs skills?
+
+- **Skills** are for structured workflows you want the AI to follow (review, scaffold, audit)
+- **Agents** are for delegation — you hand off a task to a specialist and it works autonomously
+
+Example: Use the `/review` skill to review code yourself with AI guidance. Use `@code-reviewer` to delegate the entire review to the agent.
+
+---
+
+## Hooks & Quality
+
+### What are hooks?
+
+Hooks are automated checks that run as the AI codes — auto-format on save, TypeScript type-check after edits, console.log warnings, git push safety, and mistakes auto-capture. They run in the background without you invoking them.
+
+### What hook profiles are available?
+
+- **Minimal** — auto-format + git push safety
+- **Standard** — + TypeScript type-check + console.log warnings + mistakes auto-capture
+- **Strict** — + ESLint check + pre-commit AI review + bundle impact warning
+
+### What is mistakes auto-capture?
+
+A hook that automatically logs build and lint failures into `docs/mistakes-log.md`. When a TypeScript error, ESLint failure, or build error occurs, it's logged with a timestamp and error preview. The AI references this log to avoid repeating the same mistakes.
+
+### Can I disable hooks?
+
+Yes. Hooks are generated in `.claude/settings.local.json` (which is gitignored). You can edit or delete this file. You can also choose the "minimal" profile during `ai-kit init` for the lightest hook configuration.
+
+---
+
+## Security
+
+### Does AI Kit access my code remotely?
+
+No. AI Kit runs entirely locally. It reads your project files to detect the tech stack, generates config files in your project directory, and exits. No data is sent anywhere.
+
+### Does AI Kit store or transmit any data?
+
+No. AI Kit is a pure CLI tool with zero network calls. It doesn't phone home, collect analytics, or transmit any project data.
+
+### What does the security audit check?
+
+The `ai-kit audit` command checks for:
+- Secrets in CLAUDE.md or .cursorrules
+- Exposed `.env` files (not in .gitignore)
+- Hardcoded credentials in MCP server configs
+- Hook configuration validity
+- Agent file integrity
+- Settings.local.json gitignore status
+
+Produces an A-F health grade with specific recommendations.
+
+### Is it safe to commit the generated files?
+
+Yes. Generated files contain only rules, patterns, and workflow templates — no secrets, tokens, or sensitive data. They're designed to be committed and shared.
+
+---
+
+## Teams & Collaboration
+
+### How does AI Kit work for teams?
+
+1. One developer runs `ai-kit init` and commits the generated files
+2. Every developer who clones/pulls the repo gets identical AI configuration
+3. When the stack changes, run `ai-kit update` and commit — the whole team updates
+
+### Does every developer need to run `ai-kit init`?
+
+No. Only one person needs to run it. The generated files are committed to the repo, so every team member gets them on pull.
+
+### What if different developers use different AI tools?
+
+AI Kit generates configs for all tools simultaneously. Developer A uses Claude Code (reads CLAUDE.md), Developer B uses Cursor (reads .cursorrules). Both get the same rules from the same source.
+
+### Can teams enforce a specific strictness level?
+
+Yes. The strictness level is saved in `ai-kit.config.json`. When any developer runs `ai-kit init` on the same project, they see the saved profile and can reuse it — ensuring consistency without manual coordination.
+
+### How do we handle team-specific rules?
+
+Add custom rules outside the `<!-- AI-KIT:START/END -->` markers in CLAUDE.md or .cursorrules. These sections survive `ai-kit update`. For Cursor, create additional `.mdc` files in `.cursor/rules/`.
+
+---
+
+## Updates & Maintenance
 
 ### How often should I run `ai-kit update`?
 
@@ -94,36 +330,6 @@ Run it when:
 - Your team updates coding standards
 
 You don't need to run it for routine code changes.
-
-### Do slash commands work in Cursor?
-
-Slash commands (`.claude/commands/*.md`) are a Claude Code feature and don't work in Cursor natively. However, **skills do work in Cursor**. AI Kit generates `.cursor/skills/` with the same 26 workflows. The AI in Cursor reads skill descriptions and auto-applies them when your task matches — so Cursor users get the full workflow library without typing slash commands.
-
-### Can I add my own skills?
-
-Yes. Create a subdirectory with a `SKILL.md` file in `.claude/skills/` and `.cursor/skills/`. AI Kit won't touch directories it didn't create:
-
-```
-.claude/skills/
-├── review/SKILL.md        # AI Kit (updated on ai-kit update)
-├── new-component/SKILL.md # AI Kit (updated on ai-kit update)
-├── deploy/SKILL.md        # Your custom skill (preserved)
-└── pr-template/SKILL.md   # Your custom skill (preserved)
-
-.cursor/skills/
-├── review/SKILL.md        # AI Kit (updated on ai-kit update)
-├── deploy/SKILL.md        # Your custom skill (preserved)
-```
-
-For Claude Code only, you can also still add legacy slash commands as `.md` files to `.claude/commands/`.
-
-### Will AI Kit slow down my AI assistant?
-
-No. The generated files are static markdown that AI tools read once when opening a project. There's no runtime cost, no background processes, and no API calls.
-
----
-
-## Updates & Maintenance
 
 ### What happens when AI Kit releases a new version?
 
@@ -143,3 +349,53 @@ Yes. When `ai-kit init` detects an existing `CLAUDE.md`, it asks:
 - **Skip** — keep your existing file
 
 If you choose overwrite, your custom rules are replaced. To preserve them, add them back outside the `AI-KIT:START/END` markers after generation.
+
+### Will `ai-kit update` break my custom rules?
+
+No. Custom rules outside the `<!-- AI-KIT:START/END -->` markers are preserved. Only the content between markers is refreshed. Custom skills, agents, and Cursor `.mdc` files are never overwritten.
+
+---
+
+## Performance & Token Usage
+
+### Will AI Kit slow down my AI assistant?
+
+No. The generated files are static markdown that AI tools read once when opening a project. There's no runtime cost, no background processes, and no API calls.
+
+### Does AI Kit increase token usage?
+
+The CLAUDE.md file adds context tokens at session start (~2-4K tokens depending on your stack). However, this is far less than the tokens you'd spend re-explaining context manually each session (~500-1000 tokens per conversation × 10 conversations/day).
+
+### How does the token tracking work?
+
+Run `ai-kit tokens` to see daily/weekly/monthly usage summaries, per-project cost breakdown, budget alerts at 50%/75%/90%, model recommendations (Sonnet vs Opus), and ROI estimates. Data comes from Claude Code's usage logs.
+
+### Can AI Kit help me stay within the $20/month plan limits?
+
+Yes. Use the `/token-tips` skill for optimization strategies. Enable the standard hook profile so auto-format and type-check catch issues immediately (preventing expensive multi-round debugging). The prompt quality guard prevents vague prompts that waste tokens on wrong output.
+
+---
+
+## Troubleshooting
+
+### AI Kit didn't detect my framework correctly
+
+Run `ai-kit doctor` to see what was detected. Detection relies on `package.json` dependencies — if your framework isn't listed there (e.g., it's a global install), AI Kit can't detect it. You can manually add framework-specific rules outside the markers.
+
+### My custom rules disappeared after update
+
+Custom rules must be placed **outside** the `<!-- AI-KIT:START -->` and `<!-- AI-KIT:END -->` markers. Content between these markers is regenerated on update. If your rules were between markers, they were overwritten.
+
+### Hooks aren't running
+
+Check that `.claude/settings.local.json` exists and contains hook configurations. If you selected "no hooks" during init, re-run `ai-kit init` and select a hook profile.
+
+### Skills aren't auto-discovered in Cursor
+
+Ensure `.cursor/skills/` directories exist with `SKILL.md` files. If they're missing, run `ai-kit update` to regenerate. Also verify your Cursor version supports the skills directory format.
+
+### Where can I get help?
+
+- **GitHub Issues**: [github.com/mikulgohil/ai-kit/issues](https://github.com/mikulgohil/ai-kit/issues) for bug reports and feature requests
+- **Documentation**: Browse the full docs at [ai-kit-docs site](/docs)
+- **Troubleshooting guide**: See [Troubleshooting](/docs/troubleshooting) for common issues

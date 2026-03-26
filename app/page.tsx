@@ -77,11 +77,11 @@ export default function LandingPage() {
       <section className="landing-section">
         <div className="landing-stats">
           <div className="landing-stat">
-            <div className="landing-stat-value">46</div>
+            <div className="landing-stat-value">48</div>
             <div className="landing-stat-label">Pre-built Skills</div>
           </div>
           <div className="landing-stat">
-            <div className="landing-stat-value">10</div>
+            <div className="landing-stat-value">16</div>
             <div className="landing-stat-label">Specialized Agents</div>
           </div>
           <div className="landing-stat">
@@ -154,10 +154,10 @@ export default function LandingPage() {
             <div className="landing-feature-icon landing-feature-icon--green">
               &#x2318;
             </div>
-            <h3>46 Pre-Built Skills</h3>
+            <h3>48 Pre-Built Skills</h3>
             <p>
               Structured AI workflows — <code>/review</code>, <code>/new-component</code>,
-              <code>/security-check</code>, <code>/refactor</code> and 42 more.
+              <code>/security-check</code>, <code>/deep-interview</code> and 44 more.
               No prompt writing needed.
             </p>
           </div>
@@ -167,10 +167,10 @@ export default function LandingPage() {
             <div className="landing-feature-icon landing-feature-icon--purple">
               &#x2726;
             </div>
-            <h3>10 Specialized Agents</h3>
+            <h3>16 Specialized Agents</h3>
             <p>
               Delegate to focused AI agents — planner, code-reviewer,
-              security-reviewer, build-resolver, TDD guide, CI debugger, and more.
+              security-reviewer, build-resolver, data-scientist, api-designer, and more.
             </p>
           </div>
 
@@ -325,7 +325,7 @@ export default function LandingPage() {
       <section className="landing-agents landing-section">
         <div className="landing-section-header">
           <span className="landing-section-tag">Agents</span>
-          <h2>10 specialists. Always on call.</h2>
+          <h2>16 specialists. Always on call.</h2>
           <p>Delegate complex tasks to focused AI agents with domain expertise.</p>
         </div>
 
@@ -398,6 +398,48 @@ export default function LandingPage() {
             <div>
               <h4>@sitecore-specialist</h4>
               <p>XM Cloud patterns, Content SDK v2, Experience Edge, and field helpers</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x1F3D7;</div>
+            <div>
+              <h4>@architect</h4>
+              <p>SSR/SSG/ISR strategy, component hierarchy, data flow, and rendering patterns</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x1F4CA;</div>
+            <div>
+              <h4>@data-scientist</h4>
+              <p>ML pipelines, model evaluation, data analysis, and experiment tracking</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x26A1;</div>
+            <div>
+              <h4>@performance-profiler</h4>
+              <p>Core Web Vitals, bundle analysis, runtime profiling, and rendering optimization</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x1F504;</div>
+            <div>
+              <h4>@migration-specialist</h4>
+              <p>Framework upgrades, breaking change detection, codemods, and incremental adoption</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x1F50D;</div>
+            <div>
+              <h4>@dependency-auditor</h4>
+              <p>Vulnerability scanning, outdated packages, license compliance, and bundle impact</p>
+            </div>
+          </div>
+          <div className="landing-agent">
+            <div className="landing-agent-avatar">&#x1F310;</div>
+            <div>
+              <h4>@api-designer</h4>
+              <p>REST/GraphQL API design, schema validation, versioning, and error handling</p>
             </div>
           </div>
         </div>
@@ -495,6 +537,67 @@ export default function LandingPage() {
                   <p style={{ margin: 0, fontSize: '0.8rem' }}>{desc}</p>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* --- FAQ --- */}
+      <section className="landing-faq landing-section">
+        <div className="landing-section-header">
+          <span className="landing-section-tag">FAQ</span>
+          <h2>Common questions</h2>
+          <p>Quick answers. <a href="/docs/faq" style={{ color: 'var(--accent)', textDecoration: 'none' }}>Full FAQ in the docs.</a></p>
+        </div>
+
+        <div className="landing-faq-list">
+          {[
+            {
+              q: 'Is AI Kit free?',
+              a: 'Yes. AI Kit is 100% free and open source under the MIT license. It works with any AI coding tool — free or paid.',
+            },
+            {
+              q: 'Does AI Kit work with the Claude $20 plan?',
+              a: 'Yes — that\'s actually the sweet spot. The $20 plan gives you enough tokens to be productive but not enough to waste. AI Kit eliminates the #1 token sink: re-explaining your project every session. Every token goes to actual coding, not context setup.',
+            },
+            {
+              q: 'Does AI Kit work with Cursor?',
+              a: 'Yes. AI Kit generates configs for both Claude Code and Cursor (plus Windsurf, Aider, and Cline). Skills work in both tools via auto-discovery — the AI reads skill descriptions and applies the right one automatically.',
+            },
+            {
+              q: 'Does it modify my source code?',
+              a: 'No. AI Kit only creates configuration files (CLAUDE.md, .cursorrules, skills, agents, etc.). It never touches your source code, dependencies, or existing configs.',
+            },
+            {
+              q: 'How long does setup take?',
+              a: 'About 30 seconds. Run npx @mikulgohil/ai-kit init, answer a few prompts (tool choice, strictness level), and everything is generated. Zero manual configuration.',
+            },
+            {
+              q: 'Will it slow down my AI assistant?',
+              a: 'No. The generated files are static markdown read once at session start. No runtime cost, no background processes, no API calls. It\'s just context — the AI loads it and forgets the file exists.',
+            },
+            {
+              q: 'Can I customize the generated rules?',
+              a: 'Yes. Add your own rules outside the AI-KIT markers — they\'re preserved when you run ai-kit update. You can also add custom skills and agents that AI Kit won\'t overwrite.',
+            },
+            {
+              q: 'What if my framework isn\'t supported?',
+              a: 'AI Kit still generates base rules (coding standards, naming, testing, security, docs) that apply to any project. Framework-specific fragments are additive — they\'re only included when detected.',
+            },
+          ].map(({ q, a }, i) => (
+            <div
+              className="landing-faq-item"
+              key={i}
+              onClick={(e) => {
+                const el = e.currentTarget
+                el.dataset.open = el.dataset.open === 'true' ? 'false' : 'true'
+              }}
+            >
+              <button className="landing-faq-q">
+                {q}
+                <span className="landing-faq-q-icon">+</span>
+              </button>
+              <div className="landing-faq-a">{a}</div>
             </div>
           ))}
         </div>
