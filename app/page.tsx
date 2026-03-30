@@ -32,6 +32,7 @@ export default function LandingPage() {
             <a href="/docs/cli-reference" className="landing-nav-link">CLI</a>
             <a href="/docs/agents" className="landing-nav-link">Agents</a>
             <a href="https://github.com/mikulgohil/ai-kit" className="landing-nav-link" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="/docs/support" className="landing-nav-link">Support</a>
             <a href="https://www.npmjs.com/package/@mikulgohil/ai-kit" className="landing-nav-link landing-nav-link--cta" target="_blank" rel="noreferrer">npm</a>
           </div>
         </div>
@@ -42,7 +43,7 @@ export default function LandingPage() {
         <div className="landing-hero-glow" />
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          v1.7.0 — 5 new agents &amp; requirements skills
+          v1.8.0 — JSON Schema support, CLI refactor &amp; more
         </div>
         <h1>
           Make AI assistants<br />
@@ -89,7 +90,7 @@ export default function LandingPage() {
             <div className="landing-stat-label">AI Tools Supported</div>
           </div>
           <div className="landing-stat">
-            <div className="landing-stat-value">0 min</div>
+            <div className="landing-stat-value">30 sec</div>
             <div className="landing-stat-label">Setup Time</div>
           </div>
         </div>
@@ -464,7 +465,7 @@ export default function LandingPage() {
           <tbody>
             <tr>
               <td>Context setup per conversation</td>
-              <td>0 min — auto-loaded</td>
+              <td>Auto-loaded in 30 sec</td>
               <td>5-10 min re-explaining</td>
             </tr>
             <tr>
@@ -505,7 +506,7 @@ export default function LandingPage() {
       <section className="landing-section" style={{ marginTop: 'var(--section-gap)' }}>
         <div className="landing-section-header">
           <span className="landing-section-tag">CLI</span>
-          <h2>13 commands. Full control.</h2>
+          <h2>14 commands. Full control.</h2>
           <p>From initial setup to ongoing maintenance — everything from the terminal.</p>
         </div>
 
@@ -523,6 +524,7 @@ export default function LandingPage() {
             { cmd: 'patterns', desc: 'Generate pattern library from codebase', icon: '\uD83C\uDFA8' },
             { cmd: 'dead-code', desc: 'Find unused components and dead code', icon: '\u2702' },
             { cmd: 'drift', desc: 'Detect code vs documentation drift', icon: '\uD83D\uDCCF' },
+            { cmd: 'component-registry', desc: 'Generate component catalog for AI discovery', icon: '\uD83D\uDCDA' },
             { cmd: 'reset', desc: 'Remove all AI Kit generated files cleanly', icon: '\uD83D\uDDD1' },
           ].map(({ cmd, desc, icon }) => (
             <div className="landing-feature-card" key={cmd} style={{ padding: '20px 24px' }}>
@@ -603,6 +605,75 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* --- Consulting --- */}
+      <section className="landing-consult landing-section">
+        <div className="landing-consult-box">
+          <div className="landing-consult-content">
+            <span className="landing-section-tag">Need Expert Help?</span>
+            <h2>Let&apos;s set up AI Kit for your team</h2>
+            <p>
+              Whether you&apos;re rolling out AI-assisted development across your organization
+              or need a tailored setup for a complex project — I can help. From initial
+              configuration to team training, get hands-on guidance from the creator of AI Kit.
+            </p>
+            <div className="landing-consult-services">
+              <div className="landing-consult-service">
+                <span className="landing-consult-service-icon">&#x2699;</span>
+                <div>
+                  <strong>Project Setup</strong>
+                  <p>Custom AI Kit configuration tailored to your stack, conventions, and workflow</p>
+                </div>
+              </div>
+              <div className="landing-consult-service">
+                <span className="landing-consult-service-icon">&#x1F465;</span>
+                <div>
+                  <strong>Team Rollout</strong>
+                  <p>Deploy AI Kit across your team with shared presets, skills, and agents</p>
+                </div>
+              </div>
+              <div className="landing-consult-service">
+                <span className="landing-consult-service-icon">&#x1F393;</span>
+                <div>
+                  <strong>Training &amp; Workshops</strong>
+                  <p>Help your developers get the most out of AI-assisted development</p>
+                </div>
+              </div>
+              <div className="landing-consult-service">
+                <span className="landing-consult-service-icon">&#x1F6E0;</span>
+                <div>
+                  <strong>Custom Extensions</strong>
+                  <p>Build custom skills, agents, and hooks specific to your organization</p>
+                </div>
+              </div>
+            </div>
+            <div className="landing-consult-actions">
+              <a href="https://www.linkedin.com/in/mikulgohil" className="landing-btn landing-btn--primary" target="_blank" rel="noreferrer">
+                Connect on LinkedIn
+              </a>
+              <a href="https://x.com/mikulgohil" className="landing-btn landing-btn--secondary" target="_blank" rel="noreferrer">
+                DM on Twitter / X
+              </a>
+              <a href="https://www.mikul.me" className="landing-btn landing-btn--secondary" target="_blank" rel="noreferrer">
+                Visit mikul.me
+              </a>
+            </div>
+          </div>
+          <div className="landing-consult-author">
+            <div className="landing-consult-author-name">Mikul Gohil</div>
+            <div className="landing-consult-author-role">Creator of AI Kit</div>
+            <div className="landing-consult-author-bio">
+              Senior developer and tech lead specializing in Sitecore, Next.js, and AI-assisted development workflows. Building tools that make development teams more productive.
+            </div>
+            <div className="landing-consult-author-links">
+              <a href="https://www.mikul.me" target="_blank" rel="noreferrer">mikul.me</a>
+              <a href="https://github.com/mikulgohil" target="_blank" rel="noreferrer">GitHub</a>
+              <a href="https://www.linkedin.com/in/mikulgohil" target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href="https://x.com/mikulgohil" target="_blank" rel="noreferrer">Twitter / X</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* --- CTA --- */}
       <section className="landing-cta landing-section">
         <div className="landing-cta-box">
@@ -620,13 +691,17 @@ export default function LandingPage() {
 
       {/* --- Footer --- */}
       <footer className="landing-footer">
-        MIT {new Date().getFullYear()} &copy; Mikul Gohil
+        MIT {new Date().getFullYear()} &copy; <a href="https://www.mikul.me" target="_blank" rel="noreferrer">Mikul Gohil</a>
         &nbsp;&middot;&nbsp;
         <a href="https://github.com/mikulgohil/ai-kit" target="_blank" rel="noreferrer">GitHub</a>
         &nbsp;&middot;&nbsp;
         <a href="https://www.npmjs.com/package/@mikulgohil/ai-kit" target="_blank" rel="noreferrer">npm</a>
         &nbsp;&middot;&nbsp;
         <a href="/docs">Documentation</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://www.linkedin.com/in/mikulgohil" target="_blank" rel="noreferrer">LinkedIn</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://x.com/mikulgohil" target="_blank" rel="noreferrer">Twitter / X</a>
       </footer>
     </div>
   )
