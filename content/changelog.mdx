@@ -4,6 +4,41 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.8.0 — 2026-03-30
+
+### CLI Architecture Refactor
+
+The CLI entry point (`src/index.ts`) has been refactored from a 254-line monolith into a clean modular structure:
+
+- **`src/cli/error-handler.ts`** — shared `withErrorHandler` wrapper replacing 14 duplicated try/catch blocks
+- **`src/cli/register-commands.ts`** — all 14 command registrations in one place
+- **`src/index.ts`** — now a thin 16-line entry point
+
+No behavior changes — same commands, options, and error handling. This improves maintainability for contributors.
+
+### JSON Schema for ai-kit.config.json
+
+`ai-kit.config.json` now supports JSON Schema validation:
+
+- **`ai-kit.config.schema.json`** ships with the npm package
+- Generated configs include a `$schema` field pointing to `https://ai-kit.mikul.me/schema/ai-kit.config.schema.json`
+- Editors with JSON Schema support (VS Code, JetBrains) now provide **autocomplete and validation** for all config fields
+
+### Support & Contact Page
+
+New [Support](/docs/support) page in the documentation with:
+
+- Direct contact links (website, LinkedIn, Twitter/X, GitHub)
+- Guidance for teams needing setup help, custom configuration, or training
+
+### Other Improvements
+
+- **Documentation URL updated** — all references now point to [ai-kit.mikul.me](https://ai-kit.mikul.me) (was `ai-kit-docs-beta.vercel.app`)
+- **Package metadata** — `package.json` author field expanded with website URL
+- **Contributing docs** — updated project structure to reflect `src/cli/` refactor
+
+---
+
 ## v1.7.0 — 2026-03-26
 
 ### New Agents (5)

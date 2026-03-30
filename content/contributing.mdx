@@ -27,7 +27,10 @@ npm run dev
 ```
 ai-kit/
 ├── src/
-│   ├── index.ts              # CLI entry point (Commander.js)
+│   ├── index.ts              # CLI entry point (thin — creates program, delegates)
+│   ├── cli/
+│   │   ├── error-handler.ts  # Shared error wrapper for all commands
+│   │   └── register-commands.ts # All 14 command registrations
 │   ├── types.ts              # TypeScript interfaces
 │   ├── constants.ts          # Paths, version, fragment list
 │   ├── utils.ts              # File I/O, logging, merge utilities

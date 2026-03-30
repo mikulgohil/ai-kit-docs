@@ -8,7 +8,8 @@ This file tracks what AI Kit generated and the scan results. It's created by `ai
 
 ```json
 {
-  "version": "1.5.0",
+  "$schema": "https://ai-kit.mikul.me/schema/ai-kit.config.schema.json",
+  "version": "1.8.0",
   "scanResult": {
     "framework": "nextjs",
     "nextjsVersion": "15.1.0",
@@ -66,6 +67,7 @@ This file tracks what AI Kit generated and the scan results. It's created by `ai
 
 | Field | Description |
 |---|---|
+| `$schema` | **v1.8.0+** JSON Schema URL — enables editor autocomplete and validation |
 | `version` | AI Kit version that generated this config |
 | `scanResult` | Complete tech stack detection results |
 | `generatedAt` | ISO timestamp of last generation |
