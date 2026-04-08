@@ -1,0 +1,156 @@
+# Backup & Rollback
+
+Every `ai-kit update` automatically backs up your current configs before writing any changes. If something goes wrong, `ai-kit rollback` restores from any previous backup.
+
+---
+
+## Auto-Backup on Update
+
+When you run `ai-kit update`, the following happens **before** any files are modified:
+
+1. Current `CLAUDE.md`, `.cursorrules`, `.claude/settings.local.json`, and `ai-kit.config.json` are copied to `.ai-kit/backups/{timestamp}/`
+2. The update proceeds normally (re-scan, regenerate, safe merge)
+3. A rollback hint is shown in the output
+
+```
+✓ Backed up current configs to .ai-kit/backups/2026-04-08T14-30-00
+...
+✓ CLAUDE.md updated
+✓ .cursorrules updated
+✓ 48 skills updated
+✓ 16 agents updated
+✓ Hooks updated (profile: standard)
+
+ℹ All AI configs refreshed with latest project scan.
+ℹ Rollback available: `ai-kit rollback --latest`
+```
+
+### What Gets Backed Up
+
+| File | Why |
+|---|---|
+| `CLAUDE.md` | Your project rules — the most important file |
+| `.cursorrules` | Cursor AI rules |
+| `.claude/settings.local.json` | Hook configuration |
+| `ai-kit.config.json` | Scan results and settings |
+
+### Where Backups Are Stored
+
+Backups live in `.ai-kit/backups/` inside your project directory:
+
+```
+.ai-kit/
+  backups/
+    2026-04-08T14-30-00/
+      CLAUDE.md
+      .cursorrules
+      .claude/settings.local.json
+      ai-kit.config.json
+    2026-04-01T10-00-00/
+      CLAUDE.md
+      ...
+```
+
+Each backup is timestamped. Multiple backups are kept so you can roll back to any point.
+
+---
+
+## Rolling Back
+
+### Interactive (pick a backup)
+
+```bash
+npx @mikulgohil/ai-kit rollback
+```
+
+Shows a list of available backups and lets you choose which one to restore:
+
+```
+Available Backups
+ℹ 2026-04-08T14-30-00  (latest)
+ℹ 2026-04-01T10-00-00
+ℹ 2026-03-15T09-45-00
+
+? Which backup do you want to restore? > 2026-04-08T14-30-00  (latest)
+? Restore configs from backup 2026-04-08T14-30-00? This will overwrite current files. (Y/n)
+
+Restored Files
+✓ Restored: CLAUDE.md
+✓ Restored: .cursorrules
+✓ Restored: .claude/settings.local.json
+✓ Restored: ai-kit.config.json
+
+ℹ Configs restored from backup 2026-04-08T14-30-00
+```
+
+### Quick (restore latest)
+
+```bash
+npx @mikulgohil/ai-kit rollback --latest
+```
+
+Restores the most recent backup without the selection prompt. Still asks for confirmation before overwriting.
+
+---
+
+## Options
+
+| Flag | Description |
+|---|---|
+| `--latest` | Restore most recent backup without selection prompt |
+
+---
+
+## Common Scenarios
+
+### "The update broke my custom rules"
+
+```bash
+# See what changed
+npx @mikulgohil/ai-kit diff
+
+# Roll back to before the update
+npx @mikulgohil/ai-kit rollback --latest
+
+# Your previous config is restored
+```
+
+### "I want to try a different strictness level"
+
+```bash
+# Current setup: standard strictness
+npx @mikulgohil/ai-kit init   # Choose "strict" this time
+
+# Don't like it? Roll back
+npx @mikulgohil/ai-kit rollback --latest
+```
+
+### "Team member ran update and it changed things"
+
+```bash
+# Check available backups
+npx @mikulgohil/ai-kit rollback
+
+# Pick the backup from before their update
+# Restore and review the diff
+```
+
+---
+
+## Backup Storage
+
+- Backups are **local only** — stored in `.ai-kit/backups/` which is gitignored
+- Each developer has their own backups on their machine
+- Backups are **not** cleaned up automatically — delete old ones manually if needed
+- Each backup is typically ~20-50KB (just config files, not skills/agents)
+
+---
+
+## Migrate + Rollback
+
+When you run `ai-kit migrate`, backups are created the same way. If the migration doesn't look right:
+
+```bash
+npx @mikulgohil/ai-kit migrate          # Migrates existing CLAUDE.md
+npx @mikulgohil/ai-kit rollback --latest # Undo — original CLAUDE.md restored
+```

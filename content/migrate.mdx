@@ -1,0 +1,160 @@
+# Migrate Existing Projects
+
+Already have a hand-written `CLAUDE.md` or `.cursorrules`? Use `ai-kit migrate` to adopt AI Kit without losing your custom rules.
+
+```bash
+npx @mikulgohil/ai-kit migrate
+npx @mikulgohil/ai-kit migrate ./path/to/project
+npx @mikulgohil/ai-kit migrate --dry-run
+```
+
+---
+
+## The Problem
+
+If you run `ai-kit init` on a project with an existing `CLAUDE.md`, you get two options:
+
+- **Overwrite** — lose all your custom rules
+- **Skip** — get nothing from AI Kit
+
+Neither is good. `ai-kit migrate` gives you a third option: **keep your rules AND get AI Kit's generated rules**.
+
+---
+
+## How It Works
+
+### Step 1: Scan
+
+`migrate` scans your project the same way `init` does — detecting your framework, CMS, styling, TypeScript, monorepo setup, and tools.
+
+### Step 2: Analyze
+
+It parses your existing `CLAUDE.md` into sections and compares them against what AI Kit would generate. No content is deleted — every custom section is preserved.
+
+### Step 3: Preview
+
+You see a clear plan before anything is written:
+
+```
+Migration Plan
+
+Your existing CLAUDE.md has 3 section(s):
+  ✓ KEEP: "Coding Standards"
+  ✓ KEEP: "Component Guidelines"
+  ✓ KEEP: "Deployment"
+
+ai-kit will generate 12 section(s) for your stack:
+  + ADD: "Workflow"
+  + ADD: "Next.js App Router Patterns"
+  + ADD: "Sitecore XM Cloud Rules"
+  + ADD: "Tailwind CSS Rules"
+  ...
+
+Your custom sections will be placed at the TOP of the file.
+ai-kit sections will be wrapped in AI-KIT markers below.
+Future `ai-kit update` will only touch the marked section.
+
+Apply this migration? (Y/n)
+```
+
+### Step 4: Merge
+
+Your custom sections go at the top. AI Kit's generated content goes below, wrapped in `AI-KIT:START/END` markers:
+
+```markdown
+<!-- CUSTOM RULES (preserved by ai-kit) -->
+
+## Coding Standards
+- Use TypeScript strict mode
+- No any types allowed
+...
+
+## Component Guidelines
+- All components must be in src/components/
+...
+
+<!-- /CUSTOM RULES -->
+
+<!-- AI-KIT:START -->
+
+## Workflow
+- Read before writing — understand existing code...
+
+## Next.js App Router Patterns
+- Use Server Components by default...
+
+<!-- AI-KIT:END -->
+```
+
+### Step 5: Setup
+
+Skills, agents, hooks, contexts, and guides are copied — same as `ai-kit init`. An `ai-kit.config.json` is created so future `ai-kit update` commands work normally.
+
+---
+
+## Flags
+
+| Flag | Description |
+|---|---|
+| `--dry-run` | Preview the migration plan without writing any files |
+
+---
+
+## What Gets Preserved
+
+| Content | Location After Migration |
+|---|---|
+| Your custom CLAUDE.md sections | Top of file, above AI-KIT markers |
+| AI Kit generated rules | Inside `AI-KIT:START/END` markers |
+| Your existing `.cursorrules` | Backed up before overwrite |
+
+---
+
+## What Gets Created
+
+| File | Description |
+|---|---|
+| `CLAUDE.md` | Merged file — your rules on top, AI Kit rules in markers |
+| `.cursorrules` | Generated for Cursor (if detected) |
+| `.cursor/rules/*.mdc` | Scoped Cursor rules |
+| `.claude/skills/` | 48 pre-built skills |
+| `.claude/agents/` | Up to 16 specialized agents |
+| `.claude/contexts/` | 3 context modes |
+| `.claude/settings.local.json` | Automated hooks (standard profile) |
+| `ai-kit.config.json` | Configuration metadata |
+
+---
+
+## Safety
+
+- **Backup first** — your original `CLAUDE.md` and `.cursorrules` are backed up to `.ai-kit/backups/` before any changes
+- **Preview before apply** — you see exactly what will be kept vs added
+- **Rollback available** — if anything goes wrong, run `ai-kit rollback --latest`
+- **Dry run** — use `--dry-run` to preview without writing
+
+---
+
+## After Migration
+
+From this point, your project is fully managed by AI Kit:
+
+```bash
+# Update generated sections (your custom rules stay untouched)
+npx @mikulgohil/ai-kit update
+
+# Check project health
+npx @mikulgohil/ai-kit health
+
+# Roll back if needed
+npx @mikulgohil/ai-kit rollback --latest
+```
+
+---
+
+## When to Use `migrate` vs `init`
+
+| Scenario | Command |
+|---|---|
+| Fresh project, no existing AI configs | `ai-kit init` |
+| Project with existing `CLAUDE.md` you want to keep | `ai-kit migrate` |
+| Project already managed by AI Kit | `ai-kit update` |

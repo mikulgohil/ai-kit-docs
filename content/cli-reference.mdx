@@ -1,6 +1,6 @@
 # CLI Reference
 
-AI Kit provides fourteen commands: `init`, `update`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, `health`, `patterns`, `dead-code`, `drift`, and `component-registry`.
+AI Kit provides sixteen commands: `init`, `update`, `migrate`, `rollback`, `reset`, `audit`, `tokens`, `doctor`, `diff`, `export`, `stats`, `health`, `patterns`, `dead-code`, `drift`, and `component-registry`.
 
 ## `ai-kit init [path]`
 
@@ -79,10 +79,13 @@ npx @mikulgohil/ai-kit update ./path/to/project
 1. Reads existing `ai-kit.config.json` (fails if not found)
 2. Checks for version mismatch — warns if major version differs
 3. Re-scans the project for tech stack changes
-4. Updates `CLAUDE.md` and `.cursorrules` using **safe merge** — only content between `AI-KIT:START/END` markers is replaced, preserving your manual edits
-5. Updates `.cursor/rules/*.mdc` files
-6. Refreshes slash commands, guides, agents, contexts, and hooks
-7. Updates `ai-kit.config.json`
+4. **Backs up current configs** to `.ai-kit/backups/{timestamp}/` before any writes
+5. Updates `CLAUDE.md` and `.cursorrules` using **safe merge** — only content between `AI-KIT:START/END` markers is replaced, preserving your manual edits
+6. Updates `.cursor/rules/*.mdc` files
+7. Refreshes slash commands, guides, agents, contexts, and hooks
+8. Updates `ai-kit.config.json`
+
+If the update produces unexpected results, roll back instantly with `ai-kit rollback --latest`. See [Backup & Rollback](/backup-and-rollback) for details.
 
 ### Safe Merge Behavior
 
@@ -106,6 +109,80 @@ On update, only content between these markers is replaced. Anything you add abov
 ```
 
 This appears when the major version differs. Minor/patch updates proceed silently.
+
+---
+
+## `ai-kit migrate [path]`
+
+Adopt AI Kit in a project that already has a hand-written `CLAUDE.md` or `.cursorrules`.
+
+```bash
+npx @mikulgohil/ai-kit migrate
+npx @mikulgohil/ai-kit migrate ./path/to/project
+npx @mikulgohil/ai-kit migrate --dry-run
+```
+
+### What it does
+
+1. Checks if the project is already managed by AI Kit (redirects to `update` if so)
+2. Scans the project for tech stack
+3. Parses your existing `CLAUDE.md` into sections
+4. Generates what AI Kit would produce for your stack
+5. Shows a migration plan: which sections are **kept** (yours) vs **added** (AI Kit)
+6. Backs up original files to `.ai-kit/backups/`
+7. Merges: your custom sections at the **top**, AI Kit content inside `AI-KIT:START/END` markers below
+8. Copies skills, agents, hooks, contexts, and guides
+9. Creates `ai-kit.config.json` — project is now managed by AI Kit
+
+### Options
+
+| Flag | Description |
+|---|---|
+| `--dry-run` | Preview what would change without writing any files |
+
+### When to use
+
+- You have an existing `CLAUDE.md` with custom rules you want to keep
+- Your team wrote `.cursorrules` manually and wants AI Kit's auto-detection on top
+- You want to onboard an existing project without starting over
+
+See [Migrate Existing Projects](/migrate) for a full walkthrough.
+
+---
+
+## `ai-kit rollback [path]`
+
+Restore AI configs from a previous backup created by `update` or `migrate`.
+
+```bash
+npx @mikulgohil/ai-kit rollback
+npx @mikulgohil/ai-kit rollback --latest
+npx @mikulgohil/ai-kit rollback ./path/to/project
+```
+
+### What it does
+
+1. Lists available backups from `.ai-kit/backups/` (most recent first)
+2. Prompts you to select a backup (or uses latest with `--latest`)
+3. Asks for confirmation before overwriting current files
+4. Restores all backed-up files to their original locations
+
+### Options
+
+| Flag | Description |
+|---|---|
+| `--latest` | Restore the most recent backup without the selection prompt |
+
+### Backed-up files
+
+| File | Description |
+|---|---|
+| `CLAUDE.md` | Project rules for Claude Code |
+| `.cursorrules` | Rules for Cursor AI |
+| `.claude/settings.local.json` | Hook configuration |
+| `ai-kit.config.json` | Scan results and settings |
+
+See [Backup & Rollback](/backup-and-rollback) for full details and common scenarios.
 
 ---
 
@@ -614,6 +691,9 @@ AI Kit — Component Registry
 ai-kit --version          # Show version number
 ai-kit --help             # Show help
 ai-kit init --help        # Show command-specific help
+ai-kit update --help      # Show update command help
+ai-kit migrate --help     # Show migrate command help
+ai-kit rollback --help    # Show rollback command help
 ai-kit audit --help       # Show audit command help
 ai-kit tokens --help      # Show tokens command help
 ai-kit doctor --help      # Show doctor command help

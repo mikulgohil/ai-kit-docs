@@ -4,6 +4,8 @@ export default {
   'ai-self-improvement': 'AI That Improves Itself',
   'getting-started': 'Getting Started',
   'cli-reference': 'CLI Reference',
+  migrate: 'Migrate Existing Projects',
+  'backup-and-rollback': 'Backup & Rollback',
   'what-gets-generated': 'What Gets Generated',
   'supported-stacks': 'Supported Tech Stacks',
   'slash-commands': 'Skills & Commands',

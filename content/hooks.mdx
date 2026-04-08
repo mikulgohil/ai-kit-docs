@@ -8,6 +8,7 @@ Hooks fire on specific events during your Claude Code session:
 
 | Event | When It Fires | Example |
 |---|---|---|
+| **SessionStart** | When a new Claude Code session begins | Echo tech stack and project context |
 | **PreToolUse** | Before a tool runs | Warning before `git push` |
 | **PostToolUse** | After a file is edited or written | Auto-format, type-check |
 | **PostCompact** | After context compaction | Re-echo tech stack context |
@@ -27,6 +28,7 @@ Best for: fast iteration, prototyping, or when you want minimal friction.
 
 | Hook | Event | What It Does |
 |---|---|---|
+| Session context | SessionStart | Echoes tech stack, scripts, and last scan date |
 | Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
@@ -36,6 +38,7 @@ Best for: everyday development with a safety net.
 
 | Hook | Event | What It Does |
 |---|---|---|
+| Session context | SessionStart | Echoes tech stack, scripts, and last scan date |
 | Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
 | TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
@@ -50,6 +53,7 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 
 | Hook | Event | What It Does |
 |---|---|---|
+| Session context | SessionStart | Echoes tech stack, scripts, and last scan date |
 | Auto-format | PostToolUse | Formats edited files with Prettier or Biome |
 | TypeScript check | PostToolUse | Runs `tsc --noEmit` on `.ts/.tsx` files after edits |
 | ESLint check | PostToolUse | Runs ESLint with zero warnings on edited files |
@@ -60,6 +64,35 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 | Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
 | Pre-commit AI review | PreToolUse | Checks staged files for `any` types, console.log, TODOs without tickets |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
+
+---
+
+## Session Context (SessionStart)
+
+The SessionStart hook fires once when you open Claude Code in your project. It echoes your project context so the AI has full awareness from the first prompt:
+
+```
+📋 ai-kit v1.10.0 | Stack: Next.js 16.2 (app router) + sitecore-xmc-v2 + tailwind
+   PM: pnpm | Scripts: dev, build, test, lint, typecheck
+   Last scan: 2026-04-08
+```
+
+### What it includes
+
+| Info | Source |
+|---|---|
+| AI Kit version | Baked into the hook at generation time |
+| Tech stack | Framework, router type, CMS, styling — from project scan |
+| Package manager | npm, pnpm, yarn, or bun |
+| Available scripts | First 8 scripts from `package.json` |
+| Monorepo tool | Shown if monorepo detected (Turborepo, Nx, etc.) |
+| Last scan date | Read from `ai-kit.config.json` at runtime |
+
+### Why it matters
+
+Without the session init hook, the AI has to discover your stack by reading files — wasting the first few turns of every session. With it, Claude knows "this is a Next.js 16 App Router + Sitecore project" instantly and follows the right patterns from the start.
+
+This hook runs on **all profiles** (minimal, standard, strict).
 
 ---
 
