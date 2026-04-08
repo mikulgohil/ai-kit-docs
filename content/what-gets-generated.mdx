@@ -146,7 +146,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-49 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+48 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -180,7 +180,7 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 49 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 48 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/
@@ -242,11 +242,13 @@ See [Context Modes](/docs/context-modes) for usage details.
 Automated hooks generated based on your chosen profile (minimal, standard, or strict). This file is **gitignored by default** to keep hook preferences local.
 
 Hooks include:
+- **Session context** (all profiles) — echoes tech stack, package manager, scripts, and last scan date at every session start so the AI has full project awareness from the first prompt
 - **Auto-format** on file edit (Prettier or Biome, auto-detected)
 - **TypeScript type-check** after `.ts/.tsx` edits
 - **Console.log warning** detection
 - **Mistakes auto-capture** — logs build/lint failures to `docs/mistakes-log.md` (standard + strict)
 - **Bundle impact warning** — warns when new dependencies are added to `package.json` (standard + strict)
+- **Context recovery** — re-echoes tech stack after context compaction in long sessions (standard + strict)
 - **Git push safety** reminder
 - **ESLint check** (strict profile only)
 - **Pre-commit AI review** — scans staged files for `any` types, `console.log`, and TODOs without tickets (strict profile only)

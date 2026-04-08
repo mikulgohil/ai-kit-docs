@@ -82,8 +82,8 @@ After generation, you'll see a summary:
 Setup Complete
 ✓ CLAUDE.md generated
 ✓ .cursorrules generated
-✓ 49 skills generated (Claude Code + Cursor)
-✓ 49 legacy commands copied (.claude/commands/)
+✓ 48 skills generated (Claude Code + Cursor)
+✓ 48 legacy commands copied (.claude/commands/)
 ✓ 16 agents generated (.claude/agents/)
 ✓ 3 context modes generated (.claude/contexts/)
 ✓ Hooks configured (standard profile)
@@ -156,11 +156,24 @@ I'm not sure how to phrase this request, can you help me?
 
 This launches the prompt-help workflow — a great way to verify everything is working.
 
+## Already Have a CLAUDE.md?
+
+If your project has an existing hand-written `CLAUDE.md` or `.cursorrules`, use `migrate` instead of `init`:
+
+```bash
+npx @mikulgohil/ai-kit migrate
+npx @mikulgohil/ai-kit migrate --dry-run   # preview without writing
+```
+
+Your custom rules are preserved at the top. AI Kit's generated content goes below in markers. See [Migrate Existing Projects](/docs/migrate).
+
 ## Next Steps
 
+- Browse [Use Cases](/docs/use-cases) to see how AI Kit fits into your daily workflow — 35+ real-world scenarios
 - Run `ai-kit health` to verify your project's AI setup at a glance — see [CLI Reference](/docs/cli-reference#ai-kit-health-path)
 - Read [What Gets Generated](/docs/what-gets-generated) to understand each file in detail
 - Check [Skills & Commands](/docs/slash-commands) to see all 48 available workflows
-- Learn about [Hooks](/docs/hooks) (including mistakes auto-capture), [Agents](/docs/agents), and [Context Modes](/docs/context-modes)
+- Learn about [Hooks](/docs/hooks) (including session context and mistakes auto-capture), [Agents](/docs/agents), and [Context Modes](/docs/context-modes)
+- See [Backup & Rollback](/docs/backup-and-rollback) to understand how updates are reversible
 - See [Tips & Tricks](/docs/tips-and-tricks) for productivity shortcuts
 - Read [Troubleshooting](/docs/troubleshooting) if something went wrong

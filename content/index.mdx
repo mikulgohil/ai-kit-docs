@@ -18,7 +18,7 @@ Every team using AI coding assistants hits these problems. AI Kit solves each on
 |---|---------|---------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
 | 2 | **AI generates wrong framework patterns** — Writes Pages Router code when you use App Router. Uses CSS when you use Tailwind. Creates default exports when your project uses named exports. | Auto-detects your exact stack (framework, router, CMS, styling, TypeScript config) and generates rules specific to your setup. The AI can't use the wrong patterns. |
-| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **49 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
+| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **48 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
 | 4 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same build failures and lint errors. | Generates a **mistakes log** (`docs/mistakes-log.md`) with **auto-capture hook** that logs every build/lint failure automatically. The AI references it to avoid repeating them. |
 | 5 | **Every developer gets different AI behavior** — No consistency in how the team uses AI tools, leading to inconsistent code quality and style. | One `ai-kit init` command generates the same rules for the entire team — everyone's AI follows identical project standards. Commit the generated files to the repo. |
 | 6 | **No quality checks on AI-generated code** — AI output goes straight to PR without type checking, linting, or security review. | Automated **hooks** run formatting, type-checking, linting, and git safety checks in real-time as the AI writes code. **Quality gate** runs everything before merge. |
@@ -51,7 +51,7 @@ AI Kit reads your `package.json`, config files, and directory structure to detec
 
 | What It Detects | What the AI Learns |
 |---|---|
-| Next.js 15 with App Router | Server Components, Server Actions, `app/` routing patterns |
+| Next.js 16 with App Router | Server Components, Server Actions, Turbopack, `app/` routing patterns |
 | Sitecore XM Cloud | `<Text>`, `<RichText>`, `<Image>` field helpers, placeholder patterns |
 | Tailwind CSS v4 | `@theme` tokens, utility class patterns, responsive prefixes |
 | TypeScript strict mode | No `any`, proper null checks, discriminated unions |
@@ -70,7 +70,7 @@ Skills are structured AI workflows that get applied automatically. You don't typ
 - Generates: component + types + tests + docs (if complex)
 - Follows your exact conventions — because it read them
 
-**49 skills across 8 categories:**
+**48 skills across 8 categories:**
 
 | Category | Skills | What They Do |
 |---|---|---|
@@ -83,13 +83,13 @@ Skills are structured AI workflows that get applied automatically. You don't typ
 | **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` | Coordinate agents, run comprehensive checks, audit AI config |
 | **Requirements** | `deep-interview`, `clarify-requirements` | Gather requirements through structured interviews before coding |
 
-Skills work in **both Claude Code and Cursor** — same 49 workflows, both tools.
+Skills work in **both Claude Code and Cursor** — same 48 workflows, both tools.
 
 ### 3. Hooks, Agents & Context Modes
 
 New in v1.2.0 — three systems that make the AI work more like a real teammate:
 
-**[Hooks](/docs/hooks)** — Automated quality checks that run as you code. Auto-format on save, TypeScript checks after edits, console.log warnings, git push safety, and **mistakes auto-capture** that logs build/lint failures to `docs/mistakes-log.md`. Three profiles: minimal, standard, strict.
+**[Hooks](/docs/hooks)** — Automated quality checks that run as you code. **Session context** echoes your tech stack at every session start so the AI has full awareness from the first prompt. Auto-format on save, TypeScript checks after edits, console.log warnings, git push safety, and **mistakes auto-capture** that logs build/lint failures to `docs/mistakes-log.md`. Three profiles: minimal, standard, strict.
 
 **[Agents](/docs/agents)** — 16 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. CI pipeline red? Use `@ci-debugger`. Each agent has focused expertise and tools.
 
@@ -123,9 +123,9 @@ One clarification question prevents 10 minutes of wrong output.
 - Consistent output tables with file paths and line numbers
 - Self-check before responding ("Did I cover every section?")
 
-### 5. Safe Updates
+### 5. Safe Updates, Backup & Migration
 
-Your team adds custom rules above or below the generated content. When the stack changes, run `ai-kit update` — only the generated section refreshes, your custom rules stay untouched.
+Your team adds custom rules above or below the generated content. When the stack changes, run `ai-kit update` — only the generated section refreshes, your custom rules stay untouched. Every update **auto-backs up** your current configs first.
 
 ```markdown
 # My Team's Custom Rules        ← preserved on update
@@ -137,6 +137,10 @@ Your team adds custom rules above or below the generated content. When the stack
 
 # More Custom Rules              ← preserved on update
 ```
+
+**Rollback** — Something go wrong? `ai-kit rollback --latest` restores your previous configs instantly from the auto-backup.
+
+**Migrate** — Already have a hand-written `CLAUDE.md`? `ai-kit migrate` adopts AI Kit without losing your custom rules. Your sections go on top, AI Kit's go below in markers. [Learn more](/docs/migrate)
 
 ---
 
@@ -182,7 +186,7 @@ npx @mikulgohil/ai-kit init
 
 **What you get immediately:**
 - `CLAUDE.md` + `.cursorrules` — AI rules tailored to your stack
-- 49 skills in `.claude/skills/` + `.cursor/skills/` — auto-discovered workflows
+- 48 skills in `.claude/skills/` + `.cursor/skills/` — auto-discovered workflows
 - 16 specialized agents + 3 context modes — delegation and focus control
 - Hooks with mistakes auto-capture — quality checks that build your mistakes log
 - 6 developer guides in `ai-kit/guides/` — effective AI usage playbooks
@@ -268,8 +272,10 @@ AI Kit detects and generates tailored rules for:
 | Page | What You'll Learn |
 |---|---|
 | [Why AI Kit](/docs/why-ai-kit) | Side-by-side comparison: development with and without AI Kit |
+| [Use Cases](/docs/use-cases) | 35+ real-world scenarios — setup, building, review, debugging, operations |
 | [AI That Improves Itself](/docs/ai-self-improvement) | Deep-dive into Prompt Quality Guard, Self-Enforcement, and Structured Skills |
 | [Getting Started](/docs/getting-started) | Step-by-step setup walkthrough |
-| [Skills & Commands](/docs/slash-commands) | All 49 skills with usage guides |
+| [Migrate Existing Projects](/docs/migrate) | Adopt AI Kit without losing your custom rules |
+| [Skills & Commands](/docs/slash-commands) | All 48 skills with usage guides |
 | [Recommended Tools](/docs/recommended-tools) | Free tools and MCPs that supercharge AI Kit |
 | [Token Tips](/docs/tips-and-tricks) | Optimize token usage on the $20 plan |
