@@ -43,7 +43,7 @@ export default function LandingPage() {
         <div className="landing-hero-glow" />
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          v1.8.0 — JSON Schema support, CLI refactor &amp; more
+          v1.10.0 — Next.js 16 support, agent worktree isolation &amp; doc freshness
         </div>
         <h1>
           Make AI assistants<br />
@@ -78,7 +78,7 @@ export default function LandingPage() {
       <section className="landing-section">
         <div className="landing-stats">
           <div className="landing-stat">
-            <div className="landing-stat-value">48</div>
+            <div className="landing-stat-value">49</div>
             <div className="landing-stat-label">Pre-built Skills</div>
           </div>
           <div className="landing-stat">
@@ -125,7 +125,7 @@ export default function LandingPage() {
             <div className="landing-feature-preview">
               <div className="landing-feature-preview-line">
                 <span className="landing-feature-preview-check">&#x2713;</span>
-                <span>Next.js 15 — App Router detected</span>
+                <span>Next.js 16 — App Router + Turbopack</span>
               </div>
               <div className="landing-feature-preview-line">
                 <span className="landing-feature-preview-check">&#x2713;</span>
@@ -155,10 +155,10 @@ export default function LandingPage() {
             <div className="landing-feature-icon landing-feature-icon--green">
               &#x2318;
             </div>
-            <h3>48 Pre-Built Skills</h3>
+            <h3>49 Pre-Built Skills</h3>
             <p>
               Structured AI workflows — <code>/review</code>, <code>/new-component</code>,
-              <code>/security-check</code>, <code>/deep-interview</code> and 44 more.
+              <code>/security-check</code>, <code>/fetch-docs</code> and 45 more.
               No prompt writing needed.
             </p>
           </div>

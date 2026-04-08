@@ -250,6 +250,33 @@ tools: Read, Glob, Grep, Bash
 
 The `tools` field controls which Claude Code tools the agent can use when delegated to. The `description` helps the main agent decide when to delegate.
 
+### Worktree Isolation (v1.10.0+)
+
+Code-modifying agents include `isolation: worktree` in their frontmatter:
+
+```markdown
+---
+name: refactor-cleaner
+description: Dead code cleanup and refactoring agent...
+tools: Read, Edit, Glob, Grep, Bash
+isolation: worktree
+initialPrompt: Scan for dead code and unused exports in this project.
+---
+```
+
+**`isolation: worktree`** — The agent runs in a temporary git worktree (an isolated copy of your repo). It can freely edit files, run builds, and experiment without affecting your working directory. When the agent finishes, changes are either merged back or the worktree is cleaned up.
+
+**`initialPrompt`** — An auto-submitted first turn that kicks off the agent's workflow immediately. No need to type a prompt — the agent starts working on its own.
+
+Agents with worktree isolation:
+
+| Agent | Initial Action |
+|---|---|
+| `refactor-cleaner` | Scans for dead code and unused exports |
+| `build-resolver` | Runs build command and diagnoses errors |
+| `e2e-runner` | Analyzes test coverage and identifies gaps |
+| `migration-specialist` | Audits dependency versions for upgrades |
+
 ---
 
 ## Customizing Agents

@@ -8,7 +8,7 @@ AI Kit detects ten technology dimensions from your project. Here's how each dete
 
 **Detection**: `next` package in `dependencies` or `devDependencies`
 
-**Version extraction**: Reads version from `package.json`, strips range characters (`^`, `~`, `>=`)
+**Version extraction**: Reads version from `package.json`, strips range characters (`^`, `~`, `>=`). Also extracts the **major version number** (e.g., `16` from `16.2.2`) for version-aware rule generation.
 
 **Router detection**:
 - `app/` or `src/app/` directory exists → **App Router**
@@ -16,7 +16,11 @@ AI Kit detects ten technology dimensions from your project. Here's how each dete
 - Both exist → **Hybrid** (both rule sets applied)
 - Neither found → Prompts you to choose
 
-**Rules generated**: Next.js-specific patterns for data fetching, routing, Server Components, Server Actions, file structure, and common mistakes.
+**Next.js 16+ detection** (v1.10.0):
+- When major version is `16` or higher, generated rules include **Turbopack** guidance (stable, ~4x faster dev startup), **Server Fast Refresh**, and updated caching model (route stale time decoupled from segment-level data)
+- Warns about custom `webpack()` config compatibility with Turbopack
+
+**Rules generated**: Next.js-specific patterns for data fetching, routing, Server Components, Server Actions, file structure, Turbopack (v16+), and common mistakes.
 
 ### React (without Next.js)
 
@@ -28,9 +32,11 @@ AI Kit detects ten technology dimensions from your project. Here's how each dete
 
 ## CMS
 
-### Sitecore XM Cloud
+### Sitecore XM Cloud (SitecoreAI)
 
 **Detection**: `@sitecore-content-sdk/nextjs` or `@sitecore-jss/sitecore-jss-nextjs` in deps
+
+> Sitecore XM Cloud was rebranded to **SitecoreAI** in November 2025. AI Kit references both names in generated rules for clarity.
 
 **Rules generated**: Sitecore component patterns, field helpers (`<Text>`, `<RichText>`, `<Image>`, `<Link>`), GraphQL patterns, placeholder usage, and common XM Cloud mistakes.
 

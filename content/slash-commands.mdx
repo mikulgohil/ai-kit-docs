@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 48 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 49 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -75,6 +75,7 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 | `/standup` | Workflow | Summarize yesterday's AI session activity for standup |
 | `/learn-from-pr` | Workflow | Extract lessons and patterns from a merged PR |
 | `/release-notes` | Workflow | Generate user-facing release notes from a git range or tag |
+| `/fetch-docs` | Workflow | Pre-load current docs for your tech stack via Context7 MCP |
 | `/save-session` | Session | Persists current session state and decisions for later |
 | `/resume-session` | Session | Restores context from a previously saved session |
 | `/checkpoint` | Session | Runs all quality checks and records a verification snapshot |
@@ -948,6 +949,40 @@ Generates user-facing release notes from a git range or version tag. Unlike `/ch
 - Bug fixes that users would notice
 - Breaking changes or migration steps (if any)
 - Formatted for GitHub Releases, Notion, or a changelog page
+
+---
+
+### /fetch-docs
+
+**Category**: Workflow
+
+Pre-loads current, version-specific documentation for your project's tech stack into the conversation context. Uses Context7 MCP or official `llms.txt` endpoints to fetch the latest API references.
+
+**Usage**
+```
+/fetch-docs
+/fetch-docs react
+/fetch-docs tailwindcss
+```
+
+**When to use**: At the **start of a coding session** — run once to ensure the AI has current API knowledge. Also useful before major framework upgrades or when you encounter unexpected API behavior.
+
+**How it works**
+1. Reads `ai-kit.config.json` to detect your stack (Next.js, Tailwind, Sitecore, etc.)
+2. Uses Context7 MCP to fetch current, version-specific docs for each framework
+3. Falls back to `llms.txt` endpoints (e.g., `https://nextjs.org/docs/llms-full.txt`)
+4. Summarizes key APIs, breaking changes, and code examples
+5. Outputs a reference table showing what was loaded
+
+**What it produces**
+- Current API signatures for detected frameworks
+- Breaking changes since the AI's training cutoff
+- Code examples from official documentation
+- A summary table of what was fetched and from where
+
+**Why this matters**: AI models have a training data cutoff. Next.js 16 Turbopack, Tailwind v4 `@theme`, and Sitecore Content SDK v2.x may not be fully known. This skill fills that gap at session start so all subsequent coding uses current APIs.
+
+> This skill works alongside the **Documentation Verification** section in your generated `CLAUDE.md`, which tells the AI to look up APIs when unsure. `/fetch-docs` is proactive (pre-loads), while the template section is reactive (catches gaps).
 
 ---
 

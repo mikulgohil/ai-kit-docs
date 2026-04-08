@@ -4,6 +4,88 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.10.0 — 2026-04-08
+
+### Agent Worktree Isolation
+
+Code-modifying agents now include `isolation: worktree` in their frontmatter, enabling them to run in isolated git worktrees. This means agents like `refactor-cleaner`, `build-resolver`, `e2e-runner`, and `migration-specialist` can safely modify files without affecting your working directory.
+
+Agents also gain `initialPrompt` — an auto-submitted first turn that kicks off their workflow immediately on activation.
+
+| Agent | Initial Action |
+|---|---|
+| `refactor-cleaner` | Scans for dead code and unused exports |
+| `build-resolver` | Runs the build command and diagnoses errors |
+| `e2e-runner` | Analyzes test coverage and identifies gaps |
+| `migration-specialist` | Audits dependency versions for available upgrades |
+
+### Next.js 16 & Turbopack Support
+
+AI Kit now detects **Next.js 16** (current LTS — v16.2.2) and generates Turbopack-specific rules:
+
+- Scanner extracts `nextjsMajorVersion` for version-aware template selection
+- New template sections for **Turbopack** (stable in Next.js 16 with ~4x faster dev startup)
+- **Server Fast Refresh** guidance for instant HMR on server-side changes
+- Updated caching rules — route stale time decoupled from segment-level data in Next.js 16
+- Webpack migration warnings for projects using custom `webpack()` config
+
+### PostCompact Hook
+
+New `PostCompact` hook event fires after Claude Code compacts conversation context. Available in **standard** and **strict** profiles:
+
+- Re-echoes your tech stack summary so critical context survives compaction
+- Reminds about the `/effort` command for adjusting reasoning depth
+- Confirms `CLAUDE.md` is still loaded
+
+See [Hooks](/docs/hooks#postcompact-context-recovery) for details.
+
+### .cursor/index.mdc Generation
+
+AI Kit now generates a `.cursor/index.mdc` file — a repo-wide entry point for Cursor IDE that is always loaded:
+
+- Shows project name and tech stack
+- Links to all active rule fragments
+- Lists key conventions (package manager, router type)
+- `alwaysApply: true` ensures it's loaded for every file
+
+### SitecoreAI Branding
+
+Sitecore XM Cloud was rebranded to **SitecoreAI** in November 2025. Generated templates now reference both names for clarity: "Sitecore XM Cloud (SitecoreAI)".
+
+### Token Guide Updates
+
+Updated token-saving guide with current model capabilities:
+
+- **1M token context window** (Opus 4.6)
+- **64K default / 128K max output** for both Opus 4.6 and Sonnet 4.6
+- **`/effort` command** for controlling reasoning depth and token spend
+- Context compaction guidance
+
+### Documentation Freshness System
+
+AI models have a training cutoff — they may not know the latest Next.js 16, Tailwind v4, or Sitecore Content SDK v2.x APIs. This release adds a two-layer system to solve this:
+
+**Layer 2 — Documentation Verification (passive)**: A new section in the generated `CLAUDE.md` and `.cursorrules` base template instructs the AI to verify API signatures when unsure, using Context7 MCP, `llms.txt` endpoints, or WebFetch. Always active, zero overhead.
+
+**Layer 3 — `/fetch-docs` skill (active)**: A new skill that pre-loads current, version-specific docs at session start:
+- Reads `ai-kit.config.json` to detect your stack
+- Uses Context7 MCP to fetch current docs for Next.js, Tailwind, Sitecore, React
+- Falls back to `llms.txt` (e.g., `https://nextjs.org/docs/llms-full.txt`)
+- Summarizes key APIs and breaking changes into conversation context
+
+Run `/fetch-docs` at the start of a session. The template verification section catches anything it misses.
+
+### Other Improvements
+
+- **Node.js engine** bumped from `>=18` to `>=20` (Node 18 EOL, Next.js 16 requires 20+)
+- **Version**: 1.10.0
+- **Total skills**: 49 (was 48, added `/fetch-docs`)
+- **Template fragments**: Turbopack and caching sections added to Next.js App Router rules
+- **Cursor .mdc**: `index.mdc` entry point generated alongside fragment-specific `.mdc` files
+- **Base template**: new "Documentation Verification" section in both CLAUDE.md and .cursorrules output
+
+---
+
 ## v1.8.0 — 2026-03-30
 
 ### CLI Architecture Refactor

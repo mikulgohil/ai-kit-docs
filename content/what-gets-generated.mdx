@@ -111,6 +111,7 @@ The rules file for **Cursor AI**. Contains the same standards as CLAUDE.md but f
 
 | File | Applies To |
 |---|---|
+| `index.mdc` | `**/*` — repo-wide entry point (v1.10.0+) |
 | `base.mdc` | `**/*` — all files |
 | `nextjs-app-router.mdc` | `app/**/*.{ts,tsx}`, `src/app/**/*.{ts,tsx}` |
 | `nextjs-pages-router.mdc` | `pages/**/*.{ts,tsx}`, `src/pages/**/*.{ts,tsx}` |
@@ -119,6 +120,15 @@ The rules file for **Cursor AI**. Contains the same standards as CLAUDE.md but f
 | `typescript.mdc` | `**/*.{ts,tsx}` |
 | `monorepo.mdc` | `**/*` |
 | `figma.mdc` | `src/components/**/*.{ts,tsx}`, `tokens/**/*` |
+
+### index.mdc (v1.10.0+)
+
+The `index.mdc` file is a **repo-wide entry point** for Cursor IDE — equivalent to `CLAUDE.md` for Claude Code. It includes:
+
+- Project name and detected tech stack
+- Links to all active rule fragment `.mdc` files
+- Key conventions (package manager, router type)
+- `alwaysApply: true` ensures it's loaded for every file you edit
 
 Each `.mdc` file has frontmatter:
 
@@ -136,7 +146,7 @@ This means Cursor only loads relevant rules when you're editing a specific file 
 
 ## .claude/skills/ and .cursor/skills/
 
-48 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
+49 skills generated for both Claude Code and Cursor. Each skill lives in its own subdirectory with a `SKILL.md` file:
 
 ```
 .claude/skills/
@@ -170,7 +180,7 @@ Skills are **auto-discovered** — the AI reads each skill's description at conv
 
 ## .claude/commands/
 
-Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 48 workflows as the skills above, in the classic slash command format.
+Legacy slash commands for Claude Code — kept for backward compatibility with existing workflows. These are the same 49 workflows as the skills above, in the classic slash command format.
 
 ```
 .claude/commands/

@@ -10,6 +10,7 @@ Hooks fire on specific events during your Claude Code session:
 |---|---|---|
 | **PreToolUse** | Before a tool runs | Warning before `git push` |
 | **PostToolUse** | After a file is edited or written | Auto-format, type-check |
+| **PostCompact** | After context compaction | Re-echo tech stack context |
 | **Stop** | After each AI response completes | Audit modified files for `console.log` |
 
 Hooks are configured in `.claude/settings.local.json`, which is **gitignored by default** — your hook preferences are local and won't affect teammates.
@@ -40,6 +41,7 @@ Best for: everyday development with a safety net.
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
+| Context recovery | PostCompact | Re-echoes tech stack summary after context compaction |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
 ### Strict
@@ -54,6 +56,7 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
+| Context recovery | PostCompact | Re-echoes tech stack summary after context compaction |
 | Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
 | Pre-commit AI review | PreToolUse | Checks staged files for `any` types, console.log, TODOs without tickets |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
@@ -213,6 +216,34 @@ The hook does not block the commit — it prints the findings and lets you decid
 ### Git Push Safety
 
 Fires before any `git push` command, printing a reminder to run tests and type-check first. Available in all profiles.
+
+---
+
+## PostCompact Context Recovery
+
+When conversations get long, Claude Code automatically compacts older context to free up the context window. The **PostCompact** hook fires after this happens, re-echoing critical project context:
+
+- Confirms `CLAUDE.md` is still loaded
+- Prints your tech stack summary from `ai-kit.config.json` (framework, CMS, styling)
+- Reminds about the `/effort` command for adjusting reasoning depth
+
+This ensures your project conventions survive context compaction without manual re-prompting. Available in **standard** and **strict** profiles.
+
+```json
+{
+  "PostCompact": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo '🔄 Context was compacted. Key reminders:' ..."
+        }
+      ]
+    }
+  ]
+}
+```
 
 ---
 
