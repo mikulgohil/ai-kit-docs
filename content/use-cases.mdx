@@ -1074,3 +1074,561 @@ Every new session starts with your tech stack echoed — framework, CMS, styling
 ### Context Recovery After Compaction
 
 Long sessions get compacted by Claude Code. The PostCompact hook re-echoes your tech stack so the AI doesn't lose project awareness mid-conversation.
+
+---
+
+## How AI Kit Remembers Your Project
+
+These are the invisible systems that make the AI feel like a teammate who knows your codebase — not a stranger you brief every session.
+
+### CLAUDE.md — The AI's Memory of Your Project
+
+**What it is**: A single markdown file that tells the AI everything about your project — stack, conventions, patterns, available scripts, and rules.
+
+**How it works**: When you open Claude Code (or Cursor), it automatically reads `CLAUDE.md` before your first prompt. This is why the AI knows to use App Router patterns instead of Pages Router, or Sitecore field helpers instead of raw HTML — it read the rules before you asked.
+
+**What's inside** (assembled from template fragments based on your scan):
+
+```
+CLAUDE.md
+├── Core Rules (always included)
+│   ├── Workflow: Read before writing, Understand → Plan → Code
+│   ├── Prompt Quality Guard: Push back on vague requests
+│   ├── Naming Conventions: PascalCase components, camelCase utils
+│   ├── Code Structure: 200-line component limit, colocate files
+│   ├── Component Docs: >50 lines or >3 props → needs .docs.md
+│   ├── Error Handling: Never show blank screens
+│   ├── Accessibility: Semantic HTML, ARIA, contrast
+│   ├── Git Practices: Conventional commits, no secrets
+│   ├── Performance: Memoize, lazy load, Server Components
+│   ├── Dependency Discipline: Check before adding packages
+│   └── Available Skills: List of 48 slash commands
+│
+├── Next.js App Router (if detected)
+│   ├── Server Components by default
+│   ├── Server Actions with Zod validation
+│   ├── Streaming & Suspense patterns
+│   ├── Route Groups & Layouts
+│   ├── Middleware (Edge-compatible)
+│   ├── ISR configuration
+│   ├── Turbopack rules (Next.js 16+)
+│   └── Common mistakes to avoid
+│
+├── Sitecore XM Cloud (if detected)
+│   ├── Field helpers (<Text>, <RichText>, <Image>)
+│   ├── Content SDK v2.x patterns
+│   ├── Experience Edge GraphQL
+│   ├── Image optimization with next/image
+│   ├── Personalization & variants
+│   └── Environment setup (.env.local)
+│
+├── Tailwind CSS (if detected)
+│   ├── Utility-first, mobile-first responsive
+│   ├── Design token usage (no arbitrary values)
+│   └── cn()/clsx() for conditional classes
+│
+├── TypeScript (if detected)
+│   ├── Strict patterns (no any, discriminated unions)
+│   ├── Sitecore field typing
+│   ├── Next.js typing (PageProps, Server Action returns)
+│   └── Zod validation patterns
+│
+├── Monorepo (if detected)
+│   ├── Package boundaries
+│   ├── Import through package names, not relative paths
+│   └── Cross-package impact awareness
+│
+├── Figma (if detected)
+│   ├── Design-to-code workflow
+│   ├── Token mapping rules
+│   └── Visual verification checklist
+│
+└── Custom Fragments (from .ai-kit/fragments/)
+    └── Your team's custom rules appended at the end
+```
+
+**The key insight**: The AI doesn't "remember" your project — it **re-reads the rules every session**. That's why consistency is automatic. Every developer on the team gets the same AI behavior because they share the same `CLAUDE.md`.
+
+---
+
+### AI-KIT Markers — Safe Merge System
+
+**The problem**: If `ai-kit update` replaced your entire `CLAUDE.md`, you'd lose any custom rules you added manually.
+
+**How it works**: Every generated file is wrapped in markers:
+
+```markdown
+<!-- Your custom content goes above (never touched by ai-kit) -->
+
+<!-- AI-KIT:START -->
+# Core Rules
+## Workflow
+...all generated content...
+<!-- AI-KIT:END -->
+
+<!-- Your custom content can also go below -->
+```
+
+When you run `ai-kit update`:
+1. It finds `AI-KIT:START` and `AI-KIT:END`
+2. Replaces **only** the content between them with freshly generated rules
+3. Everything above and below the markers is preserved
+
+This is why `ai-kit migrate` works — it puts your existing custom rules above the markers and AI Kit's content inside them.
+
+---
+
+### Template Fragment Assembly
+
+**The problem**: A Next.js + Sitecore + Tailwind project needs different rules than a React + CSS Modules project. How does AI Kit generate the right rules for each?
+
+**How it works**: Your `CLAUDE.md` isn't a single template — it's assembled from **fragments** selected based on your scan results.
+
+```
+ai-kit init
+  ↓
+Scanner detects: Next.js 16 (App Router) + Sitecore XMC v2 + Tailwind + TypeScript
+  ↓
+Fragment selector picks:
+  ✓ base.md (always included — 200 lines of core rules)
+  ✓ nextjs-app-router.md (App Router patterns — 79 lines)
+  ✓ sitecore-xmc.md (XM Cloud patterns — 143 lines)
+  ✓ tailwind.md (Tailwind conventions — 17 lines)
+  ✓ typescript.md (TypeScript strict patterns — 97 lines)
+  ✗ nextjs-pages-router.md (skipped — no Pages Router detected)
+  ✗ monorepo.md (skipped — not a monorepo)
+  ✗ figma.md (skipped — no Figma tools detected)
+  ↓
+Assembler joins fragments + replaces variables:
+  {{projectName}} → "TravelHub"
+  {{packageManager}} → "pnpm"
+  {{routerType}} → "app"
+  {{scripts}} → "dev, build, test, lint"
+  ↓
+Wraps in AI-KIT:START/END markers
+  ↓
+Writes CLAUDE.md
+```
+
+**Adding your own rules**: Drop a `.md` file into `.ai-kit/fragments/` in your project. AI Kit appends it to the generated output automatically. Your team's specific conventions (API naming, deployment rules, code owner policies) go here.
+
+---
+
+### The Prompt Quality Guard
+
+**The problem**: Developers write vague prompts like "fix this" or "make a component" — and the AI guesses wrong, wasting time.
+
+**How it works**: AI Kit bakes a **Prompt Quality Guard** into every generated `CLAUDE.md`. It instructs the AI to push back on vague requests before proceeding:
+
+**Scenario**: You type "create a component"
+
+Without AI Kit, the AI guesses and generates something that may not match your needs.
+
+With AI Kit, the AI responds:
+> "Before I create a component, I need a few details:
+> - What should it be called?
+> - Server or Client Component?
+> - What props does it need?
+> - Does it need loading/error states?"
+
+This 10-second clarification prevents 10 minutes of wrong output. The guard activates automatically — it's part of the core rules, not a skill you invoke.
+
+---
+
+### Self-Enforcement Rules
+
+**The problem**: Developers forget to write tests, update docs, or add JSDoc comments. Code review catches it, but that's too late — the PR is already open.
+
+**How it works**: AI Kit embeds self-enforcement rules in `CLAUDE.md` that the AI follows automatically without being asked:
+
+| Rule | Trigger | What the AI does |
+|---|---|---|
+| **Auto-document complex components** | Creating/modifying a component with >50 lines or >3 props | Creates or updates `.docs.md` with props table, usage examples, edge cases |
+| **Bug fix = regression test** | Running `/fix-bug` or fixing any reported bug | Writes a test that reproduces the bug BEFORE fixing it |
+| **JSDoc on exports** | Generating any exported function or component | Adds JSDoc comment explaining purpose |
+| **Change log updates** | Modifying a documented component | Appends an entry to the component's change log section |
+| **Flag naked TODOs** | Encounters `// TODO` without a ticket number | Asks: "This TODO has no ticket reference — should I add one or remove it?" |
+
+You don't invoke these. They happen automatically because they're in the rules the AI reads every session.
+
+---
+
+### Component Documentation Auto-Generation
+
+**Scenario**: You build a `BookingCard` component — it's 120 lines with 6 props. After the AI finishes writing the component, it automatically creates `BookingCard.docs.md`:
+
+```markdown
+# BookingCard
+
+> Displays a booking summary with flight details, price, and action buttons.
+
+## Props
+
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| booking | Booking | Yes | — | Booking data object |
+| onCancel | (id: string) => void | Yes | — | Cancel callback |
+| onModify | (id: string) => void | No | — | Modify callback |
+| variant | 'compact' \| 'full' | No | 'full' | Display variant |
+| showPrice | boolean | No | true | Show price section |
+| className | string | No | — | Additional CSS classes |
+
+## Usage
+
+\`\`\`tsx
+<BookingCard booking={data} onCancel={handleCancel} />
+<BookingCard booking={data} onCancel={handleCancel} variant="compact" />
+\`\`\`
+
+## States
+
+- **Loading**: Skeleton placeholder for all content areas
+- **Error**: "Booking details unavailable" with retry button
+- **Empty**: Should never receive empty booking — parent handles this
+
+## Design Decisions
+
+- Uses `compact` variant in list views, `full` variant in detail pages
+- Price formatting uses Intl.NumberFormat for locale-aware currency
+
+## Edge Cases
+
+- Expired bookings show disabled action buttons with "Expired" badge
+- Cancelled bookings hide the Cancel button
+
+## Change Log
+
+- 2026-04-08: Initial implementation — TRAVEL-142
+```
+
+You didn't ask for this. The AI created it because the self-enforcement rule detected a component >50 lines with >3 props. The doc file is linked from the component with `// Docs: ./BookingCard.docs.md`.
+
+Next time someone modifies `BookingCard`, the AI automatically appends to the Change Log.
+
+---
+
+### Mistakes Log — Learning from Failures
+
+**The problem**: The same build errors keep happening. A developer breaks the TypeScript build, fixes it, and two weeks later someone makes the same mistake. No organizational memory.
+
+**How it works**: AI Kit scaffolds `docs/mistakes-log.md` and the **mistakes auto-capture hook** logs failures automatically.
+
+**Scenario**: You're working on TravelHub and a TypeScript build fails:
+
+```bash
+# Claude runs tsc and it fails
+error TS2322: Type 'string' is not assignable to type 'number'
+  src/components/flights/FlightCard.tsx(47,5)
+```
+
+The PostToolUse hook detects the non-zero exit code, matches it against build error patterns, and auto-appends to `docs/mistakes-log.md`:
+
+```markdown
+### 2026-04-08 14:30 — Build/lint failure (auto-captured)
+- **What happened**: Command exited with code 2
+- **Error preview**:
+  ```
+  src/components/flights/FlightCard.tsx(47,5): error TS2322: Type 'string'...
+  ```
+- **Root cause**: <!-- TODO: Fill in after investigating -->
+- **Fix**: <!-- TODO: How was it resolved? -->
+- **Lesson**: <!-- TODO: What to do differently -->
+```
+
+The error is captured instantly — no manual logging needed. You fill in the TODOs after fixing (or the AI fills them in during `/fix-bug`). Over months, this builds an organic knowledge base of what goes wrong in your project. The AI reads this file and learns to avoid patterns that caused past failures.
+
+---
+
+### Decisions Log — Architectural Memory
+
+**The problem**: 3 months from now, nobody remembers why you chose PostgreSQL over MongoDB, or why the auth flow uses cookies instead of JWTs. The reasoning is lost in a Slack thread or someone's memory.
+
+**How it works**: AI Kit scaffolds `docs/decisions-log.md`. When you make architectural decisions (especially via `/decide` or during planning), entries are added:
+
+```markdown
+### 2026-04-08 — Use Server Actions for booking mutations
+
+- **Context**: Needed to decide between Server Actions and API Routes for the booking flow
+- **Options considered**:
+  1. Server Actions — simpler, co-located with forms, automatic revalidation
+  2. API Routes — more flexible, works with non-React clients, explicit HTTP methods
+- **Decision**: Server Actions for all form-based mutations. API Routes only for external integrations.
+- **Consequences**: Cannot call booking mutations from mobile app (would need API Routes). Acceptable for now — mobile app is 6 months away.
+```
+
+Six months later when the mobile team asks "why can't we call the booking API?", the answer is in the decisions log — not in someone's memory.
+
+---
+
+### Time Log — Estimation Intelligence
+
+**The problem**: Sprint estimates are consistently wrong. "2 hours" tasks take 8 hours, but nobody tracks the gap to improve future estimates.
+
+**How it works**: AI Kit scaffolds `docs/time-log.md` for tracking actual vs estimated time:
+
+```markdown
+### 2026-04-08 — Build FlightCard component
+
+- **Estimated**: 2h
+- **Actual**: 5h
+- **Notes**: Underestimated Sitecore field typing complexity.
+  The Experience Editor compatibility requirements added 2h
+  of edge case handling that wasn't in the estimate.
+```
+
+Over time, patterns emerge — "Sitecore components always take 2x our estimates" or "API routes take 30 min, not 2 hours." This data improves future sprint planning.
+
+---
+
+### Documentation Verification System
+
+**The problem**: AI training data has a cutoff date. When you ask the AI to use a Next.js 16 API, it might generate code based on Next.js 14 patterns that no longer work.
+
+**How it works**: AI Kit embeds documentation verification rules in `CLAUDE.md` that instruct the AI to check its knowledge before generating code:
+
+| Trigger | What the AI does |
+|---|---|
+| Using an API not seen in your codebase | Checks docs before generating code |
+| Working with recently released features (Next.js 16+, Tailwind v4) | Verifies API signature is current |
+| Build error suggests API changed | Looks up the correct API |
+
+**Verification priority**:
+1. **Your project's code** — existing implementations are the most reliable
+2. **Context7 MCP** — fetches current, version-specific library docs
+3. **Official llms.txt** — AI-friendly docs from Next.js, Sitecore, etc.
+4. **WebFetch** — fetches specific docs pages
+
+**Scenario**: You ask the AI to add ISR to a page. Instead of guessing the revalidation syntax (which changed between Next.js 14 and 16), the AI:
+1. Checks your existing pages for revalidation patterns
+2. If no existing pattern, uses Context7 MCP to fetch current Next.js docs
+3. Generates code using the verified, current API
+
+No hallucinated APIs. No deprecated patterns.
+
+---
+
+### Strictness Levels — How Rules Are Enforced
+
+**The problem**: A solo developer prototyping needs different AI behavior than an enterprise team shipping to production. One-size-fits-all rules slow down some and leave gaps for others.
+
+**How it works**: During `ai-kit init`, you choose a strictness level that changes how aggressively the AI enforces rules:
+
+**Standard** (default):
+> Follow rules by default, use judgment for edge cases.
+
+The AI follows conventions but makes pragmatic exceptions — if you're building a quick prototype, it won't insist on full test coverage for every utility function.
+
+**Strict**:
+> Enforce all rules strictly. No exceptions without explicit approval. All PRs must pass every check. Zero tolerance for `any` types, missing tests, or accessibility gaps.
+
+The AI becomes a strict code reviewer even while building. Every component gets docs. Every function gets tests. Every `any` gets replaced.
+
+**Relaxed**:
+> Rules are guidelines, not hard requirements. Prioritize shipping speed over perfection. Skip non-critical checks when under time pressure. Use best judgment.
+
+The AI focuses on getting working code fast. It still follows patterns but doesn't block on missing docs or non-critical accessibility issues.
+
+---
+
+### Custom Fragments — Team-Specific Rules
+
+**The problem**: AI Kit generates rules for frameworks and tools, but your team has unique conventions — API naming patterns, deployment policies, code ownership rules — that can't be auto-detected.
+
+**How it works**: Drop `.md` files into `.ai-kit/fragments/` in your project root. AI Kit appends them to the generated `CLAUDE.md` automatically.
+
+```
+.ai-kit/
+  fragments/
+    api-conventions.md    ← "All API routes must return { data, error, meta }"
+    deployment-rules.md   ← "Never deploy on Fridays. Staging first."
+    code-owners.md        ← "Auth changes need @security-team review"
+```
+
+These fragments survive `ai-kit update` — they're appended after the generated sections, not inside the markers.
+
+**Scenario**: Your team requires all API responses to follow a specific envelope format. Create `.ai-kit/fragments/api-envelope.md`:
+
+```markdown
+## API Response Envelope
+
+All API routes and Server Actions MUST return this structure:
+
+\`\`\`typescript
+type ApiResponse<T> = {
+  data: T | null;
+  error: string | null;
+  meta: { requestId: string; timestamp: string };
+};
+\`\`\`
+
+Never return raw data. Never throw errors from API routes — always return the envelope with `error` populated.
+```
+
+Now every AI-generated API route follows this format. The rule persists across updates.
+
+---
+
+### .aiignore — Hiding Files from AI
+
+**The problem**: Some files shouldn't be read or modified by AI tools — large generated files, vendor code, sensitive configs, or compiled output.
+
+**How it works**: Create a `.aiignore` file in your project root (same syntax as `.gitignore`). AI Kit reads it during scanning and includes the patterns in the generated rules.
+
+```
+# .aiignore
+dist/
+.next/
+node_modules/
+coverage/
+*.generated.ts
+vendor/
+scripts/seed-data.sql
+```
+
+The AI won't read or suggest changes to these files. Useful for:
+- Large generated files that waste context window
+- Vendor code you don't control
+- Sensitive SQL/migration files
+- Build output directories
+
+---
+
+### Design Token Detection
+
+**The problem**: Developers hardcode colors like `bg-[#3b82f6]` instead of using the project's design tokens (`bg-primary-500`). The AI doesn't know what tokens are available.
+
+**How it works**: AI Kit's scanner reads your `tailwind.config.ts` (or CSS variables) and detects available design tokens — colors, spacing, fonts, breakpoints. These are included in the scan results and referenced in the generated rules.
+
+**Scenario**: TravelHub has 12 custom colors, 8 spacing values, and 4 font families defined in `tailwind.config.ts`. After `ai-kit init`:
+
+- The Tailwind fragment in `CLAUDE.md` includes: "Use project design tokens — don't use arbitrary values like `text-[#ff0000]` when a token exists"
+- The Figma fragment (if detected) includes the token mapping: "Map Figma colors to Tailwind theme tokens"
+- `ai-kit stats` shows the detected tokens in the project overview
+
+When the AI generates a component, it uses `bg-primary-500` instead of `bg-[#3b82f6]` because it knows what tokens are available.
+
+---
+
+### How Skills Auto-Discover and Activate
+
+**The problem**: 48 skills is a lot. How does the AI know which one to use?
+
+**How it works**: Skills are stored as `SKILL.md` files in `.claude/skills/`. Claude Code reads these on session start and matches them to your requests automatically.
+
+```
+.claude/skills/
+  review/SKILL.md        ← activates when you say "review this code"
+  fix-bug/SKILL.md       ← activates when you say "fix this bug"
+  new-component/SKILL.md ← activates when you say "create a component"
+  ...
+```
+
+**Two ways skills activate**:
+
+1. **Manual invocation** — type `/review` or `/fix-bug` directly
+2. **Auto-discovery** — the AI reads the skill descriptions and matches your natural language. Say "I need to check if this component is accessible" and it activates the accessibility-audit skill
+
+Each skill is a structured workflow — not a one-line prompt. For example, `/new-component` asks 10 mandatory questions before generating code. `/fix-bug` follows a 5-step reproduce → diagnose → fix → test → verify process.
+
+---
+
+### How Agents Differ from Skills
+
+**Skills** are structured workflows you invoke — step-by-step processes for specific tasks.
+
+**Agents** are specialized AI personas that can be delegated to. They have their own tool permissions, expertise boundaries, and behavior profiles.
+
+| Aspect | Skills | Agents |
+|---|---|---|
+| **Invoked by** | You (or auto-matched) | You delegate to them |
+| **Scope** | Single task with steps | Ongoing specialized role |
+| **Tools** | Uses your current session tools | Has own tool permissions (read-only for reviewers, full for builders) |
+| **Isolation** | Runs in your working directory | Some run in isolated worktrees (refactor-cleaner, build-resolver, e2e-runner) |
+| **Example** | `/review` runs a checklist on files | `@code-reviewer` is a specialized reviewer persona that thinks like a senior engineer |
+
+**Worktree isolation** (agents only): Agents like `@refactor-cleaner` and `@build-resolver` run in temporary git worktrees. They can safely modify files without affecting your working directory. If they break something, the worktree is discarded — your code is untouched.
+
+---
+
+### How Context Modes Change AI Behavior
+
+**The problem**: When building a feature, you want the AI to move fast and not nitpick. When reviewing code, you want it to be thorough and strict. Same AI, different mindset.
+
+**How it works**: AI Kit generates 3 context mode files in `.claude/contexts/`. Each changes the AI's priorities:
+
+**Development Mode** — "Build first, polish later"
+- Prioritizes working code over perfect code
+- Suggests patterns from your existing codebase
+- Doesn't refactor unrelated code
+- Doesn't insist on tests during initial development (do it after)
+
+**Review Mode** — "Find every issue"
+- Becomes a strict reviewer with a comprehensive checklist
+- Security (XSS, injection, secrets) → Accessibility (WCAG 2.1 AA) → TypeScript (no any) → React patterns → Performance → Sitecore
+- Every finding has severity and exact fix
+- Read-only — reviews but doesn't modify
+
+**Research Mode** — "Understand, don't change"
+- Reads broadly before forming conclusions
+- Maps architecture, data flow, dependencies
+- Produces findings with file references
+- Never makes code changes in research mode
+
+Switch modes by referencing them in your prompt: "In review mode, check the auth flow" or "Research how the payment system works."
+
+---
+
+### The Scan → Detect → Generate Pipeline
+
+When you run `ai-kit init`, here's everything that happens in the 30-second scan:
+
+```
+1. SCAN PHASE
+   ├── Read package.json → extract name, dependencies, scripts
+   ├── Read tsconfig.json → detect TypeScript, strict mode
+   ├── Read next.config.ts → detect Next.js version, features
+   ├── Read tailwind.config.ts → detect Tailwind version, tokens
+   ├── Scan src/app/ → App Router detected
+   ├── Scan src/pages/ → Pages Router detected (or not)
+   ├── Check for @sitecore-jss or @sitecore-content-sdk → CMS detection
+   ├── Check for @remkoj/optimizely-cms-nextjs → Optimizely detection
+   ├── Check for turbo.json, nx.json → Monorepo detection
+   ├── Check for Figma MCP, figma CLI → Figma detection
+   ├── Check for playwright, eslint, prettier, biome → Tool detection
+   ├── Check for .claude/settings.json → MCP server detection
+   ├── Read .aiignore → exclusion patterns
+   ├── Scan for CSS variables / tailwind config → Design token detection
+   └── Check for static export config → Static site detection
+
+2. DETECT PHASE
+   └── Combine all scan results into ProjectScan object:
+       {
+         framework: 'nextjs',
+         nextjsVersion: '16.2.2',
+         routerType: 'app',
+         cms: 'sitecore-xmc-v2',
+         styling: ['tailwind'],
+         typescript: true,
+         typescriptStrict: true,
+         monorepo: false,
+         packageManager: 'pnpm',
+         tools: { playwright: true, eslint: true, prettier: true },
+         mcpServers: { context7: true, github: true },
+         ...
+       }
+
+3. GENERATE PHASE
+   ├── Select template fragments based on scan → [base, nextjs-app-router, sitecore-xmc, tailwind, typescript]
+   ├── Assemble CLAUDE.md from fragments + replace variables
+   ├── Assemble .cursorrules from same fragments (condensed format)
+   ├── Generate .cursor/rules/*.mdc (scoped Cursor rules)
+   ├── Generate .claude/settings.local.json (hooks for detected tools)
+   ├── Copy 48 skills to .claude/skills/ and .cursor/skills/
+   ├── Copy agents to .claude/agents/ (conditional based on scan)
+   ├── Copy 3 context modes to .claude/contexts/
+   ├── Copy developer guides to ai-kit/guides/
+   ├── Scaffold docs/ (mistakes-log, decisions-log, time-log)
+   └── Write ai-kit.config.json (scan results + settings)
+```
+
+Total output: ~600 files, all configured for your exact stack, in 30 seconds.
