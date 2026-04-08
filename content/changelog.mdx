@@ -4,6 +4,53 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v1.11.0 — 2026-04-08
+
+### Session Init Hook
+
+Every new Claude Code session now starts with an automatic context echo — the AI immediately knows your tech stack, package manager, scripts, and when configs were last updated. No wasted turns re-discovering the project. Runs on all hook profiles (minimal, standard, strict).
+
+```
+📋 ai-kit v1.11.0 | Stack: Next.js 16.2 (app router) + sitecore-xmc-v2 + tailwind
+   PM: pnpm | Scripts: dev, build, test, lint, typecheck
+   Last scan: 2026-04-08
+```
+
+### Backup & Rollback
+
+`ai-kit update` now **automatically backs up** your current configs to `.ai-kit/backups/` before writing any changes. New `ai-kit rollback` command restores from any previous backup.
+
+```bash
+ai-kit rollback          # Pick from available backups
+ai-kit rollback --latest # Restore most recent instantly
+```
+
+### Migrate Existing Projects
+
+New `ai-kit migrate` command lets teams with existing hand-written `CLAUDE.md` or `.cursorrules` adopt AI Kit **without losing custom rules**. Custom sections are preserved at the top of the file. AI Kit's generated content goes inside `AI-KIT:START/END` markers below. Future `ai-kit update` only touches the marked section.
+
+```bash
+ai-kit migrate           # Interactive — shows preview, asks confirmation
+ai-kit migrate --dry-run # Preview without writing
+```
+
+### CLI Updates
+
+- New commands: `ai-kit migrate`, `ai-kit rollback`
+- Total CLI commands: 16 (was 14)
+- Updated docs: README, getting-started guide, feature-overview, CLI reference
+
+### Internal
+
+- Extracted CLI wiring from `src/index.ts` into `src/cli/register-commands.ts` and `src/cli/error-handler.ts`
+- Added static-site scanner and templates
+- Added design-tokens scanner and `.aiignore` scanner
+- Added `component-registry` command
+- Added `ai-kit.config.schema.json` for editor autocomplete
+- Cleaned `.gitignore` — moved internal files to `.git/info/exclude`
+
+---
+
 ## v1.10.0 — 2026-04-08
 
 ### Agent Worktree Isolation
