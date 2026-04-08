@@ -1,0 +1,1076 @@
+# Use Cases
+
+Real-world scenarios showing how AI Kit fits into your daily workflow. Each use case covers the problem, the command, and what happens.
+
+---
+
+## Setup & Onboarding
+
+### Starting a New Project
+
+**Scenario**: You just scaffolded a Next.js 16 + Tailwind project for a client portal called "TravelHub." You want the AI to follow your stack conventions from the first conversation.
+
+```bash
+cd travel-hub
+npx @mikulgohil/ai-kit init
+```
+
+AI Kit scans `package.json`, `tsconfig.json`, `next.config.ts`, and your directory structure. It detects Next.js 16 with App Router, Tailwind CSS v4, TypeScript in strict mode, and pnpm as the package manager.
+
+You answer 3 prompts — AI tool (Claude Code + Cursor), strictness (standard), hook profile (standard) — and AI Kit generates:
+
+- `CLAUDE.md` with App Router patterns, Server Components guidance, Tailwind token rules
+- `.cursorrules` + `.cursor/rules/*.mdc` for Cursor
+- 48 skills, 16 agents, 3 context modes, automated hooks
+- Developer guides for prompts, tokens, hooks, and agents
+
+Every Claude Code session now opens with:
+```
+📋 ai-kit v1.11.0 | Stack: Next.js 16.2 (app router) + tailwind
+   PM: pnpm | Scripts: dev, build, test, lint
+   Last scan: 2026-04-08
+```
+
+The AI knows your stack before you type a single prompt.
+
+---
+
+### Onboarding a New Team Member
+
+**Scenario**: A junior developer named Priya joins the TravelHub project. She clones the repo and sees 50+ AI config files she didn't create.
+
+She runs:
+```bash
+npx @mikulgohil/ai-kit health
+```
+
+```
+AI Kit — Project Health
+  Setup Integrity
+    ✓ Version: v1.11.0
+    ✓ CLAUDE.md: Present with markers
+    ✓ Skills: 48 installed
+    ✓ Agents: 16 configured
+    ✓ Hooks: Configured (standard)
+
+  Stack Detection
+    ✓ Framework: Next.js 16.2 (App Router)
+    ✓ TypeScript: Enabled (strict)
+    ✓ Styling: tailwind
+
+  Overall: A (96/100)
+```
+
+She opens Claude Code and types `/prompt-help`. The interactive prompt builder walks her through crafting her first task — no guessing at prompt format. She's productive on day one instead of spending a week reading the codebase.
+
+---
+
+### Adopting AI Kit in an Existing Project
+
+**Scenario**: The "FinanceFlow" project has been running for 8 months. The team lead wrote a detailed `CLAUDE.md` by hand with 15 custom rules about their API conventions, deployment process, and naming standards. They want AI Kit's auto-detection without losing their rules.
+
+```bash
+cd finance-flow
+npx @mikulgohil/ai-kit migrate --dry-run
+```
+
+```
+Migration Plan
+
+Your existing CLAUDE.md has 5 section(s):
+  ✓ KEEP: "API Conventions"
+  ✓ KEEP: "Database Rules"
+  ✓ KEEP: "Deployment Process"
+  ✓ KEEP: "Naming Standards"
+  ✓ KEEP: "Code Review Policy"
+
+ai-kit will generate 12 section(s) for your stack:
+  + ADD: "Workflow"
+  + ADD: "Next.js App Router Patterns"
+  + ADD: "TypeScript Rules"
+  ...
+
+Dry run — no files were modified.
+```
+
+The team reviews the preview. Everything looks good — their 5 custom sections stay at the top, AI Kit's rules go below in markers. They run `npx @mikulgohil/ai-kit migrate` to apply.
+
+Future `ai-kit update` commands only touch the marked section. Their hand-written rules are preserved forever.
+
+---
+
+## Building Features
+
+### Creating a New Component
+
+**Scenario**: You need to build a `FlightCard` component for TravelHub that shows flight details, price, and a booking button.
+
+```
+/new-component
+```
+
+The skill asks 10 structured questions:
+1. Component name? `FlightCard`
+2. Props needed? `flight: Flight, onBook: (id: string) => void`
+3. Server or Client Component? Client (has click handler)
+4. Where should it live? `src/components/flights/`
+5. Does it need loading state? Yes
+6. Error handling? Yes — show fallback if flight data is missing
+7. Responsive behavior? Stack on mobile, row on desktop
+8. Accessibility? Button needs aria-label, card needs role="article"
+9. Tests? Yes
+10. Storybook story? Yes
+
+AI Kit reads your existing components to match patterns, then generates:
+- `FlightCard.tsx` — component with proper types, error boundary, responsive layout
+- `FlightCard.test.tsx` — tests covering render, click, loading, error, accessibility
+- `FlightCard.stories.tsx` — Storybook story with controls for all prop variants
+- `FlightCard.docs.md` — documentation with props table and usage examples
+
+All files follow your project's existing patterns — because AI Kit read your codebase first.
+
+---
+
+### Creating a New Page
+
+**Scenario**: TravelHub needs a `/destinations/[slug]` page that loads destination data from the API and renders it with SEO metadata.
+
+```
+/new-page
+```
+
+The skill detects you're using App Router and asks:
+- Route path? `/destinations/[slug]`
+- Data source? Server-side fetch from `/api/destinations`
+- Does it need generateStaticParams? Yes — pre-render top 50 destinations
+- ISR revalidation? Every 60 seconds
+- SEO? Yes — dynamic title, description, Open Graph image
+
+Generates:
+```
+app/
+  destinations/
+    [slug]/
+      page.tsx          ← Server Component with fetch + generateMetadata
+      loading.tsx        ← Skeleton loading state
+      error.tsx          ← Error boundary
+      not-found.tsx      ← 404 handling
+```
+
+The page uses Server Components by default (as your CLAUDE.md rules specify), includes proper ISR configuration, and handles all edge cases.
+
+---
+
+### Building a Server Action
+
+**Scenario**: The TravelHub booking form needs a Server Action that validates input, creates a booking, and revalidates the bookings page.
+
+```
+/server-action
+```
+
+Generates a complete Server Action with:
+- `'use server'` directive
+- Zod schema for input validation
+- Structured return type: `{ success: true, data: Booking } | { success: false, error: string }`
+- `revalidatePath('/bookings')` after successful mutation
+- Error handling that returns error objects instead of throwing
+
+The skill knows your project uses App Router (from the scan) and follows the exact patterns in your CLAUDE.md — including the validation-first approach and structured return types.
+
+---
+
+### Building Middleware
+
+**Scenario**: TravelHub needs authentication middleware that redirects unauthenticated users to `/login` and allows public access to `/destinations` and `/api/public`.
+
+```
+/middleware
+```
+
+Generates `middleware.ts` at the project root with:
+- Edge-compatible auth check (no Node.js APIs)
+- Correct matcher config excluding public routes, static assets, and API routes
+- Redirect to `/login?callbackUrl=` preserving the original path
+- Proper handling of Sitecore preview mode (if XM Cloud detected)
+
+---
+
+### Figma Design to Code
+
+**Scenario**: The designer shared a Figma link for the TravelHub hero section — a full-width banner with background image, heading, search form, and trust badges.
+
+```
+/figma-to-code
+```
+
+The skill instructs the AI to:
+1. **Extract design context** from the Figma file — layout, colors, typography, spacing
+2. **Check existing components** — reuse `SearchForm`, `TrustBadge` if they exist
+3. **Map design tokens** — Figma colors to your Tailwind theme tokens (`bg-primary-500`, not `bg-[#3b82f6]`)
+4. **Build mobile-first** — implement base layout, then add responsive breakpoints
+5. **Visual verification** — compare output against the Figma design
+
+The AI never hardcodes hex colors or arbitrary spacing values — it uses your project's design tokens from `tailwind.config.ts`.
+
+---
+
+### Generating TypeScript Schemas
+
+**Scenario**: The TravelHub API returns flight data, but there are no TypeScript types for it. You have a sample JSON response.
+
+```
+/schema-gen
+```
+
+Paste the JSON response. The skill generates:
+- TypeScript `interface Flight { ... }` with proper types for every field
+- Zod validation schema `FlightSchema` for runtime validation
+- `type Flight = z.infer<typeof FlightSchema>` — single source of truth
+
+One schema, both compile-time and runtime safety.
+
+---
+
+### Generating Storybook Stories
+
+**Scenario**: The `FlightCard` component exists but has no Storybook story. You want to document all its visual states.
+
+```
+/storybook-gen
+```
+
+The skill reads `FlightCard.tsx`, identifies all props and their types, and generates `FlightCard.stories.tsx` with:
+- Default story with realistic mock data
+- Loading state story
+- Error state story
+- Mobile viewport story
+- All variant combinations (one-way, round-trip, sold-out)
+- Interactive controls for every prop
+- Play functions for interaction testing
+
+---
+
+## Code Quality & Review
+
+### Reviewing Code Before PR
+
+**Scenario**: You've built the flight booking flow — 4 new files, 2 modified files. Before creating a PR, you want a thorough review.
+
+```
+/review src/components/flights/
+```
+
+The AI reviews against a comprehensive checklist:
+
+- **Security**: Checks for XSS vectors, hardcoded secrets, unsanitized input
+- **Accessibility**: Semantic HTML, ARIA labels, keyboard navigation, color contrast
+- **TypeScript**: No `any` types, proper null handling, explicit return types
+- **React Patterns**: Hooks rules, useEffect dependencies, memoization justification
+- **Performance**: Unnecessary re-renders, dynamic imports, image optimization
+- **Sitecore** (if applicable): Field helpers used correctly, Experience Editor compatible
+
+Each finding has a severity level (critical/high/medium/low) and an exact code fix. Not "consider improving performance" — specific line, specific change.
+
+---
+
+### Pre-PR Final Check
+
+**Scenario**: You're about to open a PR. You want to catch everything that would come up in code review.
+
+```
+/pre-pr
+```
+
+Runs 10 systematic categories:
+1. Type safety — any `any` types introduced?
+2. Error handling — all failure paths covered?
+3. Accessibility — WCAG 2.1 AA compliance?
+4. Security — XSS, injection, secrets exposure?
+5. Performance — unnecessary re-renders, heavy imports?
+6. Tests — new code has tests? Edge cases covered?
+7. Documentation — component docs updated?
+8. Git — clean commit history? No debug code?
+9. Dependencies — new packages justified?
+10. Sitecore — field helpers, component factory, Experience Editor?
+
+Produces a pass/fail summary. Fix the failures before opening the PR.
+
+---
+
+### Running All Quality Checks at Once
+
+**Scenario**: Before a major release, you want to run every quality check across the entire project.
+
+```
+/quality-gate
+```
+
+Orchestrates multiple checks in parallel:
+- Type check (`tsc --noEmit`)
+- Lint check (ESLint)
+- Test run (Vitest/Jest)
+- Accessibility scan
+- Security scan
+- Bundle analysis
+
+Presents a single pass/fail dashboard. If everything passes, you're clear to ship.
+
+---
+
+### Accessibility Audit
+
+**Scenario**: TravelHub is launching in the EU and needs WCAG 2.1 AA compliance. You want to audit the booking form.
+
+```
+/accessibility-audit src/components/booking/BookingForm.tsx
+```
+
+Scans for:
+- Missing `alt` text on images
+- Buttons without accessible names
+- Form inputs without labels
+- Missing keyboard navigation
+- Color contrast violations
+- Missing ARIA attributes
+- Focus management issues
+
+Each violation includes the WCAG reference number (e.g., "WCAG 2.1 SC 1.4.3 — Contrast Minimum") and the exact code fix.
+
+---
+
+### Security Check
+
+**Scenario**: The booking flow handles credit card tokens and user PII. You want to verify there are no security holes.
+
+```
+/security-check src/app/api/bookings/
+```
+
+Checks for:
+- XSS vectors (dangerouslySetInnerHTML, unsanitized input rendering)
+- SQL/NoSQL injection in database queries
+- Hardcoded API keys or secrets
+- Missing input validation on API routes
+- CSRF protection on forms
+- Authentication bypass possibilities
+- Sensitive data in logs or error messages
+
+Ranks findings by severity (critical → high → medium → low) with exact fix for each.
+
+---
+
+### Performance Audit
+
+**Scenario**: TravelHub's Lighthouse score dropped from 92 to 71 after the last sprint. You need to find what's causing it.
+
+```
+/perf-audit
+```
+
+Checks:
+- **Core Web Vitals**: LCP, FID, CLS bottlenecks
+- **Bundle size**: Heavy dependencies, missing tree-shaking, code splitting opportunities
+- **Rendering**: Unnecessary re-renders, missing memoization, client-side data fetching that should be server-side
+- **Images**: Missing `next/image`, unoptimized formats, missing width/height
+- **Caching**: Missing revalidation headers, stale fetch strategies
+
+Produces a prioritized report with estimated impact: "Moving `date-fns` to dynamic import saves ~45KB from initial bundle."
+
+---
+
+### Bundle Size Analysis
+
+**Scenario**: A new dependency was added last week and the build size jumped by 200KB. You need to find the culprit.
+
+```
+/bundle-check
+```
+
+Analyzes the project's bundle composition:
+- Lists the top 10 heaviest dependencies by size
+- Identifies packages that aren't tree-shaken properly
+- Finds duplicate packages (e.g., two versions of `lodash`)
+- Suggests code splitting opportunities for route-level chunks
+- Recommends lighter alternatives where available
+
+---
+
+### Fixing Type Safety Issues
+
+**Scenario**: The TypeScript strict mode audit found 23 `any` types scattered across the codebase. You need to fix them systematically.
+
+```
+/type-fix src/lib/api/
+```
+
+The skill treats every `any` as a bug. For each one:
+1. Reads the surrounding code to understand what the actual type should be
+2. Traces where the value comes from (API response? user input? function parameter?)
+3. Replaces `any` with the correct narrowed type
+4. Adds type guards where needed (e.g., for unknown API responses)
+
+No `any` → `unknown` cop-outs. Actual correct types.
+
+---
+
+### Finding Test Gaps
+
+**Scenario**: TravelHub has 84 components but you're not sure which ones have tests. You want a gap analysis.
+
+```
+/test-gaps src/components/
+```
+
+```
+Test Gap Analysis
+  Components scanned: 84
+
+  UNTESTED (no test file):
+    src/components/flights/FlightFilters.tsx
+    src/components/booking/PaymentForm.tsx
+    src/components/auth/LoginModal.tsx
+    ... (12 more)
+
+  PARTIAL (test exists but low coverage):
+    src/components/flights/FlightCard.test.tsx — missing: error state, loading state
+    src/components/common/SearchBar.test.tsx — missing: empty results, keyboard nav
+
+  FULLY TESTED: 57 components
+
+  Summary: 15 untested · 12 partial · 57 complete
+  Priority: PaymentForm.tsx (handles money) · LoginModal.tsx (handles auth)
+```
+
+---
+
+### Internationalization Audit
+
+**Scenario**: TravelHub is expanding to Arabic-speaking markets. You need to check i18n readiness.
+
+```
+/i18n-check
+```
+
+Finds:
+- Hardcoded strings that should be translation keys
+- Date/number formatting without locale awareness
+- Missing RTL (right-to-left) layout support
+- Currency values without proper formatting
+- Pluralization issues
+- Missing `lang` attribute on HTML elements
+
+---
+
+### Responsive Design Check
+
+**Scenario**: QA reported that the flight results page is broken on tablets. You want to audit responsive behavior.
+
+```
+/responsive-check src/components/flights/FlightResults.tsx
+```
+
+Checks every breakpoint (mobile → tablet → desktop → wide) for:
+- Layout breaks at specific widths
+- Text overflow or truncation issues
+- Touch targets too small on mobile
+- Hidden elements that should be visible (or vice versa)
+- Spacing inconsistencies between breakpoints
+
+---
+
+## Debugging & Maintenance
+
+### Fixing a Bug
+
+**Scenario**: Users report that the booking confirmation email shows the wrong date — it's showing UTC instead of the user's timezone.
+
+```
+/fix-bug
+```
+
+The skill follows a systematic process:
+1. **Gather info**: "What's the expected behavior? What actually happens? Steps to reproduce?"
+2. **Reproduce**: Reads the relevant code, traces the data flow from booking creation to email rendering
+3. **Root cause**: Identifies that `toISOString()` is used in the email template instead of `toLocaleDateString()`
+4. **Fix**: Implements minimal, targeted fix — changes only the date formatting line
+5. **Regression test**: Writes a test that would have caught this bug: `expect(formatBookingDate(date, 'Asia/Dubai')).toBe('April 8, 2026')`
+
+The skill won't refactor the entire email service. Minimal fix, regression test, done.
+
+---
+
+### Refactoring Code
+
+**Scenario**: The `BookingService` class has grown to 450 lines with 12 methods. You want to break it into focused modules.
+
+```
+/refactor src/services/BookingService.ts
+```
+
+The skill:
+1. Reads the file and identifies code smells (too many responsibilities, mixed concerns, duplicate logic)
+2. Proposes a refactoring plan: "Split into BookingCreator, BookingValidator, BookingNotifier"
+3. **Waits for your approval** before making any changes
+4. Executes the refactoring step by step, verifying tests pass after each change
+5. Updates imports across the codebase
+
+No surprise changes. You approve the plan first.
+
+---
+
+### Checking Dependencies
+
+**Scenario**: The TravelHub build has been getting slower. You suspect there are unused or duplicate dependencies.
+
+```
+/dep-check
+```
+
+```
+Dependency Audit
+  Total: 87 packages
+
+  UNUSED (installed but never imported):
+    - moment (last import removed 3 months ago)
+    - classnames (project uses cn() from @/lib/utils)
+
+  DUPLICATES:
+    - lodash@4.17.21 + lodash-es@4.17.21 (use one, not both)
+
+  SECURITY:
+    - nth-check@1.0.2 — CVE-2021-3803 (high severity)
+
+  OUTDATED:
+    - next: 16.1.0 → 16.2.2 (minor, safe to update)
+    - tailwindcss: 4.0.5 → 4.1.0 (minor, check release notes)
+
+  Bundle Impact:
+    - Remove moment → saves 72KB
+    - Remove classnames → saves 1.2KB
+    - Switch lodash → lodash-es → enables tree-shaking, saves ~50KB
+```
+
+---
+
+### Sitecore Debugging
+
+**Scenario**: Your Sitecore XM Cloud component renders correctly in development but shows "Component not found" in Experience Editor.
+
+```
+/sitecore-debug
+```
+
+The skill identifies the symptom category (component registration issue) and runs through the relevant checklist:
+
+1. Is the component registered in the component factory? **Missing** — component name doesn't match Sitecore rendering item name
+2. Does the component file name match the rendering item name exactly? `FlightCard` vs `Flight Card` — **mismatch found**
+3. Is `withDatasourceCheck` HOC applied? Yes
+4. Are Sitecore field helpers used? Yes
+
+**Fix**: Rename component to match Sitecore rendering item name, or update the component factory mapping.
+
+---
+
+### Upgrading Dependencies
+
+**Scenario**: Next.js 16.3 was released with security patches. You need to upgrade safely.
+
+```
+/upgrade
+```
+
+The skill:
+1. Reads `package.json` and identifies all outdated packages
+2. Categorizes by risk: patch (safe), minor (review changelog), major (breaking changes)
+3. Checks for known breaking changes in each upgrade
+4. Produces a step-by-step plan: "Upgrade next first, then @next/bundle-analyzer, then run tests"
+5. After each step, verifies the build and tests still pass
+
+---
+
+### Migrating Frameworks
+
+**Scenario**: TravelHub needs to migrate from Pages Router to App Router for one section of the app.
+
+```
+/migrate
+```
+
+The skill:
+1. Identifies source (Pages Router) and target (App Router)
+2. Audits all affected files in the section being migrated
+3. Creates a step-by-step migration plan:
+   - Convert `getServerSideProps` → Server Component fetch
+   - Move `_app.tsx` providers to `layout.tsx`
+   - Replace `useRouter` push/replace with `redirect()` where appropriate
+   - Update data fetching from `getStaticProps` → fetch with ISR
+4. Verifies after each step — doesn't batch everything into one risky change
+
+---
+
+## Workflow & Collaboration
+
+### Generating Commit Messages
+
+**Scenario**: You've fixed the timezone bug in the booking confirmation email and want a proper commit message.
+
+```
+/commit-msg
+```
+
+Analyzes your staged changes (git diff), identifies the nature of the change, and generates:
+
+```
+fix(booking): use timezone-aware date formatting in confirmation email
+
+- Replace toISOString() with toLocaleDateString() using user's timezone
+- Add timezone parameter to formatBookingDate utility
+- Add regression test for timezone edge cases
+```
+
+Follows Conventional Commits format matching your project's existing commit style.
+
+---
+
+### Writing PR Descriptions
+
+**Scenario**: Your PR has 6 changed files across 3 commits. You need a clear description for reviewers.
+
+```
+/pr-description
+```
+
+Analyzes the diff between your branch and main. Generates:
+
+```markdown
+## Summary
+Fix timezone display in booking confirmation emails. Users in non-UTC
+timezones were seeing incorrect dates.
+
+## Changes
+- `src/lib/formatDate.ts` — Added timezone parameter to formatBookingDate()
+- `src/services/BookingNotifier.ts` — Pass user timezone to date formatter
+- `src/services/__tests__/BookingNotifier.test.ts` — Added timezone edge case tests
+
+## Impact
+- Affects: Booking confirmation emails only
+- Breaking changes: None
+- Components touched: BookingNotifier, formatDate utility
+
+## Test Plan
+- [x] Unit test: formatBookingDate with Asia/Dubai timezone
+- [x] Unit test: formatBookingDate with UTC timezone
+- [ ] Manual: Create booking as user with non-UTC timezone, verify email
+```
+
+---
+
+### Morning Standup Summary
+
+**Scenario**: It's standup time and you need to remember what you worked on yesterday.
+
+```
+/standup
+```
+
+Reads your git history from yesterday, identifies:
+- What you shipped (merged PRs, completed features)
+- What you're working on (open branches, uncommitted changes)
+- Blockers (TODOs with "blocked" or "waiting" in your code)
+
+```
+Yesterday:
+  - Fixed timezone bug in booking confirmation (#142)
+  - Reviewed Priya's FlightFilters PR (#138)
+  - Started FlightCompare feature (branch: feat/flight-compare)
+
+Today:
+  - Continue FlightCompare feature
+  - Address review comments on DestinationPage PR
+
+Blockers:
+  - FlightCompare needs API endpoint — waiting on backend team
+  - TODO(blocked): src/components/flights/FlightCompare.tsx:47
+```
+
+---
+
+### Saving and Resuming Sessions
+
+**Scenario**: You've spent 2 hours building the FlightCompare feature with Claude. The context is rich — decisions made, approaches tried, files changed. You need to stop for a meeting.
+
+```
+/save-session
+```
+
+Persists the current session state — what you were working on, decisions made, progress, and open questions.
+
+Next day:
+
+```
+/resume-session
+```
+
+Restores the context. The AI knows what you were building, what approaches you tried, and where you left off. No re-explaining.
+
+---
+
+### Clarifying Vague Requirements
+
+**Scenario**: The PM says "make the search faster." That could mean anything — faster API, better UX, caching, lazy loading. You need clarity before writing code.
+
+```
+/clarify-requirements
+```
+
+The skill identifies gaps in under 5 minutes:
+- "What does 'faster' mean? Target load time? Current vs desired?"
+- "Which search — destination search, flight search, or both?"
+- "Is this perceived speed (UX) or actual speed (API response time)?"
+- "Are there specific user complaints or Lighthouse metrics?"
+
+Produces a clear, actionable brief that both you and the PM agree on before any code is written.
+
+---
+
+### Deep Requirements Gathering
+
+**Scenario**: TravelHub wants to add a "trip planner" feature. The idea is vague — "let users plan multi-city trips." You need to turn this into a buildable spec.
+
+```
+/deep-interview
+```
+
+Guides you through a structured Socratic interview:
+- Who is the target user? (Business travelers? Families? Backpackers?)
+- What's the core workflow? (Search → Select → Organize → Book?)
+- What constraints exist? (API limitations? Budget? Timeline?)
+- What does success look like? (Users create X plans per month?)
+- What's explicitly out of scope?
+
+Produces a detailed specification with user stories, acceptance criteria, and edge cases — before a single line of code is written.
+
+---
+
+### Learning from PR Feedback
+
+**Scenario**: Your PR got 12 review comments. Some are valid patterns you keep missing. You want to learn from them so they don't repeat.
+
+```
+/learn-from-pr
+```
+
+Reads the PR review comments and categorizes:
+- **Recurring pattern**: "You forgot to add `loading.tsx` again — 3rd time this sprint"
+- **Style preference**: "Team prefers `const` arrow functions over `function` declarations"
+- **Knowledge gap**: "Sitecore field helpers must be used for Experience Editor compatibility"
+
+Suggests concrete rules to add to your workflow or CLAUDE.md to prevent repeat feedback.
+
+---
+
+## Project Health & Operations
+
+### Checking Project Health
+
+**Scenario**: You haven't run any diagnostics in a while. Quick pulse check.
+
+```bash
+npx @mikulgohil/ai-kit health
+```
+
+One-glance dashboard covering setup integrity, security, stack detection, tools, and documentation. Produces an A-F grade with the top 3 actionable recommendations.
+
+---
+
+### Updating After Project Changes
+
+**Scenario**: You added Playwright last week and upgraded Tailwind to v4.1. Your AI configs don't know about these changes.
+
+```bash
+npx @mikulgohil/ai-kit update
+```
+
+Re-scans the project, detects the new tools, and updates all generated sections. Your custom rules are untouched — only content inside `AI-KIT:START/END` markers is refreshed. A backup is created automatically before any writes.
+
+---
+
+### Rolling Back a Bad Update
+
+**Scenario**: You ran `ai-kit update` and the new version changed your hooks in a way that breaks your workflow.
+
+```bash
+npx @mikulgohil/ai-kit rollback --latest
+```
+
+Instantly restores your previous configs from the auto-backup. No damage done.
+
+---
+
+### Previewing Changes Before Update
+
+**Scenario**: You want to see what `ai-kit update` would change before running it.
+
+```bash
+npx @mikulgohil/ai-kit diff
+```
+
+```
+Stack Changes:
+  + playwright detected (testing)
+  ~ tailwindcss version: 4.0.5 → 4.1.0
+
+File Changes:
+  modified  CLAUDE.md (template fragments unchanged)
+  modified  .cursorrules (template fragments unchanged)
+  unchanged .claude/skills/ (48 skills)
+
+Summary: 2 files would be modified, 0 added
+Run `ai-kit update` to apply.
+```
+
+---
+
+### Tracking Token Usage & Costs
+
+**Scenario**: Your team lead asks "how much are we spending on AI tools?" You need actual numbers.
+
+```bash
+npx @mikulgohil/ai-kit tokens
+```
+
+Shows daily, weekly, and monthly token usage with cost estimates. Budget alerts at 50%, 75%, and 90% thresholds. Per-project breakdown so you can see which project consumes the most. Includes model recommendations — "Switch to Sonnet for /review tasks to save 40% with similar quality."
+
+---
+
+### Finding Unused Code
+
+**Scenario**: TravelHub has grown to 84 components over 8 months. Some were replaced but never deleted.
+
+```bash
+npx @mikulgohil/ai-kit dead-code
+```
+
+```
+Dead Code Report
+  Components scanned: 84
+
+  UNUSED (never imported):
+    src/components/legacy/OldSearchBar.tsx
+    src/components/flights/FlightCardV1.tsx
+
+  TEST-ONLY (only imported in tests):
+    src/components/test-utils/MockProvider.tsx
+
+  IN USE: 81 components
+
+  Summary: 2 unused · 1 test-only · 81 in use
+```
+
+Safe to delete the 2 unused components. 81 lines of dead code removed.
+
+---
+
+### Detecting Documentation Drift
+
+**Scenario**: The `FlightCard` component was updated with new props last week, but its `.ai.md` documentation still describes the old version.
+
+```bash
+npx @mikulgohil/ai-kit drift
+```
+
+```
+Drift Report
+  Components checked: 42
+
+  DRIFTED (code changed, docs not updated):
+    src/components/flights/FlightCard.tsx — props added: discount, badge
+    src/components/booking/BookingForm.tsx — props removed: legacyMode
+
+  IN SYNC: 40 components
+```
+
+Now you know exactly which docs are stale.
+
+---
+
+### Generating Component Registry
+
+**Scenario**: Your project has 84 components across 12 directories. The AI doesn't know what already exists, so it sometimes creates duplicates.
+
+```bash
+npx @mikulgohil/ai-kit component-registry
+```
+
+Generates a machine-readable catalog (`component-registry.json`) and a human-readable summary (`component-registry.md`). The AI reads the registry before creating new components — it checks for existing matches first.
+
+---
+
+### Diagnosing Setup Issues
+
+**Scenario**: Skills aren't loading in Claude Code. Something's wrong with the setup.
+
+```bash
+npx @mikulgohil/ai-kit doctor
+```
+
+```
+AI Kit — Doctor
+
+✓ ai-kit.config.json found (v1.11.0)
+✓ Version matches CLI (v1.11.0)
+✓ CLAUDE.md exists and in sync
+✗ .cursorrules missing — expected but not found
+✓ 48/48 skills present
+⚠ Stack may have changed — detected new dependency: @playwright/test
+
+Summary: 4 passed, 1 warning, 1 issue
+Fix: Run `ai-kit update` to regenerate .cursorrules and refresh stack detection
+```
+
+---
+
+### Exporting to Other AI Tools
+
+**Scenario**: Half your team uses Windsurf instead of Claude Code. They need the same rules.
+
+```bash
+npx @mikulgohil/ai-kit export --format all
+```
+
+Generates `.windsurfrules`, `.aider.conf.yml`, and `.clinerules` — same rules, formatted for each tool. Everyone gets the same AI behavior regardless of which tool they prefer.
+
+---
+
+### Security & Configuration Audit
+
+**Scenario**: Before a production deployment, you want to verify no secrets are exposed and the AI configuration is secure.
+
+```bash
+npx @mikulgohil/ai-kit audit
+```
+
+Checks: secrets in CLAUDE.md, .env files gitignored, no hardcoded keys in MCP config, hooks properly configured, agents have valid frontmatter. Produces an A-F security grade.
+
+---
+
+### Project Statistics
+
+**Scenario**: You're presenting to stakeholders and need to quantify your AI setup.
+
+```bash
+npx @mikulgohil/ai-kit stats
+```
+
+Shows project complexity score (1-10), active template fragments, skills breakdown by category, detected vs missing tools, and MCP server status. Quick snapshot of your AI infrastructure.
+
+---
+
+## Context Modes & Agents
+
+### Switching Between Modes
+
+AI Kit generates 3 context modes that change how the AI approaches your work:
+
+**Development Mode** — Building features. The AI prioritizes working code over perfection. It suggests patterns from your existing codebase, runs type checks after changes, and doesn't refactor unrelated code.
+
+**Review Mode** — Checking quality. The AI becomes a strict reviewer — security, accessibility, TypeScript, React patterns, performance, and Sitecore compliance. Every finding has a severity level and exact fix.
+
+**Research Mode** — Understanding code. The AI reads broadly, maps data flows and dependencies, and produces findings with evidence. It does not make changes — investigate first, act later.
+
+Switch by referencing the context in your prompt: "In review mode, check this component" or by loading the context file.
+
+---
+
+### Using Specialized Agents
+
+**Scenario**: You need to plan the implementation of a complex feature — multi-city trip planner with real-time pricing.
+
+Call the planner agent:
+```
+@planner Plan the multi-city trip planner feature
+```
+
+The planner:
+1. Breaks the feature into implementation tasks with dependencies
+2. Identifies affected files and architectural tradeoffs
+3. Estimates complexity per task
+4. Flags risks and open questions
+5. Produces a dependency graph: "Build pricing API → Build trip builder UI → Add real-time updates → Add persistence"
+
+Other agents you can call directly:
+
+| Agent | When to use |
+|---|---|
+| `@code-reviewer` | Deep quality review of specific files |
+| `@security-reviewer` | Security-focused audit of auth flows, API routes |
+| `@architect` | SSR vs SSG decisions, component hierarchy, data flow design |
+| `@sitecore-specialist` | XM Cloud component mapping, GraphQL queries, Experience Edge |
+| `@build-resolver` | Build is broken and you can't figure out why |
+| `@e2e-runner` | Generate Playwright tests for a user flow |
+| `@tdd-guide` | Red-green-refactor workflow guidance |
+| `@performance-profiler` | Core Web Vitals deep dive, runtime profiling |
+| `@migration-specialist` | Framework upgrade planning and execution |
+| `@dependency-auditor` | Full dependency health check |
+| `@ci-debugger` | CI pipeline is failing and logs are unclear |
+| `@doc-updater` | Docs are out of sync with code changes |
+| `@refactor-cleaner` | Find and remove dead code across the project |
+| `@data-scientist` | Data analysis patterns, ML pipeline design |
+| `@api-designer` | REST/GraphQL API design, schema validation |
+
+---
+
+### Multi-Agent Orchestration
+
+**Scenario**: Before a major release, you want a comprehensive quality check — review, security, tests, accessibility, performance — all at once.
+
+```
+/orchestrate
+```
+
+Coordinates multiple agents in parallel:
+- `@code-reviewer` reviews all changed files
+- `@security-reviewer` audits auth flows and API routes
+- `@e2e-runner` analyzes test coverage gaps
+- `@performance-profiler` checks Core Web Vitals
+
+Results are aggregated into a single report. One command triggers the work of 4 specialists.
+
+---
+
+## Automated Hooks (Zero-Effort Quality)
+
+These run automatically — no commands needed. You just code normally and the hooks catch issues in real-time.
+
+### Auto-Format on Save
+
+Every time the AI edits a file, Prettier (or Biome) auto-formats it. You never see inconsistent formatting in AI-generated code.
+
+### TypeScript Error Catch
+
+After every file edit, `tsc --noEmit` runs on the changed file. Type errors surface immediately — not 20 minutes later when you run the build.
+
+### Console.log Warning
+
+The AI adds `console.log` for debugging? The hook flags it immediately: "console.log detected — remove before committing." No more debug statements in production.
+
+### Mistakes Auto-Capture
+
+Build fails? Lint fails? The hook auto-logs the error to `docs/mistakes-log.md` with timestamp and error preview. Over time, this builds an organic knowledge base of what goes wrong and how it was fixed.
+
+### Bundle Impact Warning
+
+Added a new package to `package.json`? The hook detects it instantly: "New dependency detected: lodash. Check bundle impact before committing." Catches heavy dependencies at the moment they're added.
+
+### Pre-Commit Review (Strict Profile)
+
+Before every `git commit`, the hook scans staged files for `any` types, `console.log` statements, and TODOs without ticket references. Catches the top 3 code review comments automatically.
+
+### Session Context (All Profiles)
+
+Every new session starts with your tech stack echoed — framework, CMS, styling, package manager, available scripts, last scan date. The AI has full project awareness from the first prompt.
+
+### Context Recovery After Compaction
+
+Long sessions get compacted by Claude Code. The PostCompact hook re-echoes your tech stack so the AI doesn't lose project awareness mid-conversation.

@@ -3,6 +3,7 @@ export default {
   'why-ai-kit': 'Why AI Kit',
   'ai-self-improvement': 'AI That Improves Itself',
   'getting-started': 'Getting Started',
+  'use-cases': 'Use Cases',
   'cli-reference': 'CLI Reference',
   migrate: 'Migrate Existing Projects',
   'backup-and-rollback': 'Backup & Rollback',
