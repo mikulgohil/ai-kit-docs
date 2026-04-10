@@ -197,7 +197,7 @@ Two skills added in v1.7.0:
 
 ### What are agents?
 
-Agents are specialized AI assistants in `.claude/agents/` that handle delegated tasks. Each has focused expertise, specific tools, and structured workflows. You invoke them with `@agent-name` in Claude Code.
+Agents are specialized AI assistants in `.claude/agents/` that handle delegated tasks. Each has focused expertise, specific tools, and structured workflows. You invoke them with `@kit-agent-name` in Claude Code.
 
 ### How many agents does AI Kit generate?
 
@@ -209,22 +209,22 @@ Up to 16 agents. 14 are universal (generated for every project) and 2 are condit
 
 | Agent | Purpose |
 |---|---|
-| `planner` | Break features into implementation plans |
-| `code-reviewer` | Deep code review for quality and patterns |
-| `security-reviewer` | OWASP Top 10, XSS, CSRF, secrets detection |
-| `build-resolver` | Diagnose and fix build/type errors |
-| `doc-updater` | Keep documentation in sync with code |
-| `refactor-cleaner` | Find and remove dead code |
-| `architect` | System design — SSR/SSG/ISR, component hierarchy |
-| `tdd-guide` | Test-driven development guidance |
-| `ci-debugger` | CI/CD failure analysis and resolution |
-| `data-scientist` | ML pipelines, model evaluation, data analysis |
-| `performance-profiler` | Core Web Vitals, bundle analysis, profiling |
-| `migration-specialist` | Framework upgrades, breaking changes, codemods |
-| `dependency-auditor` | Vulnerability scanning, license compliance |
-| `api-designer` | REST/GraphQL API design, schema validation |
-| `e2e-runner` | Playwright tests (conditional) |
-| `sitecore-specialist` | Sitecore XM Cloud patterns (conditional) |
+| `kit-planner` | Break features into implementation plans |
+| `kit-code-reviewer` | Deep code review for quality and patterns |
+| `kit-security-reviewer` | OWASP Top 10, XSS, CSRF, secrets detection |
+| `kit-build-resolver` | Diagnose and fix build/type errors |
+| `kit-doc-updater` | Keep documentation in sync with code |
+| `kit-refactor-cleaner` | Find and remove dead code |
+| `kit-architect` | System design — SSR/SSG/ISR, component hierarchy |
+| `kit-tdd-guide` | Test-driven development guidance |
+| `kit-ci-debugger` | CI/CD failure analysis and resolution |
+| `kit-data-scientist` | ML pipelines, model evaluation, data analysis |
+| `kit-performance-profiler` | Core Web Vitals, bundle analysis, profiling |
+| `kit-migration-specialist` | Framework upgrades, breaking changes, codemods |
+| `kit-dependency-auditor` | Vulnerability scanning, license compliance |
+| `kit-api-designer` | REST/GraphQL API design, schema validation |
+| `kit-e2e-runner` | Playwright tests (conditional) |
+| `kit-sitecore-specialist` | Sitecore XM Cloud patterns (conditional) |
 
 ### Can I create custom agents?
 
@@ -232,14 +232,14 @@ Yes. Add a new `.md` file to `.claude/agents/` with the same frontmatter format 
 
 ### Do agents work in Cursor?
 
-Agents are a Claude Code feature (the `@agent-name` delegation pattern). Cursor doesn't support agent delegation in the same way, but the agent markdown files can still be referenced as context.
+Agents are a Claude Code feature (the `@kit-agent-name` delegation pattern). Cursor doesn't support agent delegation in the same way, but the agent markdown files can still be referenced as context.
 
 ### When should I use agents vs skills?
 
 - **Skills** are for structured workflows you want the AI to follow (review, scaffold, audit)
 - **Agents** are for delegation — you hand off a task to a specialist and it works autonomously
 
-Example: Use the `/review` skill to review code yourself with AI guidance. Use `@code-reviewer` to delegate the entire review to the agent.
+Example: Use the `/kit-review` skill to review code yourself with AI guidance. Use `@kit-code-reviewer` to delegate the entire review to the agent.
 
 ---
 

@@ -8,22 +8,22 @@ AI Kit generates up to 16 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
-| **planner** | Break features into implementation plans with file lists, steps, and risks | Read, Glob, Grep, Bash |
-| **code-reviewer** | Deep code review for quality, patterns, security, and accessibility | Read, Glob, Grep |
-| **security-reviewer** | Security-focused audit — XSS, CSRF, injection, OWASP Top 10 | Read, Glob, Grep, Bash |
-| **e2e-runner** | Generate and run Playwright E2E tests with Page Object Model | Read, Write, Edit, Glob, Grep, Bash |
-| **build-resolver** | Diagnose and fix Next.js, TypeScript, and Sitecore build errors | Read, Edit, Glob, Grep, Bash |
-| **doc-updater** | Keep documentation, README, and Storybook stories in sync with code | Read, Write, Edit, Glob, Grep |
-| **refactor-cleaner** | Find unused exports, dead code, and unnecessary complexity | Read, Edit, Glob, Grep, Bash |
-| **tdd-guide** | Test-driven development guidance — red/green/refactor workflow | Read, Write, Edit, Glob, Grep, Bash |
-| **ci-debugger** | CI/CD failure debugger — analyzes pipeline logs and suggests fixes | Read, Glob, Grep, Bash |
-| **sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
-| **architect** | System design — SSR/SSG/ISR strategy, component hierarchy, data flow | Read, Glob, Grep, Bash |
-| **data-scientist** | ML pipelines, model evaluation, data analysis, experiment tracking | Read, Glob, Grep, Bash |
-| **performance-profiler** | Core Web Vitals, bundle analysis, runtime profiling, rendering optimization | Read, Glob, Grep, Bash |
-| **migration-specialist** | Framework upgrades, breaking change detection, codemods, incremental adoption | Read, Glob, Grep, Bash |
-| **dependency-auditor** | Outdated packages, vulnerability scanning, license compliance, bundle impact | Read, Glob, Grep, Bash |
-| **api-designer** | REST/GraphQL API design, schema validation, versioning, error handling | Read, Glob, Grep, Bash |
+| **kit-planner** | Break features into implementation plans with file lists, steps, and risks | Read, Glob, Grep, Bash |
+| **kit-code-reviewer** | Deep code review for quality, patterns, security, and accessibility | Read, Glob, Grep |
+| **kit-security-reviewer** | Security-focused audit — XSS, CSRF, injection, OWASP Top 10 | Read, Glob, Grep, Bash |
+| **kit-e2e-runner** | Generate and run Playwright E2E tests with Page Object Model | Read, Write, Edit, Glob, Grep, Bash |
+| **kit-build-resolver** | Diagnose and fix Next.js, TypeScript, and Sitecore build errors | Read, Edit, Glob, Grep, Bash |
+| **kit-doc-updater** | Keep documentation, README, and Storybook stories in sync with code | Read, Write, Edit, Glob, Grep |
+| **kit-refactor-cleaner** | Find unused exports, dead code, and unnecessary complexity | Read, Edit, Glob, Grep, Bash |
+| **kit-tdd-guide** | Test-driven development guidance — red/green/refactor workflow | Read, Write, Edit, Glob, Grep, Bash |
+| **kit-ci-debugger** | CI/CD failure debugger — analyzes pipeline logs and suggests fixes | Read, Glob, Grep, Bash |
+| **kit-sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
+| **kit-architect** | System design — SSR/SSG/ISR strategy, component hierarchy, data flow | Read, Glob, Grep, Bash |
+| **kit-data-scientist** | ML pipelines, model evaluation, data analysis, experiment tracking | Read, Glob, Grep, Bash |
+| **kit-performance-profiler** | Core Web Vitals, bundle analysis, runtime profiling, rendering optimization | Read, Glob, Grep, Bash |
+| **kit-migration-specialist** | Framework upgrades, breaking change detection, codemods, incremental adoption | Read, Glob, Grep, Bash |
+| **kit-dependency-auditor** | Outdated packages, vulnerability scanning, license compliance, bundle impact | Read, Glob, Grep, Bash |
+| **kit-api-designer** | REST/GraphQL API design, schema validation, versioning, error handling | Read, Glob, Grep, Bash |
 
 ---
 
@@ -32,25 +32,25 @@ AI Kit generates up to 16 agents based on your project's detected stack:
 In Claude Code, agents are automatically available for delegation. You can invoke them directly:
 
 ```
-@planner Plan the implementation for adding dark mode support
-@code-reviewer Review the changes in src/components/Header.tsx
-@security-reviewer Run a security audit on the authentication flow
-@e2e-runner Write E2E tests for the checkout flow
-@build-resolver Fix the TypeScript build errors
-@doc-updater Update docs for the changes I just made
-@refactor-cleaner Find dead code in src/components/
-@tdd-guide Walk me through adding tests for the cart feature using TDD
-@ci-debugger Diagnose the failing GitHub Actions workflow
-@sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
-@architect Design the rendering strategy for the new product pages
-@data-scientist Profile this dataset and recommend a modeling approach
-@performance-profiler Audit the homepage for Core Web Vitals issues
-@migration-specialist Plan the upgrade from Next.js 14 to 15
-@dependency-auditor Run a full dependency audit with license check
-@api-designer Design the REST API for the orders resource
+@kit-planner Plan the implementation for adding dark mode support
+@kit-code-reviewer Review the changes in src/components/Header.tsx
+@kit-security-reviewer Run a security audit on the authentication flow
+@kit-e2e-runner Write E2E tests for the checkout flow
+@kit-build-resolver Fix the TypeScript build errors
+@kit-doc-updater Update docs for the changes I just made
+@kit-refactor-cleaner Find dead code in src/components/
+@kit-tdd-guide Walk me through adding tests for the cart feature using TDD
+@kit-ci-debugger Diagnose the failing GitHub Actions workflow
+@kit-sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
+@kit-architect Design the rendering strategy for the new product pages
+@kit-data-scientist Profile this dataset and recommend a modeling approach
+@kit-performance-profiler Audit the homepage for Core Web Vitals issues
+@kit-migration-specialist Plan the upgrade from Next.js 14 to 15
+@kit-dependency-auditor Run a full dependency audit with license check
+@kit-api-designer Design the REST API for the orders resource
 ```
 
-You can also use the `/orchestrate` skill to coordinate multiple agents on a complex task.
+You can also use the `/kit-orchestrate` skill to coordinate multiple agents on a complex task.
 
 ---
 
@@ -145,7 +145,7 @@ Diagnoses CI/CD pipeline failures and suggests targeted fixes:
 - Provides specific file and line references where relevant
 - Suggests the minimal fix to unblock the pipeline without over-engineering
 
-Invoke with: `@ci-debugger Diagnose the failing workflow — here's the log output: [paste log]`
+Invoke with: `@kit-ci-debugger Diagnose the failing workflow — here's the log output: [paste log]`
 
 ### Sitecore Specialist
 
@@ -225,10 +225,10 @@ Some agents are only generated when their tools are detected in your project:
 
 | Agent | Condition |
 |---|---|
-| **e2e-runner** | Only if `@playwright/test` is in dependencies |
-| **sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
+| **kit-e2e-runner** | Only if `@playwright/test` is in dependencies |
+| **kit-sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
 
-All other agents (planner, code-reviewer, security-reviewer, build-resolver, doc-updater, refactor-cleaner, architect, tdd-guide, ci-debugger, data-scientist, performance-profiler, migration-specialist, dependency-auditor, api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+All other agents (kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-architect, kit-tdd-guide, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 
 ---
 
@@ -238,7 +238,7 @@ Each agent is a markdown file with YAML frontmatter in `.claude/agents/`:
 
 ```markdown
 ---
-name: planner
+name: kit-planner
 description: Implementation planning agent — breaks features into tasks...
 tools: Read, Glob, Grep, Bash
 ---
@@ -256,7 +256,7 @@ Code-modifying agents include `isolation: worktree` in their frontmatter:
 
 ```markdown
 ---
-name: refactor-cleaner
+name: kit-refactor-cleaner
 description: Dead code cleanup and refactoring agent...
 tools: Read, Edit, Glob, Grep, Bash
 isolation: worktree
@@ -272,10 +272,10 @@ Agents with worktree isolation:
 
 | Agent | Initial Action |
 |---|---|
-| `refactor-cleaner` | Scans for dead code and unused exports |
-| `build-resolver` | Runs build command and diagnoses errors |
-| `e2e-runner` | Analyzes test coverage and identifies gaps |
-| `migration-specialist` | Audits dependency versions for upgrades |
+| `kit-refactor-cleaner` | Scans for dead code and unused exports |
+| `kit-build-resolver` | Runs build command and diagnoses errors |
+| `kit-e2e-runner` | Analyzes test coverage and identifies gaps |
+| `kit-migration-specialist` | Audits dependency versions for upgrades |
 
 ---
 

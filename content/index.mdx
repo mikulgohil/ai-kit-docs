@@ -18,19 +18,19 @@ Every team using AI coding assistants hits these problems. AI Kit solves each on
 |---|---------|---------------------|
 | 1 | **AI forgets everything each session** — Every new chat starts from zero. No memory of project rules, patterns, or past decisions. | Generates a persistent `CLAUDE.md` with project rules, conventions, and stack details. The AI knows your project from the first prompt, every time. |
 | 2 | **AI generates wrong framework patterns** — Writes Pages Router code when you use App Router. Uses CSS when you use Tailwind. Creates default exports when your project uses named exports. | Auto-detects your exact stack (framework, router, CMS, styling, TypeScript config) and generates rules specific to your setup. The AI can't use the wrong patterns. |
-| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **48 pre-built skills** so developers don't write prompts from scratch — just run `/review`, `/security-check`, `/new-component`, `/refactor`, etc. |
+| 3 | **Developers write bad prompts** — Vague or incorrect prompts lead to wrong code, wasted time, and rework. Junior developers waste the most time. | Ships **48 pre-built skills** so developers don't write prompts from scratch — just run `/kit-review`, `/kit-security-check`, `/kit-new-component`, `/kit-refactor`, etc. |
 | 4 | **Same mistakes happen repeatedly** — No system to track what went wrong, so the team keeps hitting the same build failures and lint errors. | Generates a **mistakes log** (`docs/mistakes-log.md`) with **auto-capture hook** that logs every build/lint failure automatically. The AI references it to avoid repeating them. |
 | 5 | **Every developer gets different AI behavior** — No consistency in how the team uses AI tools, leading to inconsistent code quality and style. | One `ai-kit init` command generates the same rules for the entire team — everyone's AI follows identical project standards. Commit the generated files to the repo. |
 | 6 | **No quality checks on AI-generated code** — AI output goes straight to PR without type checking, linting, or security review. | Automated **hooks** run formatting, type-checking, linting, and git safety checks in real-time as the AI writes code. **Quality gate** runs everything before merge. |
 | 7 | **AI generates insecure code** — No guardrails for secrets exposure, XSS, SQL injection, or other vulnerabilities. AI doesn't scan its own output. | Built-in **security audit** scans for exposed secrets, OWASP risks, and misconfigurations. **Security review agent** catches issues at development time, not production. |
-| 8 | **AI can't handle multi-file reasoning** — Changes to one component break related files. AI loses context across linked models and shared types. | **16 specialized agents** with focused expertise — planner, code-reviewer, build-resolver, doc-updater, refactor-cleaner, ci-debugger, data-scientist, performance-profiler, migration-specialist, dependency-auditor, api-designer — each maintains context for their domain. |
+| 8 | **AI can't handle multi-file reasoning** — Changes to one component break related files. AI loses context across linked models and shared types. | **16 specialized agents** with focused expertise — kit-planner, kit-code-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer — each maintains context for their domain. |
 | 9 | **No decision trail** — Nobody remembers why a technical decision was made 3 months ago. Knowledge walks out the door when developers leave. | Auto-scaffolds a **decisions log** (`docs/decisions-log.md`) to capture what was decided, why, and by whom — fully searchable and traceable. |
 | 10 | **Onboarding takes too long** — New developers spend days understanding the project and its AI setup before they can contribute. | AI Kit generates developer guides and project-aware configurations — new team members get productive AI assistance from day one with zero manual setup. |
 | 11 | **Context gets repeated every conversation** — You explain the same conventions in every session: import order, naming, component structure, testing patterns. | All conventions are encoded in the generated rules file. The AI reads them automatically at session start. You explain once, it remembers forever. |
 | 12 | **AI doesn't improve over time** — The AI makes the same wrong suggestions regardless of past feedback, team patterns, or previous failures. | The system **learns as you use it** — mistakes log, decisions log, and updated rules mean the AI gets smarter with every session. Mistakes auto-capture builds the log organically. |
-| 13 | **Complex tasks need multiple manual AI passes** — Developers manually coordinate review + test + docs updates across separate conversations. | **Multi-agent orchestration** runs multiple specialized agents in parallel — review, test, document, and refactor in one command with `/orchestrate`. |
+| 13 | **Complex tasks need multiple manual AI passes** — Developers manually coordinate review + test + docs updates across separate conversations. | **Multi-agent orchestration** runs multiple specialized agents in parallel — review, test, document, and refactor in one command with `/kit-orchestrate`. |
 | 14 | **Switching AI tools means starting over** — Moving from Cursor to Claude Code (or vice versa) loses all configuration and project context. | Generates configs for **5+ AI tools** (Claude Code, Cursor, Windsurf, Aider, Cline) from a single source — switch tools without losing project knowledge. |
-| 15 | **AI creates components without tests, docs, or types** — Every AI-generated file needs manual follow-up to add what was missed. | Skills like `/new-component` enforce a structured workflow: asks 10 questions, reads existing patterns, generates component + types + tests + docs together. |
+| 15 | **AI creates components without tests, docs, or types** — Every AI-generated file needs manual follow-up to add what was missed. | Skills like `/kit-new-component` enforce a structured workflow: asks 10 questions, reads existing patterns, generates component + types + tests + docs together. |
 | 16 | **No visibility into AI usage costs** — Management has no idea how many tokens the team is consuming or which projects cost the most. | Built-in **token tracking** provides daily/weekly/monthly usage summaries, per-project cost breakdown, budget alerts, and ROI estimates. |
 | 17 | **Cursor copies entire modules instead of targeted edits** — AI bloats the repo with unnecessary file duplication, especially in CMS and monorepo setups. | Generated rules include explicit instructions for editing patterns — update in place, respect package boundaries, follow existing structure. |
 | 18 | **No component-level AI awareness** — AI doesn't know which components have tests, stories, Sitecore integration, or documentation gaps. | **Component scanner** discovers all React components and generates `.ai.md` docs with health scores, props tables, Sitecore field mappings, and dependency trees. |
@@ -64,7 +64,7 @@ Rules are generated for **both** Claude Code (`CLAUDE.md`) and Cursor (`.cursorr
 
 Skills are structured AI workflows that get applied automatically. You don't type a command — the AI recognizes what you're doing and loads the right skill.
 
-**Example:** You say "create a ProductCard component." The AI auto-loads the `new-component` skill, which:
+**Example:** You say "create a ProductCard component." The AI auto-loads the `kit-new-component` skill, which:
 - Asks 10 structured questions (props, Server/Client, data fetching, responsive needs...)
 - Reads an existing component to match your project's patterns
 - Generates: component + types + tests + docs (if complex)
@@ -74,14 +74,14 @@ Skills are structured AI workflows that get applied automatically. You don't typ
 
 | Category | Skills | What They Do |
 |---|---|---|
-| **Getting Started** | `prompt-help`, `understand` | Help you write effective prompts, explain unfamiliar code |
-| **Building** | `new-component`, `new-page`, `api-route`, `error-boundary`, `extract-hook`, `figma-to-code`, `design-tokens`, `schema-gen`, `storybook-gen`, `scaffold-spec` | Scaffold production-ready code that matches your patterns |
-| **Quality** | `review`, `pre-pr`, `test`, `accessibility-audit`, `security-check`, `responsive-check`, `type-fix`, `perf-audit`, `bundle-check`, `i18n-check`, `test-gaps` | Catch issues before code review — a11y, security, types, responsive, perf |
-| **Maintenance** | `fix-bug`, `refactor`, `optimize`, `migrate`, `dep-check`, `sitecore-debug`, `upgrade` | Debug, refactor, upgrade, and audit with structured workflows |
-| **Workflow** | `document`, `commit-msg`, `env-setup`, `changelog`, `release`, `pr-description`, `standup`, `learn-from-pr`, `release-notes` | Automate docs, git messages, releases, and PR workflows |
-| **Session** | `save-session`, `resume-session`, `checkpoint` | Persist context across sessions and track quality |
-| **Orchestration** | `orchestrate`, `quality-gate`, `harness-audit` | Coordinate agents, run comprehensive checks, audit AI config |
-| **Requirements** | `deep-interview`, `clarify-requirements` | Gather requirements through structured interviews before coding |
+| **Getting Started** | `kit-prompt-help`, `kit-understand` | Help you write effective prompts, explain unfamiliar code |
+| **Building** | `kit-new-component`, `kit-new-page`, `kit-api-route`, `kit-error-boundary`, `kit-extract-hook`, `kit-figma-to-code`, `kit-design-tokens`, `kit-schema-gen`, `kit-storybook-gen`, `kit-scaffold-spec` | Scaffold production-ready code that matches your patterns |
+| **Quality** | `kit-review`, `kit-pre-pr`, `kit-test`, `kit-accessibility-audit`, `kit-security-check`, `kit-responsive-check`, `kit-type-fix`, `kit-perf-audit`, `kit-bundle-check`, `kit-i18n-check`, `kit-test-gaps` | Catch issues before code review — a11y, security, types, responsive, perf |
+| **Maintenance** | `kit-fix-bug`, `kit-refactor`, `kit-optimize`, `kit-migrate`, `kit-dep-check`, `kit-sitecore-debug`, `kit-upgrade` | Debug, refactor, upgrade, and audit with structured workflows |
+| **Workflow** | `kit-document`, `kit-commit-msg`, `kit-env-setup`, `kit-changelog`, `kit-release`, `kit-pr-description`, `kit-standup`, `kit-learn-from-pr`, `kit-release-notes` | Automate docs, git messages, releases, and PR workflows |
+| **Session** | `kit-save-session`, `kit-resume-session`, `kit-checkpoint` | Persist context across sessions and track quality |
+| **Orchestration** | `kit-orchestrate`, `kit-quality-gate`, `kit-harness-audit` | Coordinate agents, run comprehensive checks, audit AI config |
+| **Requirements** | `kit-deep-interview`, `kit-clarify-requirements` | Gather requirements through structured interviews before coding |
 
 Skills work in **both Claude Code and Cursor** — same 48 workflows, both tools.
 
@@ -91,7 +91,7 @@ New in v1.2.0 — three systems that make the AI work more like a real teammate:
 
 **[Hooks](/docs/hooks)** — Automated quality checks that run as you code. **Session context** echoes your tech stack at every session start so the AI has full awareness from the first prompt. Auto-format on save, TypeScript checks after edits, console.log warnings, git push safety, and **mistakes auto-capture** that logs build/lint failures to `docs/mistakes-log.md`. Three profiles: minimal, standard, strict.
 
-**[Agents](/docs/agents)** — 16 specialized AI assistants for delegation. Need a security audit? Delegate to `@security-reviewer`. Build failing? Send it to `@build-resolver`. CI pipeline red? Use `@ci-debugger`. Each agent has focused expertise and tools.
+**[Agents](/docs/agents)** — 16 specialized AI assistants for delegation. Need a security audit? Delegate to `@kit-security-reviewer`. Build failing? Send it to `@kit-build-resolver`. CI pipeline red? Use `@kit-ci-debugger`. Each agent has focused expertise and tools.
 
 **[Context Modes](/docs/context-modes)** — Switch between dev (build fast), review (check quality), and research (understand code) modes to change how the AI approaches your work.
 
@@ -118,7 +118,7 @@ One clarification question prevents 10 minutes of wrong output.
 | Flags `// TODO` without ticket numbers | Untracked TODOs never get done |
 
 **Structured Output** — Every skill produces output in the same format, every time:
-- Role-specific expertise (security engineer for `/security-check`, a11y engineer for `/accessibility-audit`)
+- Role-specific expertise (security engineer for `/kit-security-check`, a11y engineer for `/kit-accessibility-audit`)
 - Mandatory numbered steps the AI cannot skip
 - Consistent output tables with file paths and line numbers
 - Self-check before responding ("Did I cover every section?")
@@ -163,7 +163,7 @@ Your team adds custom rules above or below the generated content. When the stack
 |---|---|
 | AI already knows your project | 0 min — context auto-loaded |
 | AI generates code matching your exact patterns | Ready for review, no fixing |
-| `/pre-pr` catches issues before review | 1-2 review cycles per PR |
+| `/kit-pre-pr` catches issues before review | 1-2 review cycles per PR |
 | New developer runs `ai-kit init`, AI knows everything | 2-3 days to productivity |
 | AI auto-adds regression test with every bug fix | Bug can't return |
 | AI auto-creates docs for complex components | Documentation stays current |
@@ -236,7 +236,7 @@ AI Kit is free and open source. It works with every pricing tier of every suppor
 ### Recommendations by Budget
 
 **On the $20/mo plan (Claude Pro or Cursor Pro)?**
-This is AI Kit's sweet spot. You have enough tokens to be productive but not enough to waste. AI Kit eliminates the #1 token sink — re-explaining your project every session. Use the `/token-tips` skill and enable the standard hook profile to maximize every interaction.
+This is AI Kit's sweet spot. You have enough tokens to be productive but not enough to waste. AI Kit eliminates the #1 token sink — re-explaining your project every session. Use the `/kit-token-tips` skill and enable the standard hook profile to maximize every interaction.
 
 **On a free plan or BYOK (Aider, Cline)?**
 AI Kit is even more important here. With API costs per token, every wasted request is money lost. The generated rules, skills, and context modes ensure your AI gets it right the first time instead of needing 3 rounds of correction.

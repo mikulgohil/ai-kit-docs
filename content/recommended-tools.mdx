@@ -86,9 +86,9 @@ After restarting Claude Code, ask: "Can you open my localhost:3000 and take a sc
 | Command | How Playwright MCP helps |
 |---|---|
 | `/test` | AI can generate E2E tests and immediately run them to verify they pass |
-| `/responsive-check` | AI takes actual screenshots at each breakpoint instead of only reading code |
-| `/accessibility-audit` | AI can inspect rendered output — not just source — for accessibility issues |
-| `/fix-bug` | AI can reproduce UI bugs in a real browser to confirm the fix works |
+| `/kit-responsive-check` | AI takes actual screenshots at each breakpoint instead of only reading code |
+| `/kit-accessibility-audit` | AI can inspect rendered output — not just source — for accessibility issues |
+| `/kit-fix-bug` | AI can reproduce UI bugs in a real browser to confirm the fix works |
 
 ---
 
@@ -102,10 +102,10 @@ This matters because design-to-code translation is where a lot of precision is l
 
 **What it enables:**
 
-- `/figma-to-code` receives exact spacing, color, typography, and component data from the Figma file — not your approximation of it
+- `/kit-figma-to-code` receives exact spacing, color, typography, and component data from the Figma file — not your approximation of it
 - The AI can check whether a Figma design uses tokens that already exist in your Tailwind config
 - The AI can identify gaps between what Figma defines and what your design token system covers
-- Design handoff becomes a single step: share the Figma link, run `/figma-to-code`
+- Design handoff becomes a single step: share the Figma link, run `/kit-figma-to-code`
 
 **Setup:**
 
@@ -159,10 +159,10 @@ Copy a Figma frame URL (it looks like `https://figma.com/file/abc123/...?node-id
 
 | Command | How Figma MCP helps |
 |---|---|
-| `/figma-to-code` | Reads exact design values instead of relying on your description |
-| `/design-tokens` | Compares Figma token names directly against your Tailwind config |
-| `/responsive-check` | Can read Figma frame dimensions to verify implementation matches spec |
-| `/new-component` | Component scaffolding can be seeded with real design values |
+| `/kit-figma-to-code` | Reads exact design values instead of relying on your description |
+| `/kit-design-tokens` | Compares Figma token names directly against your Tailwind config |
+| `/kit-responsive-check` | Can read Figma frame dimensions to verify implementation matches spec |
+| `/kit-new-component` | Component scaffolding can be seeded with real design values |
 
 ---
 
@@ -208,11 +208,11 @@ Ask the AI: "Using Context7, what is the current API for generateMetadata in Nex
 
 | Command | How Context7 MCP helps |
 |---|---|
-| `/migrate` | Fetches real migration guides and breaking changes for the target library version |
-| `/new-component` | Generates code against current API docs, not potentially outdated training data |
-| `/api-route` | Uses current Next.js route handler API patterns |
-| `/type-fix` | Can look up current type definitions when TypeScript errors relate to library types |
-| `/dep-check` | Can fetch current changelog data when evaluating upgrade impact |
+| `/kit-migrate` | Fetches real migration guides and breaking changes for the target library version |
+| `/kit-new-component` | Generates code against current API docs, not potentially outdated training data |
+| `/kit-api-route` | Uses current Next.js route handler API patterns |
+| `/kit-type-fix` | Can look up current type definitions when TypeScript errors relate to library types |
+| `/kit-dep-check` | Can fetch current changelog data when evaluating upgrade impact |
 
 Context7 MCP benefits every skill that generates code. It is one of the highest-value MCPs in this list.
 
@@ -224,7 +224,7 @@ Context7 MCP benefits every skill that generates code. It is one of the highest-
 
 GitHub MCP gives the AI direct access to the GitHub API — authenticated as you. It can read repository data, create and update pull requests, manage issues, read PR diffs, and more.
 
-Without GitHub MCP, `/pre-pr` runs its checklist and tells you what to do. With GitHub MCP, it can also create the PR for you, pre-filled with a structured description based on what it found. Without GitHub MCP, `/review` can only review the code you paste or the files you point it at. With GitHub MCP, it can read the actual diff of an open PR.
+Without GitHub MCP, `/kit-pre-pr` runs its checklist and tells you what to do. With GitHub MCP, it can also create the PR for you, pre-filled with a structured description based on what it found. Without GitHub MCP, `/kit-review` can only review the code you paste or the files you point it at. With GitHub MCP, it can read the actual diff of an open PR.
 
 **What it enables:**
 
@@ -276,10 +276,10 @@ Ask the AI: "What are the open pull requests on this repository?" If GitHub MCP 
 
 | Command | How GitHub MCP helps |
 |---|---|
-| `/pre-pr` | Can automatically create the PR after the checklist passes |
-| `/review` | Can read the actual diff of an open PR directly from GitHub |
-| `/commit-msg` | Can read recent commit history and open issues for better context |
-| `/fix-bug` | Can read the issue description and related comments for bug context |
+| `/kit-pre-pr` | Can automatically create the PR after the checklist passes |
+| `/kit-review` | Can read the actual diff of an open PR directly from GitHub |
+| `/kit-commit-msg` | Can read recent commit history and open issues for better context |
+| `/kit-fix-bug` | Can read the issue description and related comments for bug context |
 
 ---
 
@@ -293,9 +293,9 @@ This is different from Context7 MCP (which fetches structured library docs) — 
 
 **What it enables:**
 
-- `/migrate` can search for real migration experiences, gotchas, and community-reported issues
-- `/fix-bug` can search for known bugs related to the error message you are seeing
-- `/dep-check` can check for recent security advisories and community-reported vulnerabilities
+- `/kit-migrate` can search for real migration experiences, gotchas, and community-reported issues
+- `/kit-fix-bug` can search for known bugs related to the error message you are seeing
+- `/kit-dep-check` can check for recent security advisories and community-reported vulnerabilities
 - The AI can find the latest release notes for any package when evaluating an upgrade
 
 **Setup:**
@@ -349,10 +349,10 @@ Ask the AI: "Using Perplexity, search for recent breaking changes in Next.js 15.
 
 | Command | How Perplexity MCP helps |
 |---|---|
-| `/migrate` | Searches for community migration reports, not just official docs |
-| `/fix-bug` | Searches for known issues matching the specific error message |
-| `/dep-check` | Searches for recent CVEs, advisories, and compatibility reports |
-| `/security-check` | Can research recent attack vectors and known vulnerability patterns |
+| `/kit-migrate` | Searches for community migration reports, not just official docs |
+| `/kit-fix-bug` | Searches for known issues matching the specific error message |
+| `/kit-dep-check` | Searches for recent CVEs, advisories, and compatibility reports |
+| `/kit-security-check` | Can research recent attack vectors and known vulnerability patterns |
 
 ---
 
@@ -554,11 +554,11 @@ test('checkout form should be accessible', async ({ page }) => {
 })
 ```
 
-**How it pairs with `/accessibility-audit`:**
+**How it pairs with `/kit-accessibility-audit`:**
 
-`/accessibility-audit` is a code-level analysis — it reads your component source and identifies potential accessibility issues. axe-core complements this by scanning the rendered output in a real browser. The two tools catch different things. Code analysis finds missing ARIA attributes in JSX. axe-core finds issues that only appear after rendering — like a button that becomes inaccessible due to a CSS `pointer-events: none` applied by a parent.
+`/kit-accessibility-audit` is a code-level analysis — it reads your component source and identifies potential accessibility issues. axe-core complements this by scanning the rendered output in a real browser. The two tools catch different things. Code analysis finds missing ARIA attributes in JSX. axe-core finds issues that only appear after rendering — like a button that becomes inaccessible due to a CSS `pointer-events: none` applied by a parent.
 
-Run `/accessibility-audit` on a component, implement the fixes, then verify with an axe-core Playwright test. This gives you both a documented analysis and a programmatic assertion that can run in CI.
+Run `/kit-accessibility-audit` on a component, implement the fixes, then verify with an axe-core Playwright test. This gives you both a documented analysis and a programmatic assertion that can run in CI.
 
 ---
 
@@ -640,9 +640,9 @@ export const Disabled: Story = {
 }
 ```
 
-**How it pairs with `/new-component`:**
+**How it pairs with `/kit-new-component`:**
 
-When you run `/new-component`, the AI asks whether to generate a Storybook story. If you answer yes, it generates a `.stories.tsx` file alongside the component with stories for the primary use cases, loading state, error state, and edge cases — so you can review the component visually before wiring it into a page.
+When you run `/kit-new-component`, the AI asks whether to generate a Storybook story. If you answer yes, it generates a `.stories.tsx` file alongside the component with stories for the primary use cases, loading state, error state, and edge cases — so you can review the component visually before wiring it into a page.
 
 ---
 
@@ -860,9 +860,9 @@ Create `knip.json` if you need to adjust what Knip analyzes:
 }
 ```
 
-**How it pairs with `/dep-check`:**
+**How it pairs with `/kit-dep-check`:**
 
-`/dep-check` audits your dependencies for outdated versions, vulnerabilities, and sizing issues. Knip tells it exactly which packages are actually unused — so when `/dep-check` recommends removing a package, it is backed by real data showing the package is not imported anywhere. Run Knip before running `/dep-check` for the most accurate analysis.
+`/kit-dep-check` audits your dependencies for outdated versions, vulnerabilities, and sizing issues. Knip tells it exactly which packages are actually unused — so when `/kit-dep-check` recommends removing a package, it is backed by real data showing the package is not imported anywhere. Run Knip before running `/kit-dep-check` for the most accurate analysis.
 
 ---
 
@@ -914,9 +914,9 @@ snyk monitor
 snyk fix
 ```
 
-**How it pairs with `/security-check`:**
+**How it pairs with `/kit-security-check`:**
 
-`/security-check` analyzes your code for security vulnerabilities: XSS vectors, unvalidated inputs, exposed secrets, missing auth guards. Snyk complements this by checking your dependency tree for known CVEs. The two operate at different layers. Run `/security-check` on your code, run `snyk test` on your dependencies. Both pass before a release.
+`/kit-security-check` analyzes your code for security vulnerabilities: XSS vectors, unvalidated inputs, exposed secrets, missing auth guards. Snyk complements this by checking your dependency tree for known CVEs. The two operate at different layers. Run `/kit-security-check` on your code, run `snyk test` on your dependencies. Both pass before a release.
 
 ---
 
@@ -981,9 +981,9 @@ npx lhci autorun
 }
 ```
 
-**How it pairs with `/optimize`:**
+**How it pairs with `/kit-optimize`:**
 
-`/optimize` analyzes your code and recommends performance improvements: add `useMemo` here, move this to a Server Component, lazy load this module. Lighthouse CI measures the actual result. Run `/optimize` to get the recommendations, implement them, run `npm run lighthouse` to verify that Core Web Vitals scores improved. The audit loop closes.
+`/kit-optimize` analyzes your code and recommends performance improvements: add `useMemo` here, move this to a Server Component, lazy load this module. Lighthouse CI measures the actual result. Run `/kit-optimize` to get the recommendations, implement them, run `npm run lighthouse` to verify that Core Web Vitals scores improved. The audit loop closes.
 
 ---
 
@@ -1043,9 +1043,9 @@ This runs a full production build and opens two browser windows showing the bund
 - A module that appears in many chunks — a good candidate for extraction into a shared chunk
 - A large utility library (like `lodash` or `moment`) when you only use one function — consider tree-shaking or a lighter alternative
 
-**How it pairs with `/dep-check`:**
+**How it pairs with `/kit-dep-check`:**
 
-`/dep-check` identifies packages that could be removed or replaced. Bundle analyzer shows you the weight cost of each package — so when `/dep-check` flags a large dependency, you can see exactly how much bundle weight removing it would save. Run `/dep-check` first for the list, then run `npm run analyze` to quantify the impact.
+`/kit-dep-check` identifies packages that could be removed or replaced. Bundle analyzer shows you the weight cost of each package — so when `/kit-dep-check` flags a large dependency, you can see exactly how much bundle weight removing it would save. Run `/kit-dep-check` first for the list, then run `npm run analyze` to quantify the impact.
 
 ---
 
@@ -1203,31 +1203,31 @@ This table maps every AI Kit skill to the tools that meaningfully enhance it. "C
 
 | AI Kit Skill | Playwright MCP | Figma MCP | Context7 MCP | GitHub MCP | Perplexity MCP | Playwright Tests | axe-core | Storybook | ESLint | Prettier | Knip | Snyk | Lighthouse CI | Bundle Analyzer |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `/prompt-help` | | | | | | | | | | | | | | |
+| `/kit-prompt-help` | | | | | | | | | | | | | | |
 | `/understand` | | | Context7 | GitHub | Perplexity | | | | | | | | | |
-| `/new-component` | | Figma | Context7 | | | | | Storybook | ESLint | Prettier | | | | |
+| `/kit-new-component` | | Figma | Context7 | | | | | Storybook | ESLint | Prettier | | | | |
 | `/new-page` | | | Context7 | | | | | | ESLint | Prettier | | | | |
-| `/api-route` | | | Context7 | | | | | | ESLint | Prettier | | Snyk | | |
+| `/kit-api-route` | | | Context7 | | | | | | ESLint | Prettier | | Snyk | | |
 | `/error-boundary` | | | Context7 | | | | | | ESLint | Prettier | | | | |
-| `/extract-hook` | | | Context7 | | | Playwright | | | ESLint | Prettier | | | | |
-| `/figma-to-code` | | Figma | | | | | | | ESLint | Prettier | | | | |
-| `/design-tokens` | | Figma | Context7 | | | | | | | | | | | |
-| `/review` | | | Context7 | GitHub | | | | | ESLint | Prettier | | | | |
-| `/pre-pr` | | | | GitHub | | | | | ESLint | Prettier | Knip | Snyk | | |
+| `/kit-extract-hook` | | | Context7 | | | Playwright | | | ESLint | Prettier | | | | |
+| `/kit-figma-to-code` | | Figma | | | | | | | ESLint | Prettier | | | | |
+| `/kit-design-tokens` | | Figma | Context7 | | | | | | | | | | | |
+| `/kit-review` | | | Context7 | GitHub | | | | | ESLint | Prettier | | | | |
+| `/kit-pre-pr` | | | | GitHub | | | | | ESLint | Prettier | Knip | Snyk | | |
 | `/test` | Playwright | | Context7 | | | Playwright | axe-core | Storybook | | | | | | |
-| `/accessibility-audit` | Playwright | | | | | | axe-core | | ESLint | | | | Lighthouse CI | |
-| `/security-check` | | | | | Perplexity | | | | ESLint | | | Snyk | | |
-| `/responsive-check` | Playwright | Figma | | | | Playwright | | | | | | | | |
-| `/type-fix` | | | Context7 | | | | | | ESLint | | | | | |
-| `/fix-bug` | Playwright | | Context7 | GitHub | Perplexity | Playwright | | | | | | | | |
-| `/refactor` | | | Context7 | | | | | | ESLint | Prettier | Knip | | | |
-| `/optimize` | | | Context7 | | Perplexity | | | | | | Knip | | Lighthouse CI | Bundle Analyzer |
-| `/migrate` | | | Context7 | | Perplexity | | | | ESLint | Prettier | | | | |
-| `/dep-check` | | | Context7 | | Perplexity | | | | | | Knip | Snyk | | Bundle Analyzer |
-| `/sitecore-debug` | Playwright | | Context7 | | Perplexity | | | | | | | | | |
-| `/document` | | | | GitHub | | | | Storybook | | | | | | |
-| `/commit-msg` | | | | GitHub | | | | | | | | | | |
-| `/env-setup` | | | | GitHub | | | | | | | | | | |
+| `/kit-accessibility-audit` | Playwright | | | | | | axe-core | | ESLint | | | | Lighthouse CI | |
+| `/kit-security-check` | | | | | Perplexity | | | | ESLint | | | Snyk | | |
+| `/kit-responsive-check` | Playwright | Figma | | | | Playwright | | | | | | | | |
+| `/kit-type-fix` | | | Context7 | | | | | | ESLint | | | | | |
+| `/kit-fix-bug` | Playwright | | Context7 | GitHub | Perplexity | Playwright | | | | | | | | |
+| `/kit-refactor` | | | Context7 | | | | | | ESLint | Prettier | Knip | | | |
+| `/kit-optimize` | | | Context7 | | Perplexity | | | | | | Knip | | Lighthouse CI | Bundle Analyzer |
+| `/kit-migrate` | | | Context7 | | Perplexity | | | | ESLint | Prettier | | | | |
+| `/kit-dep-check` | | | Context7 | | Perplexity | | | | | | Knip | Snyk | | Bundle Analyzer |
+| `/kit-sitecore-debug` | Playwright | | Context7 | | Perplexity | | | | | | | | | |
+| `/kit-document` | | | | GitHub | | | | Storybook | | | | | | |
+| `/kit-commit-msg` | | | | GitHub | | | | | | | | | | |
+| `/kit-env-setup` | | | | GitHub | | | | | | | | | | |
 
 **Reading this table:**
 

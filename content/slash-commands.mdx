@@ -15,7 +15,7 @@ AI Kit generates 48 skills across two formats — **skills** for auto-discovery,
 
 Skills are the same structured workflow prompts as commands, but packaged in a way that lets the AI **auto-discover and apply them without you typing a slash command**. Each skill file contains a description the AI reads to understand what the skill covers and when to use it.
 
-When you ask the AI to "review my PR changes" or "scaffold a new component", it reads the skill descriptions, identifies the right one, and applies it — even if you've never heard of `/review` or `/new-component`.
+When you ask the AI to "review my PR changes" or "scaffold a new component", it reads the skill descriptions, identifies the right one, and applies it — even if you've never heard of `/kit-review` or `/kit-new-component`.
 
 ### Auto-Discovery
 
@@ -28,7 +28,7 @@ This means:
 
 ### Legacy Commands Still Work
 
-If you already use slash commands like `/review` or `/pre-pr`, they continue to work in Claude Code exactly as before. AI Kit generates both formats in every project — skills for auto-discovery and cross-platform support, commands for existing workflows.
+If you already use slash commands like `/kit-review` or `/kit-pre-pr`, they continue to work in Claude Code exactly as before. AI Kit generates both formats in every project — skills for auto-discovery and cross-platform support, commands for existing workflows.
 
 ---
 
@@ -36,54 +36,54 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 
 | Command | Category | What it does |
 |---|---|---|
-| `/prompt-help` | Getting Started | Interactive prompt builder for better AI requests |
-| `/understand` | Getting Started | Explains code, architecture, and data flow |
-| `/new-component` | Building | Scaffolds a component with types, tests, and docs |
-| `/new-page` | Building | Scaffolds a new route with all required files |
-| `/api-route` | Building | Creates a typed API route handler with validation |
-| `/error-boundary` | Building | Adds a React error boundary to a component tree |
-| `/extract-hook` | Building | Pulls logic out of a component into a custom hook |
-| `/figma-to-code` | Building | Implements a Figma design using project tokens |
-| `/design-tokens` | Building | Audits and manages your design token system |
-| `/schema-gen` | Building | Generates TypeScript types and Zod schemas from data |
-| `/storybook-gen` | Building | Generates Storybook stories with controls and play functions |
-| `/scaffold-spec` | Building | Generate a feature specification document before writing code |
-| `/review` | Quality & Review | Deep code review following project standards |
-| `/pre-pr` | Quality & Review | Full pre-PR checklist before you open a pull request |
-| `/test` | Quality & Review | Generates unit and integration tests for any file |
-| `/accessibility-audit` | Quality & Review | Audits a component for WCAG accessibility issues |
-| `/security-check` | Quality & Review | Scans code for common security vulnerabilities |
-| `/responsive-check` | Quality & Review | Verifies responsive behavior across breakpoints |
-| `/type-fix` | Quality & Review | Resolves TypeScript errors and tightens types |
-| `/perf-audit` | Quality & Review | Lighthouse-style performance audit with Core Web Vitals |
-| `/bundle-check` | Quality & Review | Analyzes bundle size and suggests optimizations |
-| `/i18n-check` | Quality & Review | Finds hardcoded strings and internationalization gaps |
-| `/test-gaps` | Quality & Review | Identifies untested code paths and missing test cases |
-| `/fix-bug` | Maintenance | Guided systematic debugging workflow |
-| `/refactor` | Maintenance | Refactors code while preserving behavior |
-| `/optimize` | Maintenance | Performance analysis and optimization |
-| `/migrate` | Maintenance | Migrates code to a new API, pattern, or version |
-| `/dep-check` | Maintenance | Audits dependencies for issues and updates |
-| `/sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
-| `/upgrade` | Maintenance | Guided major dependency upgrade with breaking change analysis |
-| `/document` | Workflow | Generates JSDoc, README, and component docs |
-| `/commit-msg` | Workflow | Writes a conventional commit message for staged changes |
-| `/env-setup` | Workflow | Sets up local environment variables and configuration |
-| `/changelog` | Workflow | Generates formatted changelogs from git history |
-| `/release` | Workflow | Guided release workflow with versioning and tagging |
-| `/pr-description` | Workflow | Generate a structured PR description from staged changes |
-| `/standup` | Workflow | Summarize yesterday's AI session activity for standup |
-| `/learn-from-pr` | Workflow | Extract lessons and patterns from a merged PR |
-| `/release-notes` | Workflow | Generate user-facing release notes from a git range or tag |
-| `/fetch-docs` | Workflow | Pre-load current docs for your tech stack via Context7 MCP |
-| `/save-session` | Session | Persists current session state and decisions for later |
-| `/resume-session` | Session | Restores context from a previously saved session |
-| `/checkpoint` | Session | Runs all quality checks and records a verification snapshot |
-| `/orchestrate` | Orchestration | Coordinates multiple specialized agents on complex tasks |
-| `/quality-gate` | Orchestration | Comprehensive pass/fail quality checks (types, lint, format, tests, a11y, security) |
-| `/harness-audit` | Orchestration | Audits AI configuration health with A-F grade |
-| `/deep-interview` | Requirements | Socratic requirements gathering — structured interview before coding |
-| `/clarify-requirements` | Requirements | Quick task clarification — identify gaps in under 5 minutes |
+| `/kit-prompt-help` | Getting Started | Interactive prompt builder for better AI requests |
+| `/kit-understand` | Getting Started | Explains code, architecture, and data flow |
+| `/kit-new-component` | Building | Scaffolds a component with types, tests, and docs |
+| `/kit-new-page` | Building | Scaffolds a new route with all required files |
+| `/kit-api-route` | Building | Creates a typed API route handler with validation |
+| `/kit-error-boundary` | Building | Adds a React error boundary to a component tree |
+| `/kit-extract-hook` | Building | Pulls logic out of a component into a custom hook |
+| `/kit-figma-to-code` | Building | Implements a Figma design using project tokens |
+| `/kit-design-tokens` | Building | Audits and manages your design token system |
+| `/kit-schema-gen` | Building | Generates TypeScript types and Zod schemas from data |
+| `/kit-storybook-gen` | Building | Generates Storybook stories with controls and play functions |
+| `/kit-scaffold-spec` | Building | Generate a feature specification document before writing code |
+| `/kit-review` | Quality & Review | Deep code review following project standards |
+| `/kit-pre-pr` | Quality & Review | Full pre-PR checklist before you open a pull request |
+| `/kit-test` | Quality & Review | Generates unit and integration tests for any file |
+| `/kit-accessibility-audit` | Quality & Review | Audits a component for WCAG accessibility issues |
+| `/kit-security-check` | Quality & Review | Scans code for common security vulnerabilities |
+| `/kit-responsive-check` | Quality & Review | Verifies responsive behavior across breakpoints |
+| `/kit-type-fix` | Quality & Review | Resolves TypeScript errors and tightens types |
+| `/kit-perf-audit` | Quality & Review | Lighthouse-style performance audit with Core Web Vitals |
+| `/kit-bundle-check` | Quality & Review | Analyzes bundle size and suggests optimizations |
+| `/kit-i18n-check` | Quality & Review | Finds hardcoded strings and internationalization gaps |
+| `/kit-test-gaps` | Quality & Review | Identifies untested code paths and missing test cases |
+| `/kit-fix-bug` | Maintenance | Guided systematic debugging workflow |
+| `/kit-refactor` | Maintenance | Refactors code while preserving behavior |
+| `/kit-optimize` | Maintenance | Performance analysis and optimization |
+| `/kit-migrate` | Maintenance | Migrates code to a new API, pattern, or version |
+| `/kit-dep-check` | Maintenance | Audits dependencies for issues and updates |
+| `/kit-sitecore-debug` | Maintenance | Debugs Sitecore XM Cloud-specific problems |
+| `/kit-upgrade` | Maintenance | Guided major dependency upgrade with breaking change analysis |
+| `/kit-document` | Workflow | Generates JSDoc, README, and component docs |
+| `/kit-commit-msg` | Workflow | Writes a conventional commit message for staged changes |
+| `/kit-env-setup` | Workflow | Sets up local environment variables and configuration |
+| `/kit-changelog` | Workflow | Generates formatted changelogs from git history |
+| `/kit-release` | Workflow | Guided release workflow with versioning and tagging |
+| `/kit-pr-description` | Workflow | Generate a structured PR description from staged changes |
+| `/kit-standup` | Workflow | Summarize yesterday's AI session activity for standup |
+| `/kit-learn-from-pr` | Workflow | Extract lessons and patterns from a merged PR |
+| `/kit-release-notes` | Workflow | Generate user-facing release notes from a git range or tag |
+| `/kit-fetch-docs` | Workflow | Pre-load current docs for your tech stack via Context7 MCP |
+| `/kit-save-session` | Session | Persists current session state and decisions for later |
+| `/kit-resume-session` | Session | Restores context from a previously saved session |
+| `/kit-checkpoint` | Session | Runs all quality checks and records a verification snapshot |
+| `/kit-orchestrate` | Orchestration | Coordinates multiple specialized agents on complex tasks |
+| `/kit-quality-gate` | Orchestration | Comprehensive pass/fail quality checks (types, lint, format, tests, a11y, security) |
+| `/kit-harness-audit` | Orchestration | Audits AI configuration health with A-F grade |
+| `/kit-deep-interview` | Requirements | Socratic requirements gathering — structured interview before coding |
+| `/kit-clarify-requirements` | Requirements | Quick task clarification — identify gaps in under 5 minutes |
 
 ---
 
@@ -91,13 +91,13 @@ If you already use slash commands like `/review` or `/pre-pr`, they continue to 
 
 These two commands are the best entry points when you're new to the project or unsure how to phrase a request.
 
-### /prompt-help
+### /kit-prompt-help
 
 **The most important command.** If you're not sure how to ask the AI for something, start here. It runs an interactive prompt builder that walks you through what you're trying to do, which files are involved, what constraints exist, and what success looks like — then generates a ready-to-paste prompt for you.
 
 **Usage**
 ```
-/prompt-help
+/kit-prompt-help
 ```
 
 **When to use**: Any time you're stuck on how to phrase a request, or you want to make sure you're giving the AI enough context before a complex task.
@@ -110,15 +110,15 @@ These two commands are the best entry points when you're new to the project or u
 
 ---
 
-### /understand
+### /kit-understand
 
 Explains any piece of code in plain language. Point it at a file, function, or module and it returns a structured breakdown that covers purpose, architecture fit, data flow, dependencies, edge cases, and related files worth reading.
 
 **Usage**
 ```
-/understand src/lib/auth.ts
-/understand src/components/Header.tsx
-/understand src/app/api/products/route.ts
+/kit-understand src/lib/auth.ts
+/kit-understand src/components/Header.tsx
+/kit-understand src/app/api/products/route.ts
 ```
 
 **When to use**: When onboarding to a new project, inheriting unfamiliar code, or before refactoring something you didn't write.
@@ -136,15 +136,15 @@ Explains any piece of code in plain language. Point it at a file, function, or m
 
 Commands for creating new code that follows project conventions from the start.
 
-### /new-component
+### /kit-new-component
 
 Scaffolds a complete new component by asking a series of structured questions. The output follows your project's naming conventions and generates everything the component needs to be production-ready.
 
 **Usage**
 ```
-/new-component
-/new-component ProductCard
-/new-component NavigationMenu
+/kit-new-component
+/kit-new-component ProductCard
+/kit-new-component NavigationMenu
 ```
 
 **When to use**: Every time you create a new component. This ensures consistency — it's far easier to start with the right structure than to retrofit it later.
@@ -160,15 +160,15 @@ Scaffolds a complete new component by asking a series of structured questions. T
 
 ---
 
-### /new-page
+### /kit-new-page
 
 Scaffolds a new route with all the supporting files your router needs. Detects whether you're using App Router or Pages Router and generates the appropriate file structure.
 
 **Usage**
 ```
-/new-page
-/new-page products/[id]
-/new-page checkout/confirmation
+/kit-new-page
+/kit-new-page products/[id]
+/kit-new-page checkout/confirmation
 ```
 
 **When to use**: Whenever you add a new URL to the application. Handles the boilerplate so you can focus on the page logic.
@@ -182,15 +182,15 @@ Scaffolds a new route with all the supporting files your router needs. Detects w
 
 ---
 
-### /api-route
+### /kit-api-route
 
 Creates a fully typed API route handler with input validation, error handling, and response shaping. Follows Next.js conventions and adds the structure needed for a maintainable endpoint.
 
 **Usage**
 ```
-/api-route
-/api-route POST /api/orders
-/api-route GET /api/users/[id]
+/kit-api-route
+/kit-api-route POST /api/orders
+/kit-api-route GET /api/users/[id]
 ```
 
 **When to use**: When adding a new API endpoint. Prevents the common pattern of writing route handlers without validation or consistent error responses.
@@ -204,14 +204,14 @@ Creates a fully typed API route handler with input validation, error handling, a
 
 ---
 
-### /error-boundary
+### /kit-error-boundary
 
 Adds a React error boundary to a component tree. Generates the boundary component itself along with a fallback UI, and wraps the target component so errors are caught and displayed gracefully rather than crashing the page.
 
 **Usage**
 ```
-/error-boundary
-/error-boundary src/components/ProductList.tsx
+/kit-error-boundary
+/kit-error-boundary src/components/ProductList.tsx
 ```
 
 **When to use**: When a component relies on external data or has failure modes that should be contained — especially before shipping to production.
@@ -224,14 +224,14 @@ Adds a React error boundary to a component tree. Generates the boundary componen
 
 ---
 
-### /extract-hook
+### /kit-extract-hook
 
 Pulls logic out of a component and into a reusable custom hook. Identifies state, effects, and derived values that belong outside the render function and moves them cleanly while keeping the component readable.
 
 **Usage**
 ```
-/extract-hook src/components/ProductFilter.tsx
-/extract-hook src/components/SearchBar.tsx useSearch
+/kit-extract-hook src/components/ProductFilter.tsx
+/kit-extract-hook src/components/SearchBar.tsx useSearch
 ```
 
 **When to use**: When a component is getting long, when the same logic appears in multiple components, or when you want to test logic independently from the UI.
@@ -244,14 +244,14 @@ Pulls logic out of a component and into a reusable custom hook. Identifies state
 
 ---
 
-### /figma-to-code
+### /kit-figma-to-code
 
 Structured workflow for translating a Figma design into code. Uses the Figma MCP (if configured) to extract design context, maps visual properties to existing project tokens, identifies reusable components, and implements with correct responsive breakpoints.
 
 **Usage**
 ```
-/figma-to-code
-/figma-to-code https://figma.com/file/...
+/kit-figma-to-code
+/kit-figma-to-code https://figma.com/file/...
 ```
 
 **When to use**: Any time you're implementing a Figma design. Prevents the habit of hardcoding values that should reference design tokens.
@@ -265,15 +265,15 @@ Structured workflow for translating a Figma design into code. Uses the Figma MCP
 
 ---
 
-### /design-tokens
+### /kit-design-tokens
 
 Audits and manages the design token system for your project. Maps Figma token names to Tailwind config values or CSS custom properties, surfaces any hardcoded values that should be using tokens, and generates token documentation.
 
 **Usage**
 ```
-/design-tokens
-/design-tokens audit
-/design-tokens src/components/Button.tsx
+/kit-design-tokens
+/kit-design-tokens audit
+/kit-design-tokens src/components/Button.tsx
 ```
 
 **When to use**: When setting up a new project's token system, after a design update introduces new tokens, or when auditing for consistency before a design review.
@@ -286,15 +286,15 @@ Audits and manages the design token system for your project. Maps Figma token na
 
 ---
 
-### /schema-gen
+### /kit-schema-gen
 
 Generates TypeScript interfaces and Zod validation schemas from API responses, JSON samples, or GraphQL schemas.
 
 **Usage**
 ```
-/schema-gen
-/schema-gen src/api/response.json
-/schema-gen https://api.example.com/products
+/kit-schema-gen
+/kit-schema-gen src/api/response.json
+/kit-schema-gen https://api.example.com/products
 ```
 
 **When to use**: When integrating a new API, when API responses change, or when you need runtime validation alongside types.
@@ -307,14 +307,14 @@ Generates TypeScript interfaces and Zod validation schemas from API responses, J
 
 ---
 
-### /storybook-gen
+### /kit-storybook-gen
 
 Generates comprehensive Storybook stories for a component with typed controls, play functions for interaction testing, and visual state coverage.
 
 **Usage**
 ```
-/storybook-gen src/components/Button.tsx
-/storybook-gen src/components/Modal.tsx
+/kit-storybook-gen src/components/Button.tsx
+/kit-storybook-gen src/components/Modal.tsx
 ```
 
 **When to use**: After creating a new component, when adding Storybook to a project, or when expanding story coverage.
@@ -327,15 +327,15 @@ Generates comprehensive Storybook stories for a component with typed controls, p
 
 ---
 
-### /scaffold-spec
+### /kit-scaffold-spec
 
 Generates a feature specification document before writing any code. Captures the problem, proposed solution, acceptance criteria, edge cases, and open questions — giving you and the AI a shared written contract before implementation starts.
 
 **Usage**
 ```
-/scaffold-spec
-/scaffold-spec dark mode support
-/scaffold-spec user notification preferences
+/kit-scaffold-spec
+/kit-scaffold-spec dark mode support
+/kit-scaffold-spec user notification preferences
 ```
 
 **When to use**: Before starting a significant new feature, when requirements are fuzzy, or when you want to align with a reviewer before committing to an implementation approach.
@@ -356,15 +356,15 @@ Saves to `docs/specs/[feature-name].md`.
 
 Commands for catching problems before they reach production or a reviewer.
 
-### /review
+### /kit-review
 
 Deep code review following project standards. Goes beyond linting — it evaluates structure, intent, and maintainability.
 
 **Usage**
 ```
-/review
-/review src/components/CheckoutForm.tsx
-/review src/lib/api.ts
+/kit-review
+/kit-review src/components/CheckoutForm.tsx
+/kit-review src/lib/api.ts
 ```
 
 **When to use**: Before creating a PR, or when reviewing someone else's code with AI assistance.
@@ -381,14 +381,14 @@ Deep code review following project standards. Goes beyond linting — it evaluat
 
 ---
 
-### /pre-pr
+### /kit-pre-pr
 
 Runs a full pre-PR checklist before you open a pull request. Combines review, test coverage check, accessibility audit, and documentation check into a single workflow that produces a clear go/no-go summary.
 
 **Usage**
 ```
-/pre-pr
-/pre-pr src/features/checkout/
+/kit-pre-pr
+/kit-pre-pr src/features/checkout/
 ```
 
 **When to use**: As the last step before pushing a branch and opening a PR. Catches issues that reviewers would otherwise flag.
@@ -403,15 +403,15 @@ Runs a full pre-PR checklist before you open a pull request. Combines review, te
 
 ---
 
-### /test
+### /kit-test
 
 Generates a test file for any component, hook, or utility function. Produces behavior-driven tests using React Testing Library, covering the happy path, error states, and edge cases.
 
 **Usage**
 ```
-/test src/components/Header.tsx
-/test src/hooks/useCart.ts
-/test src/lib/formatPrice.ts
+/kit-test src/components/Header.tsx
+/kit-test src/hooks/useCart.ts
+/kit-test src/lib/formatPrice.ts
 ```
 
 **When to use**: After writing a new component or utility, or when increasing test coverage on existing code.
@@ -425,14 +425,14 @@ Generates a test file for any component, hook, or utility function. Produces beh
 
 ---
 
-### /accessibility-audit
+### /kit-accessibility-audit
 
 Audits a component or page for WCAG 2.1 AA compliance issues. Covers semantic HTML, keyboard navigation, ARIA usage, color contrast guidance, and screen reader behavior.
 
 **Usage**
 ```
-/accessibility-audit src/components/Modal.tsx
-/accessibility-audit src/app/checkout/page.tsx
+/kit-accessibility-audit src/components/Modal.tsx
+/kit-accessibility-audit src/app/checkout/page.tsx
 ```
 
 **When to use**: Before shipping any interactive UI, when a component receives focus-related feedback, or as part of an accessibility sprint.
@@ -448,14 +448,14 @@ Audits a component or page for WCAG 2.1 AA compliance issues. Covers semantic HT
 
 ---
 
-### /security-check
+### /kit-security-check
 
 Scans code for common security vulnerabilities relevant to Next.js and React applications. Produces a prioritized list of issues with remediation guidance.
 
 **Usage**
 ```
-/security-check src/app/api/
-/security-check src/components/RichTextEditor.tsx
+/kit-security-check src/app/api/
+/kit-security-check src/components/RichTextEditor.tsx
 ```
 
 **When to use**: Before shipping new API routes, when handling user-generated content, or during a security review sprint.
@@ -471,14 +471,14 @@ Scans code for common security vulnerabilities relevant to Next.js and React app
 
 ---
 
-### /responsive-check
+### /kit-responsive-check
 
 Verifies that a component or page handles all required responsive breakpoints correctly. Maps your Tailwind breakpoint config to the design system and identifies gaps or inconsistencies.
 
 **Usage**
 ```
-/responsive-check src/components/NavigationBar.tsx
-/responsive-check src/app/products/page.tsx
+/kit-responsive-check src/components/NavigationBar.tsx
+/kit-responsive-check src/app/products/page.tsx
 ```
 
 **When to use**: Before shipping any layout change, when a component looks off on mobile, or during a responsive QA pass.
@@ -493,14 +493,14 @@ Verifies that a component or page handles all required responsive breakpoints co
 
 ---
 
-### /type-fix
+### /kit-type-fix
 
 Resolves TypeScript errors in a file and tightens loose typing. Explains the root cause of each error, applies the fix, and avoids the anti-pattern of silencing errors with `any` or `// @ts-ignore`.
 
 **Usage**
 ```
-/type-fix src/components/DataTable.tsx
-/type-fix src/lib/api-client.ts
+/kit-type-fix src/components/DataTable.tsx
+/kit-type-fix src/lib/api-client.ts
 ```
 
 **When to use**: When TypeScript is reporting errors you're not sure how to fix, or after upgrading a dependency that changed its type signatures.
@@ -514,14 +514,14 @@ Resolves TypeScript errors in a file and tightens loose typing. Explains the roo
 
 ---
 
-### /perf-audit
+### /kit-perf-audit
 
 Lighthouse-style performance audit covering Core Web Vitals, resource loading, render-blocking resources, and caching strategies.
 
 **Usage**
 ```
-/perf-audit
-/perf-audit src/app/page.tsx
+/kit-perf-audit
+/kit-perf-audit src/app/page.tsx
 ```
 
 **When to use**: Before a performance review, when Lighthouse scores are low, or after shipping a large feature.
@@ -535,14 +535,14 @@ Lighthouse-style performance audit covering Core Web Vitals, resource loading, r
 
 ---
 
-### /bundle-check
+### /kit-bundle-check
 
 Analyzes bundle size, identifies heavy imports, suggests tree-shaking opportunities, and recommends code splitting points.
 
 **Usage**
 ```
-/bundle-check
-/bundle-check src/components/Dashboard.tsx
+/kit-bundle-check
+/kit-bundle-check src/components/Dashboard.tsx
 ```
 
 **When to use**: Before a release, when bundle size has grown, or when page load times have increased.
@@ -556,14 +556,14 @@ Analyzes bundle size, identifies heavy imports, suggests tree-shaking opportunit
 
 ---
 
-### /i18n-check
+### /kit-i18n-check
 
 Finds hardcoded user-facing strings, missing translation keys, and internationalization gaps including RTL support and locale formatting.
 
 **Usage**
 ```
-/i18n-check
-/i18n-check src/components/
+/kit-i18n-check
+/kit-i18n-check src/components/
 ```
 
 **When to use**: Before launching in a new locale, during an i18n sprint, or when auditing for localization readiness.
@@ -577,15 +577,15 @@ Finds hardcoded user-facing strings, missing translation keys, and international
 
 ---
 
-### /test-gaps
+### /kit-test-gaps
 
 Analyzes a file or directory and identifies code paths that are not covered by existing tests. Produces a prioritized list of missing test cases rather than a generic coverage report.
 
 **Usage**
 ```
-/test-gaps src/components/CheckoutForm.tsx
-/test-gaps src/lib/pricing.ts
-/test-gaps src/hooks/useCart.ts
+/kit-test-gaps src/components/CheckoutForm.tsx
+/kit-test-gaps src/lib/pricing.ts
+/kit-test-gaps src/hooks/useCart.ts
 ```
 
 **When to use**: When increasing test coverage on existing code, before a release, or when a bug was caught in production and you want to identify similar gaps.
@@ -602,14 +602,14 @@ Analyzes a file or directory and identifies code paths that are not covered by e
 
 Commands for improving, fixing, and managing existing code.
 
-### /fix-bug
+### /kit-fix-bug
 
 Guided systematic debugging workflow. Forces a structured approach — describe the bug, identify reproduction steps, locate the root cause, implement the fix, verify with tests — instead of jumping straight to guessing a solution.
 
 **Usage**
 ```
-/fix-bug
-/fix-bug src/components/CartSummary.tsx
+/kit-fix-bug
+/kit-fix-bug src/components/CartSummary.tsx
 ```
 
 **When to use**: When you encounter a bug and want to avoid the trial-and-error spiral. Especially useful for bugs where the cause isn't immediately obvious.
@@ -623,14 +623,14 @@ Guided systematic debugging workflow. Forces a structured approach — describe 
 
 ---
 
-### /refactor
+### /kit-refactor
 
 Refactors a file or function to improve readability, reduce duplication, or align with current conventions — while preserving the existing behavior. Proposes the approach before making changes.
 
 **Usage**
 ```
-/refactor src/components/ProductList.tsx
-/refactor src/lib/utils.ts
+/kit-refactor src/components/ProductList.tsx
+/kit-refactor src/lib/utils.ts
 ```
 
 **When to use**: When a file has grown too large, when you spot repeated logic, or when code conventions have evolved and an older file hasn't kept up.
@@ -644,14 +644,14 @@ Refactors a file or function to improve readability, reduce duplication, or alig
 
 ---
 
-### /optimize
+### /kit-optimize
 
 Performance analysis and optimization for a component or page. Identifies specific, actionable improvements rather than generic advice.
 
 **Usage**
 ```
-/optimize src/components/ProductGrid.tsx
-/optimize src/app/dashboard/page.tsx
+/kit-optimize src/components/ProductGrid.tsx
+/kit-optimize src/app/dashboard/page.tsx
 ```
 
 **When to use**: When a page feels slow, before a performance audit, or when reviewing a component that handles large data sets.
@@ -666,15 +666,15 @@ Performance analysis and optimization for a component or page. Identifies specif
 
 ---
 
-### /migrate
+### /kit-migrate
 
 Migrates code from one API, pattern, library version, or convention to another. Documents what changed and why, so the diff is reviewable and reversible.
 
 **Usage**
 ```
-/migrate src/components/ --from pages-router --to app-router
-/migrate src/lib/api.ts --from axios --to fetch
-/migrate src/components/Form.tsx --from react-hook-form-v6 --to react-hook-form-v7
+/kit-migrate src/components/ --from pages-router --to app-router
+/kit-migrate src/lib/api.ts --from axios --to fetch
+/kit-migrate src/components/Form.tsx --from react-hook-form-v6 --to react-hook-form-v7
 ```
 
 **When to use**: During a library upgrade, when adopting a new pattern project-wide, or when migrating from one router to another.
@@ -688,14 +688,14 @@ Migrates code from one API, pattern, library version, or convention to another. 
 
 ---
 
-### /dep-check
+### /kit-dep-check
 
 Audits project dependencies for outdated versions, known vulnerabilities, duplicates, and unused packages. Produces a prioritized action list rather than a raw dump of every package.
 
 **Usage**
 ```
-/dep-check
-/dep-check --security-only
+/kit-dep-check
+/kit-dep-check --security-only
 ```
 
 **When to use**: Before a release, after a security advisory, or when the lockfile hasn't been reviewed in a while.
@@ -710,14 +710,14 @@ Audits project dependencies for outdated versions, known vulnerabilities, duplic
 
 ---
 
-### /sitecore-debug
+### /kit-sitecore-debug
 
 Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in the Sitecore + Next.js integration — component registration, field mapping, rendering host config, and personalization rules.
 
 **Usage**
 ```
-/sitecore-debug
-/sitecore-debug src/components/HeroBanner.tsx
+/kit-sitecore-debug
+/kit-sitecore-debug src/components/HeroBanner.tsx
 ```
 
 **When to use**: When a Sitecore component isn't rendering, fields aren't mapping correctly, or the rendering host is failing to connect.
@@ -733,15 +733,15 @@ Debugs Sitecore XM Cloud-specific problems. Covers the common failure points in 
 
 ---
 
-### /upgrade
+### /kit-upgrade
 
 Guides a major dependency upgrade from start to finish. Reads the package's migration guide, identifies breaking changes in your codebase, and produces a step-by-step plan before touching any code.
 
 **Usage**
 ```
-/upgrade react 18 → 19
-/upgrade next.js 14 → 15
-/upgrade tailwindcss 3 → 4
+/kit-upgrade react 18 → 19
+/kit-upgrade next.js 14 → 15
+/kit-upgrade tailwindcss 3 → 4
 ```
 
 **When to use**: Before any major version bump where breaking changes are expected.
@@ -759,15 +759,15 @@ Guides a major dependency upgrade from start to finish. Reads the package's migr
 
 Commands that support day-to-day development process rather than specific code tasks.
 
-### /document
+### /kit-document
 
 Generates JSDoc for exported functions and components, creates or updates README files, and produces component documentation in `docs/components/`. Targets a file or directory.
 
 **Usage**
 ```
-/document src/components/Button.tsx
-/document src/hooks/
-/document src/lib/api-client.ts
+/kit-document src/components/Button.tsx
+/kit-document src/hooks/
+/kit-document src/lib/api-client.ts
 ```
 
 **When to use**: After writing a new module, before a PR that touches public API surface, or when running a documentation sprint.
@@ -781,14 +781,14 @@ Generates JSDoc for exported functions and components, creates or updates README
 
 ---
 
-### /commit-msg
+### /kit-commit-msg
 
 Writes a conventional commit message for your currently staged changes. Reads the diff, infers the type and scope, and produces a message that follows the `type(scope): description` format with an optional body.
 
 **Usage**
 ```
-/commit-msg
-/commit-msg --with-body
+/kit-commit-msg
+/kit-commit-msg --with-body
 ```
 
 **When to use**: When you've staged your changes and want a well-formed commit message without writing it from scratch.
@@ -802,15 +802,15 @@ Writes a conventional commit message for your currently staged changes. Reads th
 
 ---
 
-### /env-setup
+### /kit-env-setup
 
 Sets up local environment variables and configuration for a new developer joining the project. Reads existing `.env.example` files, explains what each variable does, and generates a populated `.env.local` with safe defaults.
 
 **Usage**
 ```
-/env-setup
-/env-setup --service sitecore
-/env-setup --service vercel
+/kit-env-setup
+/kit-env-setup --service sitecore
+/kit-env-setup --service vercel
 ```
 
 **When to use**: When onboarding to a project for the first time, after cloning the repo, or when a new service integration requires new environment variables.
@@ -824,14 +824,14 @@ Sets up local environment variables and configuration for a new developer joinin
 
 ---
 
-### /changelog
+### /kit-changelog
 
 Generates a formatted changelog entry from git history since the last release tag, categorized by change type following the Keep a Changelog format.
 
 **Usage**
 ```
-/changelog
-/changelog --since v1.0.0
+/kit-changelog
+/kit-changelog --since v1.0.0
 ```
 
 **When to use**: Before a release, when preparing release notes, or when catching up on what changed.
@@ -844,14 +844,14 @@ Generates a formatted changelog entry from git history since the last release ta
 
 ---
 
-### /release
+### /kit-release
 
 Guided release workflow that walks through version decision, changelog generation, package.json update, git tag creation, and release notes preparation.
 
 **Usage**
 ```
-/release
-/release --type minor
+/kit-release
+/kit-release --type minor
 ```
 
 **When to use**: When cutting a new release. Ensures nothing is missed in the release process.
@@ -865,14 +865,14 @@ Guided release workflow that walks through version decision, changelog generatio
 
 ---
 
-### /pr-description
+### /kit-pr-description
 
 Generates a structured pull request description from your staged changes and branch diff. Reads the diff, infers the type of change, and produces a description ready to paste into GitHub, GitLab, or Bitbucket.
 
 **Usage**
 ```
-/pr-description
-/pr-description --base main
+/kit-pr-description
+/kit-pr-description --base main
 ```
 
 **When to use**: When opening a PR and you want a clear, reviewer-friendly description without writing it from scratch.
@@ -887,14 +887,14 @@ Generates a structured pull request description from your staged changes and bra
 
 ---
 
-### /standup
+### /kit-standup
 
 Summarizes your AI session activity from the previous day into a standup-ready update.
 
 **Usage**
 ```
-/standup
-/standup --date yesterday
+/kit-standup
+/kit-standup --date yesterday
 ```
 
 **When to use**: At the start of your day to prepare your standup contribution based on what the AI helped you accomplish.
@@ -907,15 +907,15 @@ Summarizes your AI session activity from the previous day into a standup-ready u
 
 ---
 
-### /learn-from-pr
+### /kit-learn-from-pr
 
 Extracts lessons, patterns, and decisions from a merged pull request and logs them to `docs/decisions-log.md`.
 
 **Usage**
 ```
-/learn-from-pr
-/learn-from-pr https://github.com/org/repo/pull/123
-/learn-from-pr --branch feature/checkout-redesign
+/kit-learn-from-pr
+/kit-learn-from-pr https://github.com/org/repo/pull/123
+/kit-learn-from-pr --branch feature/checkout-redesign
 ```
 
 **When to use**: After merging a significant PR to capture what was decided, why, and what the team should do differently next time.
@@ -930,15 +930,15 @@ Appends a dated entry to `docs/decisions-log.md`.
 
 ---
 
-### /release-notes
+### /kit-release-notes
 
-Generates user-facing release notes from a git range or version tag. Unlike `/changelog` (which is developer-focused), release notes are written for end users or stakeholders.
+Generates user-facing release notes from a git range or version tag. Unlike `/kit-changelog` (which is developer-focused), release notes are written for end users or stakeholders.
 
 **Usage**
 ```
-/release-notes
-/release-notes --since v1.3.0
-/release-notes --tag v1.4.0
+/kit-release-notes
+/kit-release-notes --since v1.3.0
+/kit-release-notes --tag v1.4.0
 ```
 
 **When to use**: When publishing a release to users, writing GitHub Release notes, or preparing a product update announcement.
@@ -952,7 +952,7 @@ Generates user-facing release notes from a git range or version tag. Unlike `/ch
 
 ---
 
-### /fetch-docs
+### /kit-fetch-docs
 
 **Category**: Workflow
 
@@ -960,9 +960,9 @@ Pre-loads current, version-specific documentation for your project's tech stack 
 
 **Usage**
 ```
-/fetch-docs
-/fetch-docs react
-/fetch-docs tailwindcss
+/kit-fetch-docs
+/kit-fetch-docs react
+/kit-fetch-docs tailwindcss
 ```
 
 **When to use**: At the **start of a coding session** — run once to ensure the AI has current API knowledge. Also useful before major framework upgrades or when you encounter unexpected API behavior.
@@ -982,7 +982,7 @@ Pre-loads current, version-specific documentation for your project's tech stack 
 
 **Why this matters**: AI models have a training data cutoff. Next.js 16 Turbopack, Tailwind v4 `@theme`, and Sitecore Content SDK v2.x may not be fully known. This skill fills that gap at session start so all subsequent coding uses current APIs.
 
-> This skill works alongside the **Documentation Verification** section in your generated `CLAUDE.md`, which tells the AI to look up APIs when unsure. `/fetch-docs` is proactive (pre-loads), while the template section is reactive (catches gaps).
+> This skill works alongside the **Documentation Verification** section in your generated `CLAUDE.md`, which tells the AI to look up APIs when unsure. `/kit-fetch-docs` is proactive (pre-loads), while the template section is reactive (catches gaps).
 
 ---
 
@@ -1005,30 +1005,30 @@ This works in both Claude Code and Cursor.
 In Claude Code, you can also invoke any workflow by name:
 
 ```
-/prompt-help
+/kit-prompt-help
 ```
 
 Most commands work best with a target file or argument:
 
 ```
-/new-component ProductCard
-/understand src/lib/auth.ts
-/test src/components/Header.tsx
-/review src/features/checkout/
-/accessibility-audit src/components/Modal.tsx
+/kit-new-component ProductCard
+/kit-understand src/lib/auth.ts
+/kit-test src/components/Header.tsx
+/kit-review src/features/checkout/
+/kit-accessibility-audit src/components/Modal.tsx
 ```
 
 ### Tips
 
 Skills and commands work best when you provide context. The more specific you are about the file, behavior, and constraints, the more useful the output.
 
-If you're ever unsure what to reach for, run `/prompt-help` first — it will guide you to the right workflow.
+If you're ever unsure what to reach for, run `/kit-prompt-help` first — it will guide you to the right workflow.
 
 ---
 
 ## Session Skills (v1.2.0)
 
-### `/save-session`
+### `/kit-save-session`
 
 **Category**: Session
 
@@ -1045,7 +1045,7 @@ Save the current session state so it can be resumed later.
 
 Saves to `ai-kit/sessions/[date]-[time]-[topic].md`.
 
-### `/resume-session`
+### `/kit-resume-session`
 
 **Category**: Session
 
@@ -1059,7 +1059,7 @@ Restore context from a saved session and continue where you left off.
 3. Verifies current file state matches expectations
 4. Picks up from the first unchecked pending item
 
-### `/checkpoint`
+### `/kit-checkpoint`
 
 **Category**: Session
 
@@ -1075,13 +1075,13 @@ Run all quality checks and record a verification snapshot.
 - Build (`npm run build`)
 - Security (`npm audit`)
 
-Saves results to `ai-kit/checkpoints/[date]-[time].md` and compares against the previous checkpoint to flag regressions.
+Saves results to `ai-kit/kit-checkpoints/[date]-[time].md` and compares against the previous checkpoint to flag regressions.
 
 ---
 
 ## Orchestration Skills (v1.2.0)
 
-### `/orchestrate`
+### `/kit-orchestrate`
 
 **Category**: Orchestration
 
@@ -1095,13 +1095,13 @@ Coordinate multiple specialized agents to tackle complex tasks.
 3. Launches agents in parallel where possible
 4. Collects results, identifies conflicts, and creates a unified action plan
 
-### `/quality-gate`
+### `/kit-quality-gate`
 
 **Category**: Orchestration
 
 Run all quality checks and present a pass/fail summary.
 
-**When to use**: Before merging a PR or cutting a release. More comprehensive than `/checkpoint` — includes accessibility and bundle size checks.
+**When to use**: Before merging a PR or cutting a release. More comprehensive than `/kit-checkpoint` — includes accessibility and bundle size checks.
 
 **Checks performed**:
 - TypeScript type check (zero errors)
@@ -1116,7 +1116,7 @@ Run all quality checks and present a pass/fail summary.
 
 **Gate policy**: All PASS = safe to merge. Any WARN = merge with acknowledgment. Any FAIL = fix before merge.
 
-### `/harness-audit`
+### `/kit-harness-audit`
 
 **Category**: Orchestration
 
@@ -1139,7 +1139,7 @@ Outputs an overall health grade (A-F) with specific recommendations.
 
 ## Requirements Skills (v1.7.0)
 
-### `/deep-interview`
+### `/kit-deep-interview`
 
 **Category**: Requirements
 
@@ -1157,13 +1157,13 @@ Socratic requirements gathering — a structured interview that transforms vague
 
 Output can be saved to `docs/specs/[feature-name].md`.
 
-### `/clarify-requirements`
+### `/kit-clarify-requirements`
 
 **Category**: Requirements
 
 Quick task clarification — identifies gaps and ambiguities in a task description in under 5 minutes.
 
-**When to use**: Before starting any task where the requirements feel slightly vague or incomplete. Much faster than `/deep-interview` — asks a maximum of 5 targeted questions.
+**When to use**: Before starting any task where the requirements feel slightly vague or incomplete. Much faster than `/kit-deep-interview` — asks a maximum of 5 targeted questions.
 
 **What it does**:
 1. Analyzes the task for ambiguity across 6 dimensions (what, where, who, when, edge cases, scope)

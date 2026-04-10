@@ -4,6 +4,46 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v2.0.0 — 2026-04-09
+
+### Breaking: `kit-` Namespace Prefix
+
+All 48 skills and 16 agents are now namespaced with a `kit-` prefix to prevent collisions with global/built-in skills in Claude Code, Cursor, and other AI tools.
+
+| Before (v1.x) | After (v2.0) |
+|---|---|
+| `/review` | `/kit-review` |
+| `/new-component` | `/kit-new-component` |
+| `/security-check` | `/kit-security-check` |
+| `@planner` | `@kit-planner` |
+| `@code-reviewer` | `@kit-code-reviewer` |
+| `@security-reviewer` | `@kit-security-reviewer` |
+| All 48 skills | `kit-` prefixed |
+| All 16 agents | `kit-` prefixed |
+
+**Why?** Without namespacing, project-level AI Kit skills silently override users' personal global skills with the same name. Near-duplicates like `/security` (global) and `/security-check` (AI Kit) both appear in suggestions, causing confusion. The `kit-` prefix makes every AI Kit skill and agent instantly recognizable and collision-free.
+
+### Migration
+
+```bash
+npx @mikulgohil/ai-kit update
+```
+
+One command backs up current configs, removes old unprefixed files, generates new `kit-` prefixed files, and updates `ai-kit.config.json`. New projects get `kit-` prefixed names from the start.
+
+### Security Fix
+
+- `exec()` replaced with `execFile()` in token dashboard (`src/commands/tokens.ts`) to prevent shell metacharacter injection in file paths
+
+### Internal
+
+- `SKILL_PREFIX` constant in `src/constants.ts` — single source of truth for the `kit-` prefix
+- Skills and agents derived from base names + prefix at runtime
+- Dead `src/copier/commands.ts` removed (superseded by `skills.ts`)
+- Automatic cleanup of unprefixed files during `ai-kit update`
+
+---
+
 ## v1.11.0 — 2026-04-08
 
 ### Session Init Hook

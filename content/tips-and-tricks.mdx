@@ -30,14 +30,14 @@ Run `ai-kit update` after:
 
 The update command re-scans and adjusts the rules automatically.
 
-### Start Every AI Session with /fetch-docs
+### Start Every AI Session with /kit-fetch-docs
 
-Run `/fetch-docs` at the start of each coding session to pre-load current API documentation for your tech stack. This is especially important for:
+Run `/kit-fetch-docs` at the start of each coding session to pre-load current API documentation for your tech stack. This is especially important for:
 - **Next.js 16+** — Turbopack APIs, new caching model, Server Fast Refresh
 - **Tailwind v4** — `@theme` syntax, new config format
 - **Sitecore Content SDK v2.x** — niche library that models know less about
 
-The generated `CLAUDE.md` also includes a "Documentation Verification" section that tells the AI to look up APIs when unsure — so even without `/fetch-docs`, the AI will verify before guessing.
+The generated `CLAUDE.md` also includes a "Documentation Verification" section that tells the AI to look up APIs when unsure — so even without `/kit-fetch-docs`, the AI will verify before guessing.
 
 ### Start Every AI Session with Context
 
@@ -53,7 +53,7 @@ The generated rules handle conventions; you provide task-specific context.
 
 ### Use Skills as Checklists
 
-Even if you don't use the AI output directly, skills like `review` and `new-component` serve as checklists for what to cover. Invoke them explicitly with `/review` in Claude Code, or let the AI auto-apply them when your request matches.
+Even if you don't use the AI output directly, skills like `kit-review` and `kit-new-component` serve as checklists for what to cover. Invoke them explicitly with `/kit-review` in Claude Code, or let the AI auto-apply them when your request matches.
 
 ---
 
@@ -132,8 +132,8 @@ New developer joining the team?
 1. Clone the repo
 2. Run `npx @mikulgohil/ai-kit init` (if not already committed)
 3. Read `ai-kit/guides/getting-started.md`
-4. Use `/understand` on unfamiliar modules
-5. Use `/prompt-help` when unsure how to ask
+4. Use `/kit-understand` on unfamiliar modules
+5. Use `/kit-prompt-help` when unsure how to ask
 
 ### Custom Rules Per Team
 
@@ -162,15 +162,15 @@ Add team-specific rules outside the `AI-KIT:START/END` markers:
 | Opus 4.6 | 1M tokens | 64K tokens | 128K tokens |
 | Sonnet 4.6 | 200K tokens | 64K tokens | 128K tokens |
 
-Use the **`/effort`** command to control reasoning depth — lower effort saves tokens for simple tasks, higher effort produces better results for complex architecture decisions.
+Use the **`/kit-effort`** command to control reasoning depth — lower effort saves tokens for simple tasks, higher effort produces better results for complex architecture decisions.
 
 ### Reduce Token Usage
 
 1. **Be specific about files** — "Fix the error in `src/lib/auth.ts:45`" not "fix the auth"
-2. **Use `/understand` before modifying** — Costs fewer tokens than a failed attempt
+2. **Use `/kit-understand` before modifying** — Costs fewer tokens than a failed attempt
 3. **Don't ask AI to read everything** — Point to specific files
 4. **Use slash commands** — They provide structured context efficiently
-5. **Use `/effort` for simple tasks** — Lower reasoning effort = fewer tokens spent
+5. **Use `/kit-effort` for simple tasks** — Lower reasoning effort = fewer tokens spent
 
 ### Speed Up Generation
 

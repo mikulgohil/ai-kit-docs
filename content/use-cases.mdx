@@ -26,7 +26,7 @@ You answer 3 prompts — AI tool (Claude Code + Cursor), strictness (standard), 
 
 Every Claude Code session now opens with:
 ```
-📋 ai-kit v1.11.0 | Stack: Next.js 16.2 (app router) + tailwind
+📋 ai-kit v2.0.0 | Stack: Next.js 16.2 (app router) + tailwind
    PM: pnpm | Scripts: dev, build, test, lint
    Last scan: 2026-04-08
 ```
@@ -47,7 +47,7 @@ npx @mikulgohil/ai-kit health
 ```
 AI Kit — Project Health
   Setup Integrity
-    ✓ Version: v1.11.0
+    ✓ Version: v2.0.0
     ✓ CLAUDE.md: Present with markers
     ✓ Skills: 48 installed
     ✓ Agents: 16 configured
@@ -258,7 +258,7 @@ The skill reads `FlightCard.tsx`, identifies all props and their types, and gene
 **Scenario**: You've built the flight booking flow — 4 new files, 2 modified files. Before creating a PR, you want a thorough review.
 
 ```
-/review src/components/flights/
+/kit-review src/components/flights/
 ```
 
 The AI reviews against a comprehensive checklist:
@@ -840,7 +840,7 @@ Run `ai-kit update` to apply.
 npx @mikulgohil/ai-kit tokens
 ```
 
-Shows daily, weekly, and monthly token usage with cost estimates. Budget alerts at 50%, 75%, and 90% thresholds. Per-project breakdown so you can see which project consumes the most. Includes model recommendations — "Switch to Sonnet for /review tasks to save 40% with similar quality."
+Shows daily, weekly, and monthly token usage with cost estimates. Budget alerts at 50%, 75%, and 90% thresholds. Per-project breakdown so you can see which project consumes the most. Includes model recommendations — "Switch to Sonnet for /kit-review tasks to save 40% with similar quality."
 
 ---
 
@@ -918,8 +918,8 @@ npx @mikulgohil/ai-kit doctor
 ```
 AI Kit — Doctor
 
-✓ ai-kit.config.json found (v1.11.0)
-✓ Version matches CLI (v1.11.0)
+✓ ai-kit.config.json found (v2.0.0)
+✓ Version matches CLI (v2.0.0)
 ✓ CLAUDE.md exists and in sync
 ✗ .cursorrules missing — expected but not found
 ✓ 48/48 skills present
@@ -989,7 +989,7 @@ Switch by referencing the context in your prompt: "In review mode, check this co
 
 Call the planner agent:
 ```
-@planner Plan the multi-city trip planner feature
+@kit-planner Plan the multi-city trip planner feature
 ```
 
 The planner:
@@ -1003,21 +1003,21 @@ Other agents you can call directly:
 
 | Agent | When to use |
 |---|---|
-| `@code-reviewer` | Deep quality review of specific files |
-| `@security-reviewer` | Security-focused audit of auth flows, API routes |
-| `@architect` | SSR vs SSG decisions, component hierarchy, data flow design |
-| `@sitecore-specialist` | XM Cloud component mapping, GraphQL queries, Experience Edge |
-| `@build-resolver` | Build is broken and you can't figure out why |
-| `@e2e-runner` | Generate Playwright tests for a user flow |
-| `@tdd-guide` | Red-green-refactor workflow guidance |
-| `@performance-profiler` | Core Web Vitals deep dive, runtime profiling |
-| `@migration-specialist` | Framework upgrade planning and execution |
-| `@dependency-auditor` | Full dependency health check |
-| `@ci-debugger` | CI pipeline is failing and logs are unclear |
-| `@doc-updater` | Docs are out of sync with code changes |
-| `@refactor-cleaner` | Find and remove dead code across the project |
-| `@data-scientist` | Data analysis patterns, ML pipeline design |
-| `@api-designer` | REST/GraphQL API design, schema validation |
+| `@kit-code-reviewer` | Deep quality review of specific files |
+| `@kit-security-reviewer` | Security-focused audit of auth flows, API routes |
+| `@kit-architect` | SSR vs SSG decisions, component hierarchy, data flow design |
+| `@kit-sitecore-specialist` | XM Cloud component mapping, GraphQL queries, Experience Edge |
+| `@kit-build-resolver` | Build is broken and you can't figure out why |
+| `@kit-e2e-runner` | Generate Playwright tests for a user flow |
+| `@kit-tdd-guide` | Red-green-refactor workflow guidance |
+| `@kit-performance-profiler` | Core Web Vitals deep dive, runtime profiling |
+| `@kit-migration-specialist` | Framework upgrade planning and execution |
+| `@kit-dependency-auditor` | Full dependency health check |
+| `@kit-ci-debugger` | CI pipeline is failing and logs are unclear |
+| `@kit-doc-updater` | Docs are out of sync with code changes |
+| `@kit-refactor-cleaner` | Find and remove dead code across the project |
+| `@kit-data-scientist` | Data analysis patterns, ML pipeline design |
+| `@kit-api-designer` | REST/GraphQL API design, schema validation |
 
 ---
 
@@ -1026,14 +1026,14 @@ Other agents you can call directly:
 **Scenario**: Before a major release, you want a comprehensive quality check — review, security, tests, accessibility, performance — all at once.
 
 ```
-/orchestrate
+/kit-orchestrate
 ```
 
 Coordinates multiple agents in parallel:
-- `@code-reviewer` reviews all changed files
-- `@security-reviewer` audits auth flows and API routes
-- `@e2e-runner` analyzes test coverage gaps
-- `@performance-profiler` checks Core Web Vitals
+- `@kit-code-reviewer` reviews all changed files
+- `@kit-security-reviewer` audits auth flows and API routes
+- `@kit-e2e-runner` analyzes test coverage gaps
+- `@kit-performance-profiler` checks Core Web Vitals
 
 Results are aggregated into a single report. One command triggers the work of 4 specialists.
 
@@ -1525,7 +1525,7 @@ When the AI generates a component, it uses `bg-primary-500` instead of `bg-[#3b8
 
 **Two ways skills activate**:
 
-1. **Manual invocation** — type `/review` or `/fix-bug` directly
+1. **Manual invocation** — type `/kit-review` or `/fix-bug` directly
 2. **Auto-discovery** — the AI reads the skill descriptions and matches your natural language. Say "I need to check if this component is accessible" and it activates the accessibility-audit skill
 
 Each skill is a structured workflow — not a one-line prompt. For example, `/new-component` asks 10 mandatory questions before generating code. `/fix-bug` follows a 5-step reproduce → diagnose → fix → test → verify process.
@@ -1543,10 +1543,10 @@ Each skill is a structured workflow — not a one-line prompt. For example, `/ne
 | **Invoked by** | You (or auto-matched) | You delegate to them |
 | **Scope** | Single task with steps | Ongoing specialized role |
 | **Tools** | Uses your current session tools | Has own tool permissions (read-only for reviewers, full for builders) |
-| **Isolation** | Runs in your working directory | Some run in isolated worktrees (refactor-cleaner, build-resolver, e2e-runner) |
-| **Example** | `/review` runs a checklist on files | `@code-reviewer` is a specialized reviewer persona that thinks like a senior engineer |
+| **Isolation** | Runs in your working directory | Some run in isolated worktrees (kit-refactor-cleaner, kit-build-resolver, kit-e2e-runner) |
+| **Example** | `/kit-review` runs a checklist on files | `@kit-code-reviewer` is a specialized reviewer persona that thinks like a senior engineer |
 
-**Worktree isolation** (agents only): Agents like `@refactor-cleaner` and `@build-resolver` run in temporary git worktrees. They can safely modify files without affecting your working directory. If they break something, the worktree is discarded — your code is untouched.
+**Worktree isolation** (agents only): Agents like `@kit-refactor-cleaner` and `@kit-build-resolver` run in temporary git worktrees. They can safely modify files without affecting your working directory. If they break something, the worktree is discarded — your code is untouched.
 
 ---
 

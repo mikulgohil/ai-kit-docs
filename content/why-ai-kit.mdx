@@ -24,7 +24,7 @@ Runtime cost:         Zero — no background processes, no API calls
 
 | | Without AI Kit | With AI Kit |
 |---|---|---|
-| **What you type** | "Create a ProductCard component" | "Create a ProductCard component" or `/new-component ProductCard` |
+| **What you type** | "Create a ProductCard component" | "Create a ProductCard component" or `/kit-new-component ProductCard` |
 | **What AI knows** | Nothing about your project | Your framework, styling, CMS, conventions — and which skill applies |
 | **What you get** | Generic React component. Wrong export style, wrong file structure, no Sitecore helpers, no TypeScript patterns | Component matching your exact project patterns. Correct exports, Tailwind classes, Sitecore field helpers, typed props |
 | **Tests** | None unless you ask | Auto-generated: happy path, error states, edge cases |
@@ -45,7 +45,7 @@ Runtime cost:         Zero — no background processes, no API calls
 
 | | Without AI Kit | With AI Kit |
 |---|---|---|
-| **What you do** | Push code, open PR, wait for review | Run `/pre-pr` before pushing |
+| **What you do** | Push code, open PR, wait for review | Run `/kit-pre-pr` before pushing |
 | **What reviewers catch** | Console.logs, missing types, `any` usage, no alt text, wrong imports, missing tests | Already fixed before they see it |
 | **Review time** | 30-60 min per review cycle | 10-15 min focused on logic |
 | **Review cycles** | 2-4 rounds | 1-2 rounds |
@@ -55,7 +55,7 @@ Runtime cost:         Zero — no background processes, no API calls
 
 | | Without AI Kit | With AI Kit |
 |---|---|---|
-| **Approach** | Eyeball the design, hardcode values | `/figma-to-code` — structured token mapping |
+| **Approach** | Eyeball the design, hardcode values | `/kit-figma-to-code` — structured token mapping |
 | **Spacing/colors** | Hardcoded `p-6`, `#1a2b3c` | Maps to design tokens: `p-spacing-lg`, `text-primary` |
 | **Design review cycles** | 3-4 rounds ("wrong spacing", "wrong color", "not responsive") | 1-2 rounds |
 | **Maintainability** | Breaks when design system updates | Token changes propagate automatically |
@@ -67,15 +67,15 @@ Runtime cost:         Zero — no background processes, no API calls
 | **Day 1** | Read the wiki (if it exists). Ask teammates about conventions. | Run `ai-kit init`. AI already knows everything. |
 | **First PR** | 5+ review comments about naming, structure, missing docs | AI enforced conventions. Review focuses on logic. |
 | **Time to productivity** | 1-2 weeks | 2-3 days |
-| **Questions asked** | "What's the naming convention? Where do tests go? Which import style?" | AI answers these through `/understand` and `/prompt-help` |
+| **Questions asked** | "What's the naming convention? Where do tests go? Which import style?" | AI answers these through `/kit-understand` and `/kit-prompt-help` |
 
 ### 6. Sitecore Component Development
 
 | | Without AI Kit | With AI Kit |
 |---|---|---|
 | **Field helpers** | Developer forgets `<Text>`, uses `{fields.title.value}` — breaks Experience Editor | Rules enforce field helpers. AI uses `<Text>`, `<RichText>`, `<Image>` automatically |
-| **Debugging** | Hours googling "Sitecore component not rendering" | `/sitecore-debug` — structured checklist finds the issue in minutes |
-| **Component registration** | Forgot to register in componentFactory — blank page | AI checks registration as part of `/new-component` |
+| **Debugging** | Hours googling "Sitecore component not rendering" | `/kit-sitecore-debug` — structured checklist finds the issue in minutes |
+| **Component registration** | Forgot to register in componentFactory — blank page | AI checks registration as part of `/kit-new-component` |
 
 ---
 
@@ -109,7 +109,7 @@ Runtime cost:         Zero — no background processes, no API calls
 | Knowledge sharing | Tribal knowledge | Codified in rules + guides | Preserved |
 | Client code quality | Varies by developer | Consistent across team | Uniform quality |
 | Technical debt from AI | Grows (AI generates non-standard code) | Minimal (AI follows standards) | Prevented |
-| Security mistakes | Caught in review (if at all) | Caught by `/security-check` before commit | Shifted left |
+| Security mistakes | Caught in review (if at all) | Caught by `/kit-security-check` before commit | Shifted left |
 
 ---
 
@@ -137,10 +137,10 @@ Runtime cost:         Zero — no background processes, no API calls
 ### Monday — With AI Kit
 
 ```
-09:00  Start new feature. Run /new-component for each.
+09:00  Start new feature. Run /kit-new-component for each.
 09:45  AI generates components with correct patterns, tests, and docs.
        Sitecore field helpers included automatically.
-10:00  Run /pre-pr. Catches a missing alt text and a console.log.
+10:00  Run /kit-pre-pr. Catches a missing alt text and a console.log.
 10:15  Fix both. Push PR.
 11:00  Review feedback: "Could we use a discriminated union for the
        loading state?" (Actual architecture feedback, not conventions.)

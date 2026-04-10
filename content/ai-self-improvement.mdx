@@ -167,7 +167,7 @@ Each of the 48 skills has:
 
 ### The Result
 
-Developer A on Project X (Claude Code) gets a security report in the same format as Developer B on Project Y (Cursor). Whether triggered by `/security-check` or auto-applied when the AI detects a security review task, both get:
+Developer A on Project X (Claude Code) gets a security report in the same format as Developer B on Project Y (Cursor). Whether triggered by `/kit-security-check` or auto-applied when the AI detects a security review task, both get:
 - A severity-sorted table
 - File paths and line numbers for every issue
 - Before/after code for every fix
@@ -199,9 +199,9 @@ When AI Kit is installed on multiple projects, every project gets the same base 
 - Same error handling patterns (never blank screens)
 
 ### Same Review Standards
-- `/pre-pr` checks the same 10 categories on every project
-- `/review` evaluates the same criteria everywhere
-- `/security-check` scans for the same vulnerability classes
+- `/kit-pre-pr` checks the same 10 categories on every project
+- `/kit-review` evaluates the same criteria everywhere
+- `/kit-security-check` scans for the same vulnerability classes
 
 **The AI becomes your team's coding standards — enforced automatically, consistently, every time.**
 
@@ -214,7 +214,7 @@ When AI Kit is installed on multiple projects, every project gets the same base 
 | Vague prompt | AI guesses, often wrong | AI asks clarifying questions |
 | Missing docs | Nothing happens | AI auto-creates docs for complex components |
 | Bug fix without test | Bug can recur | AI auto-adds regression test |
-| Code review feedback | Reviewer catches issues | `/pre-pr` catches them before review |
+| Code review feedback | Reviewer catches issues | `/kit-pre-pr` catches them before review |
 | Cross-project consistency | Every project different | Same standards everywhere |
 | New developer onboarding | "Read the wiki" | AI already knows the conventions |
 | Command output format | Unpredictable | Same structured format every time |
@@ -246,7 +246,7 @@ npx @mikulgohil/ai-kit init
 # Watch the AI ask you which component and what's wrong
 
 # Try a slash command
-/pre-pr
+/kit-pre-pr
 # Watch it produce a structured 10-category audit
 
 # Modify a complex component
