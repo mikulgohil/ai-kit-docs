@@ -43,7 +43,7 @@ export default function LandingPage() {
         <div className="landing-hero-glow" />
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          v1.10.0 — Next.js 16 support, agent worktree isolation &amp; doc freshness
+          v2.0.0 — kit- namespace prefix for all 48 skills &amp; 16 agents
         </div>
         <h1>
           Make AI assistants<br />
