@@ -8,6 +8,7 @@ export default {
   migrate: 'Migrate Existing Projects',
   'backup-and-rollback': 'Backup & Rollback',
   'what-gets-generated': 'What Gets Generated',
+  'behavioral-guardrails': 'Behavioral Guardrails',
   'supported-stacks': 'Supported Tech Stacks',
   'slash-commands': 'Skills & Commands',
   hooks: 'Hooks',

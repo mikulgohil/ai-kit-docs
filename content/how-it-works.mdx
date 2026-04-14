@@ -94,7 +94,7 @@ The generator turns a `ProjectScan` into output files using a **template fragmen
 
 ```typescript
 function selectFragments(scan: ProjectScan): string[] {
-  const fragments = ['base'];  // Always included
+  const fragments = ['base', 'behavioral'];  // Always included
 
   // Conditional fragments based on scan results
   if (scan.framework === 'nextjs' && scan.routerType === 'app')
@@ -108,6 +108,8 @@ function selectFragments(scan: ProjectScan): string[] {
   return fragments;
 }
 ```
+
+> The `behavioral` fragment (v2.1.0+) provides meta-cognitive guardrails — think before coding, simplicity first, surgical changes, and goal-driven execution. See [Behavioral Guardrails](/docs/behavioral-guardrails) for details.
 
 ### Template Assembly
 

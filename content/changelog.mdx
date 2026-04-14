@@ -4,6 +4,37 @@ All notable changes to AI Kit are documented here. This project follows [Semanti
 
 ---
 
+## v2.1.0 — 2026-04-14
+
+### Behavioral Guardrails (Karpathy-Inspired)
+
+New `behavioral` template fragment — a set of meta-cognitive rules that control *how* the AI approaches work, not *what* code patterns to follow. Inspired by [Andrej Karpathy's LLM coding guidelines](https://github.com/forrestchang/andrej-karpathy-skills) (27K+ stars).
+
+Four principles, always included in every generated CLAUDE.md and .cursorrules:
+
+| Principle | What It Prevents |
+|---|---|
+| **Think Before Coding** | Silent wrong assumptions — the AI surfaces ambiguity and asks before coding |
+| **Simplicity First** | Over-engineering — minimum code for the stated problem, no speculative features |
+| **Surgical Changes** | Drive-by refactoring — every changed line must trace to the user's request |
+| **Goal-Driven Execution** | Aimless iteration — tasks become verifiable goals with explicit checkpoints |
+
+The behavioral fragment is **always included** (like `base`), regardless of your tech stack. It sits between the core coding standards and stack-specific rules in the assembly order.
+
+See [Behavioral Guardrails](/docs/behavioral-guardrails) for full details, before/after examples, and design rationale.
+
+```bash
+# Add to existing projects
+npx @mikulgohil/ai-kit update
+```
+
+### Other Improvements
+
+- **Template fragments**: 11 (was 10, added `behavioral`)
+- **Version**: 2.1.0
+
+---
+
 ## v2.0.0 — 2026-04-09
 
 ### Breaking: `kit-` Namespace Prefix

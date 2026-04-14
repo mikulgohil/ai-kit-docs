@@ -1,0 +1,171 @@
+# Behavioral Guardrails
+
+AI Kit v2.1.0 introduces a new **behavioral guardrails** template fragment — a set of meta-cognitive rules that control *how* the AI approaches work, not *what* code patterns to follow.
+
+These guardrails are inspired by [Andrej Karpathy's observations](https://github.com/forrestchang/andrej-karpathy-skills) on the most common and costly LLM coding behaviors, packaged into four actionable principles.
+
+---
+
+## Why Behavioral Rules?
+
+AI Kit has always been excellent at generating **stack-specific** rules — telling the AI about your Next.js version, Sitecore patterns, Tailwind tokens, and TypeScript conventions. But there was a gap: the AI knew *what patterns to follow* but lacked guardrails for *how to think about work*.
+
+Common AI coding failures that stack rules don't prevent:
+
+| Failure | What Happens |
+|---|---|
+| **Silent assumptions** | The AI interprets an ambiguous request one way and runs with it — producing 200 lines of code that solve the wrong problem |
+| **Over-engineering** | Asked for a simple discount function, the AI creates an abstract Strategy pattern with 5 classes |
+| **Drive-by refactoring** | While fixing a bug in one function, the AI "improves" three adjacent functions, changes formatting, and adds type annotations nobody asked for |
+| **Aimless iteration** | The AI keeps trying different approaches without verifying what works, burning tokens and context |
+
+Behavioral guardrails address all four.
+
+---
+
+## The Four Principles
+
+### 1. Think Before Coding
+
+**Problem:** LLMs make wrong assumptions silently and run with them.
+
+**Rule:** If a request is ambiguous, surface the ambiguity before writing code. State your interpretation, present alternatives, and push back when warranted.
+
+Before non-trivial changes, the AI is instructed to briefly list:
+- What it thinks the user wants changed
+- What should NOT change
+- Which existing patterns to follow
+- What the success criteria are
+
+If any of these are unclear, it asks first.
+
+### 2. Simplicity First
+
+**Problem:** LLMs over-engineer solutions with bloated abstractions and speculative features.
+
+**Rule:** Write the minimum code that solves the stated problem. No speculative features, no premature abstractions, no unnecessary flexibility.
+
+The **"Senior Engineer Test"**: After writing code, the AI reviews it asking:
+- Does this solve exactly what was asked?
+- Is there code here that wasn't requested?
+- Could this be simpler without losing functionality?
+
+If the answer to the last two is "yes" — it simplifies before presenting.
+
+### 3. Surgical Changes
+
+**Problem:** LLMs change unrelated code, fix formatting, add types, and remove comments as side effects.
+
+**Rule:** Every changed line must trace back to the user's request. Don't improve adjacent code, change formatting, add type annotations, or remove comments outside the scope of the task.
+
+The **"Diff Test"**: Before presenting changes, the AI reviews the diff. If a reviewer would question why any line was touched, it reverts that line.
+
+### 4. Goal-Driven Execution
+
+**Problem:** LLMs implement tasks without clear success criteria, leading to aimless iteration.
+
+**Rule:** Transform vague tasks into verifiable goals. "Fix the bug" becomes "Write a test that reproduces the bug, then make it pass."
+
+Non-trivial work is broken into 3-5 concrete steps with verification at each step. When an approach fails twice with the same root cause, the AI switches strategies instead of retrying blindly.
+
+---
+
+## How It Works
+
+The behavioral guardrails are a **template fragment** — the same system used for Next.js, Tailwind, TypeScript, and other stack-specific rules.
+
+```
+templates/
+  claude-md/
+    base.md           ← coding standards (always included)
+    behavioral.md     ← behavioral guardrails (always included) ← NEW
+    nextjs-app-router.md
+    sitecore-xmc.md
+    tailwind.md
+    ...
+  cursorrules/
+    base.md
+    behavioral.md     ← NEW
+    ...
+```
+
+**Always included** — unlike stack-specific fragments that are conditionally selected, the `behavioral` fragment is included in every generated CLAUDE.md and .cursorrules file, regardless of your tech stack. Behavioral guardrails apply universally.
+
+### Fragment Order
+
+The `behavioral` fragment is placed immediately after `base` in the assembly order:
+
+1. `base` — core coding standards
+2. `behavioral` — meta-cognitive guardrails
+3. Stack-specific fragments (Next.js, Sitecore, Tailwind, etc.)
+
+This means the AI reads behavioral rules early in the context, before diving into specific technology patterns.
+
+---
+
+## Before & After Examples
+
+### Example 1: Ambiguous Request
+
+**User says:** "Make search faster"
+
+**Without guardrails:** The AI immediately starts adding database indexes, caching layers, and pagination — potentially breaking the existing search or over-engineering the solution.
+
+**With guardrails:** The AI responds:
+> "Make search faster" could mean several things:
+> 1. Add server-side caching to the search API
+> 2. Add client-side debouncing to reduce API calls
+> 3. Optimize the GraphQL query itself
+> 4. Add pagination to reduce payload size
+>
+> Which approach are you looking for? Or should I profile the current search to find the actual bottleneck?
+
+### Example 2: Simple Bug Fix
+
+**User says:** "Fix the discount calculation in CartTotal"
+
+**Without guardrails:** The AI fixes the discount math, then also refactors the cart summary into a custom hook, adds TypeScript strict types to adjacent functions, and reformats import statements.
+
+**With guardrails:** The AI:
+1. Writes a test that reproduces the wrong discount calculation
+2. Fixes the math in the discount function
+3. Runs the test to verify it passes
+4. Presents only the two changed files — nothing else touched
+
+### Example 3: Feature Request
+
+**User says:** "Add an export button"
+
+**Without guardrails:** The AI builds an export system with PDF, CSV, and Excel support, a progress bar, error retry logic, and a configurable export template system — 500 lines of code.
+
+**With guardrails:** The AI asks:
+> Before I build the export feature, a few quick questions:
+> 1. What format — CSV, PDF, or something else?
+> 2. What data should it export — the current view, or something specific?
+> 3. Is this a one-time action (download button) or does it need scheduling?
+
+---
+
+## Proportional Application
+
+The behavioral guardrails include a **proportionality clause**: these rules are calibrated for non-trivial work. For trivial tasks (typo fixes, one-line changes, obvious corrections), the AI applies them proportionally — a quick fix doesn't need a full assumption audit.
+
+This prevents the guardrails from slowing down simple tasks while still protecting against costly mistakes on complex work.
+
+---
+
+## Updating Existing Projects
+
+To add behavioral guardrails to an existing AI Kit project:
+
+```bash
+npx @mikulgohil/ai-kit update
+```
+
+This re-scans your project, regenerates configs with the new `behavioral` fragment included, and backs up your previous configs automatically.
+
+---
+
+## Credits
+
+The behavioral guardrails are inspired by Andrej Karpathy's widely-shared observations about LLM coding patterns, as packaged in the [andrej-karpathy-skills](https://github.com/forrestchang/andrej-karpathy-skills) repository (27K+ stars). AI Kit adapts these principles into its template fragment system for automatic inclusion in every project.
