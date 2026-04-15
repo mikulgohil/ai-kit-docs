@@ -43,7 +43,7 @@ export default function LandingPage() {
         <div className="landing-hero-glow" />
         <div className="landing-badge">
           <span className="landing-badge-dot" />
-          v2.0.0 — kit- namespace prefix for all 48 skills &amp; 16 agents
+          v2.1.0 — behavioral guardrails + 11 template fragments
         </div>
         <h1>
           Make AI assistants<br />
