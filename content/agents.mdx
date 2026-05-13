@@ -4,7 +4,7 @@ Agents are specialized AI assistants that live in `.claude/agents/` and handle d
 
 ## Available Agents
 
-AI Kit generates up to 17 agents based on your project's detected stack:
+AI Kit generates up to 20 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
@@ -25,6 +25,9 @@ AI Kit generates up to 17 agents based on your project's detected stack:
 | **kit-migration-specialist** | Framework upgrades, breaking change detection, codemods, incremental adoption | Read, Glob, Grep, Bash |
 | **kit-dependency-auditor** | Outdated packages, vulnerability scanning, license compliance, bundle impact | Read, Glob, Grep, Bash |
 | **kit-api-designer** | REST/GraphQL API design, schema validation, versioning, error handling | Read, Glob, Grep, Bash |
+| **kit-ui-designer** | Visual design quality audit — Tailwind token consistency, spacing, typography, hierarchy, interaction design | Read, Glob, Grep |
+| **kit-release-manager** | Full release lifecycle — pre-release validation, version bump, tagging, release notes, post-deploy verification | Read, Bash, Glob, Grep |
+| **kit-onboarding-guide** | New developer onboarding — project orientation, local setup, codebase navigation, first-contribution path | Read, Glob, Grep, Bash |
 
 ---
 
@@ -50,6 +53,9 @@ In Claude Code, agents are automatically available for delegation. You can invok
 @kit-migration-specialist Plan the upgrade from Next.js 14 to 15
 @kit-dependency-auditor Run a full dependency audit with license check
 @kit-api-designer Design the REST API for the orders resource
+@kit-ui-designer Review the ProductCard component for design quality
+@kit-release-manager Cut the v2.3.0 release
+@kit-onboarding-guide Help me understand the project structure as a new developer
 ```
 
 You can also use the `/kit-orchestrate` skill to coordinate multiple agents on a complex task.
@@ -247,6 +253,72 @@ Designs, reviews, and improves REST and GraphQL APIs:
 
 Outputs endpoint tables, request/response examples, Zod schemas, and error response catalogs.
 
+### UI Designer
+
+Reviews components and pages for visual quality — catching design issues that pass code review but look wrong to a user. Evaluates six dimensions:
+
+- **Typography** — scale consistency, line height, heading hierarchy
+- **Spacing & Layout** — grid alignment, padding consistency, visual grouping
+- **Color & Contrast** — token usage, WCAG AA contrast, semantic color meaning
+- **Hierarchy & Focus** — primary action clarity, scanability, information density
+- **Consistency** — pattern reuse, system alignment, no one-off decisions
+- **Interaction Design** — hover/focus states, loading, error, and empty states
+
+Scores each dimension 0–10, surfaces the top three improvements with specific Tailwind code fixes, and acknowledges what's working well. Reads `tailwind.config.ts` first to validate token usage.
+
+Does not duplicate accessibility (use `kit-security-reviewer`) or responsive checks (use the `/kit-responsive-check` skill).
+
+Invoke with:
+```
+@kit-ui-designer Review src/components/HeroBanner.tsx for design quality
+@kit-ui-designer Audit the checkout page for visual hierarchy issues
+```
+
+### Release Manager
+
+Orchestrates the complete release lifecycle end-to-end:
+
+1. **Pre-release validation** — clean tree, tests passing, build succeeding, no critical vulnerabilities
+2. **Version decision** — reads git log and CHANGELOG, applies semver rules, explains the reasoning
+3. **Release execution plan** — outputs the exact `git tag`, `npm version`, and push commands for review (never auto-executes them)
+4. **Release notes** — user-facing GitHub Release notes from CHANGELOG entries
+5. **Post-deploy verification** — lists critical paths to verify and references `/kit-post-deploy`
+
+Never pushes without explicit user confirmation. If any pre-release check fails, stops and reports the blocker instead of proceeding.
+
+Invoke with:
+```
+@kit-release-manager Cut the v2.3.0 release
+@kit-release-manager What version should the next release be?
+@kit-release-manager Generate release notes for v2.3.0
+```
+
+### Onboarding Guide
+
+Helps a new team member get productive quickly. Adapts to the actual project structure — reads `package.json`, `CLAUDE.md`, `README.md`, and the source directory before generating any guidance.
+
+Covers three phases:
+- **Day 1** — project orientation, local setup, key files to read
+- **Week 1** — first contribution, Sitecore component workflow, AI Kit usage
+- **Week 2+** — independent task work, code review, rendering strategy understanding
+
+Produces a structured onboarding document with:
+- Tech stack table (technology → purpose in this specific project)
+- Step-by-step local setup with exact commands
+- First 30-minute reading list (5–7 files with explanations)
+- "Where to add things" table (new page, new component, new API route → location + pattern to follow)
+- Common gotchas specific to this codebase
+- AI Kit skill quick reference for new developers
+
+Explicitly flags Sitecore-specific patterns that are non-obvious to developers new to the JSS + Next.js stack.
+
+Invoke with:
+```
+@kit-onboarding-guide I'm new to this project — help me get started
+@kit-onboarding-guide Walk me through how Sitecore data flows to components
+@kit-onboarding-guide What's the right pattern for adding a new component here?
+```
+
 ---
 
 ## Conditional Agents
@@ -260,7 +332,7 @@ Some agents are only generated when their tools are detected in your project:
 | **kit-tdd-guide** | Only if Playwright or a `test` script is detected |
 | **kit-database-reviewer** | Only if Sitecore CMS is detected or project is Next.js |
 
-All other agents (kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-architect, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+All other agents (kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-architect, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer, kit-ui-designer, kit-release-manager, kit-onboarding-guide) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 
 ---
 

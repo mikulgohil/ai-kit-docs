@@ -1,6 +1,6 @@
 # Skills & Commands
 
-AI Kit generates 48 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
+AI Kit generates 54 skills across two formats — **skills** for auto-discovery, and **legacy commands** for backward compatibility.
 
 ## Skills vs Commands
 
@@ -84,6 +84,12 @@ If you already use slash commands like `/kit-review` or `/kit-pre-pr`, they cont
 | `/kit-harness-audit` | Orchestration | Audits AI configuration health with A-F grade |
 | `/kit-deep-interview` | Requirements | Socratic requirements gathering — structured interview before coding |
 | `/kit-clarify-requirements` | Requirements | Quick task clarification — identify gaps in under 5 minutes |
+| `/kit-product-review` | Roles | Pre-code product review — Go/No-Go/Reshape recommendation with 10x version framing |
+| `/kit-design-review` | Roles | Visual design quality audit — six-dimension scorecard with Tailwind fixes |
+| `/kit-devex-review` | Roles | Developer experience audit — TTHW measurement and DX improvement plan |
+| `/kit-retro` | Roles | Sprint/feature retrospective — what shipped, what worked, AI collaboration insights |
+| `/kit-post-deploy` | Roles | Post-deploy health check — HEALTHY/DEGRADED/ROLLBACK verdict with evidence |
+| `/kit-careful` | Roles | Safety guard — pauses before destructive operations and requires explicit confirmation |
 
 ---
 
@@ -1172,3 +1178,159 @@ Quick task clarification — identifies gaps and ambiguities in a task descripti
 4. Produces a concise task brief with acceptance criteria
 
 If the task is already clear, it skips questions and produces the brief immediately.
+
+---
+
+## Role Skills (v2.3.0)
+
+Role skills apply a specialist perspective to your work — product owner, designer, DX auditor, retrospective facilitator, release engineer, and safety guard. Each one activates a distinct lens that isn't covered by the code-quality or workflow skills.
+
+### /kit-product-review
+
+**Category**: Roles
+
+Pre-code product review. Evaluates whether a proposed feature is worth building, challenges the scope, and identifies the highest-value version before any implementation starts.
+
+**Usage**
+```
+/kit-product-review
+/kit-product-review dark mode support
+/kit-product-review user notification preferences panel
+```
+
+**When to use**: Before starting any significant new feature — especially when requirements feel loosely defined or the scope could go in multiple directions.
+
+**What it produces**
+- Verdict: Go / No-Go / Reshape
+- Problem clarity assessment (is the problem well-defined enough to build?)
+- MVP scope (must-have) vs. deferred scope (v2)
+- The 10x version — what the exceptional version of this feature looks like
+- Technical considerations specific to Sitecore content model and Next.js rendering strategy
+- Risks and assumptions with impact if wrong
+
+---
+
+### /kit-design-review
+
+**Category**: Roles
+
+Visual design quality audit. Scores a component or page across six design dimensions (0–10 each) and surfaces the three highest-impact improvements with specific Tailwind class fixes.
+
+**Usage**
+```
+/kit-design-review src/components/ProductCard.tsx
+/kit-design-review src/app/checkout/page.tsx
+```
+
+**When to use**: After implementing a component from a Figma design, before a design review meeting, or when a component looks "off" but you're not sure why.
+
+**Dimensions scored**
+- Typography — scale consistency, line height, heading hierarchy
+- Spacing & Layout — grid alignment, padding, visual grouping
+- Color & Contrast — token usage, WCAG contrast, semantic colors
+- Hierarchy & Focus — primary action clarity, scanability
+- Consistency — pattern reuse, system alignment
+- Interaction Design — hover/focus states, loading, error, empty states
+
+Reads `tailwind.config.ts` to evaluate token usage before scoring.
+
+---
+
+### /kit-devex-review
+
+**Category**: Roles
+
+Developer experience audit. Measures TTHW (Time to Hello World), identifies setup friction, and produces a prioritized list of DX improvements — ordered by how likely each gap is to block a new developer on day one.
+
+**Usage**
+```
+/kit-devex-review
+/kit-devex-review --focus docs
+/kit-devex-review --focus tooling
+```
+
+**When to use**: Before onboarding new team members, after a major project restructure, or when setting up AI Kit for the first time and wanting to ensure the project is ready for a team.
+
+**What it audits**
+- Onboarding speed — TTHW step count and estimated time
+- Environment setup — `.env.example` completeness, Sitecore variables
+- Documentation quality — common workflows covered, architectural decisions recorded
+- Tooling health — TypeScript, lint, tests, AI configuration
+- Error messages — are failure modes documented and actionable?
+
+---
+
+### /kit-retro
+
+**Category**: Roles
+
+Sprint or feature retrospective. Reads git log and session files, then produces a structured retrospective covering what shipped, what worked, what slowed the team down, and concrete action items — including AI collaboration insights specific to skills and agents.
+
+**Usage**
+```
+/kit-retro
+/kit-retro --since 2026-05-01
+/kit-retro feature/checkout-redesign
+```
+
+**When to use**: At the end of a sprint, after shipping a significant feature, or any time the team wants to extract learnings before moving to the next cycle.
+
+**What it produces**
+- What shipped (from git log)
+- What worked — specific enough to be intentionally repeated
+- What slowed things down — with root causes, not just symptoms
+- What to change next sprint (table: current approach → proposed change)
+- AI collaboration review: skills that helped most, skills that underperformed, suggested CLAUDE.md additions
+- Action items (3–5 max, concrete and assignable)
+
+---
+
+### /kit-post-deploy
+
+**Category**: Roles
+
+Post-deployment health check. Verifies that the deployed application is working correctly across application health, Sitecore integration, performance baseline, and configuration — then issues a clear HEALTHY / DEGRADED / ROLLBACK verdict.
+
+**Usage**
+```
+/kit-post-deploy
+/kit-post-deploy v2.3.0
+/kit-post-deploy feature/new-homepage
+```
+
+**When to use**: Immediately after every production or staging deployment. Run this before closing the deploy and marking it complete.
+
+**Checks performed**
+- Application health: pages load, critical flows work, no console errors
+- Sitecore integration: Layout Service responding, components rendering, fields populated
+- Performance baseline: page load time within ±20% of pre-deploy, LCP under 2.5s
+- Configuration: no dev values in production, CDN cache purged, SSL valid
+- Monitoring: error rate at baseline, no new error types
+
+Produces a structured status table with ✅/⚠️/❌ per check and a final verdict.
+
+---
+
+### /kit-careful
+
+**Category**: Roles
+
+Safety guard. Automatically pauses before destructive or irreversible operations, explains the specific risk, quantifies the blast radius, offers a safer alternative, and requires explicit confirmation before proceeding.
+
+**Usage**
+```
+/kit-careful
+/kit-careful git reset --hard HEAD~3
+/kit-careful rm -rf src/legacy/
+```
+
+**When to use**: Activate at the start of a session involving risky operations, or invoke explicitly when you want to review a destructive command before running it.
+
+**What it catches**
+- Destructive file operations — `rm -rf`, overwriting uncommitted files
+- Destructive git operations — `reset --hard`, `push --force`, `branch -D`, rebase on pushed branches
+- Database operations — `DROP TABLE`, `TRUNCATE`, `DELETE` without `WHERE`
+- Configuration changes — removing env vars, changing auth config, modifying CI/CD pipelines
+- Deployment actions — deploying to production without staging verification
+
+For each detected operation, outputs: what will happen, blast radius, reversibility, safer alternative, and an explicit YES/NO confirmation prompt.
