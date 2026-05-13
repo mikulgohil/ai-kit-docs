@@ -44,6 +44,7 @@ Best for: everyday development with a safety net.
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
+| Pre-edit reminder | PreToolUse | Warns before editing files over 150 lines to encourage reading first |
 | Context recovery | PostCompact | Re-echoes tech stack summary after context compaction |
 | Git push safety | PreToolUse | Reminder to review changes before pushing |
 
@@ -60,6 +61,9 @@ Best for: production code, pre-merge reviews, or teams with high quality bars.
 | Console.log warning | PostToolUse | Flags `console.log` statements in edited files |
 | Mistakes auto-capture | PostToolUse | Logs build/lint failures to `docs/mistakes-log.md` |
 | Bundle impact warning | PostToolUse | Warns when new dependencies are added to package.json |
+| Pre-edit reminder | PreToolUse | Warns before editing files over 150 lines to encourage reading first |
+| Config weakening guard | PostToolUse | Flags `eslint-disable`, `@ts-ignore`, and `strict: false` additions |
+| Credential scan | PostToolUse | Detects hardcoded API keys and secrets in edited files |
 | Context recovery | PostCompact | Re-echoes tech stack summary after context compaction |
 | Console.log audit | Stop | Scans all modified files for `console.log` at end of response |
 | Pre-commit AI review | PreToolUse | Checks staged files for `any` types, console.log, TODOs without tickets |
@@ -277,6 +281,83 @@ This ensures your project conventions survive context compaction without manual 
   ]
 }
 ```
+
+---
+
+## Pre-Edit Investigation Reminder
+
+Fires before every `Edit` or `Write` tool call. When the target file is over 150 lines, it prints a reminder to read the file before editing:
+
+```
+📖 Large file (312 lines): src/components/ProductCard.tsx
+   Ensure you have read the full file before editing to avoid missing imports or breaking invariants.
+```
+
+This addresses a common failure mode in AI-assisted coding: making targeted edits to large files without reading the full context first, which leads to missed type dependencies, broken exports, or conflicting logic.
+
+Available in **standard** and **strict** profiles.
+
+---
+
+## Config Weakening Guard
+
+Fires after every `Edit` or `Write` on TypeScript and JavaScript files. Detects additions that weaken code quality enforcement:
+
+| Pattern | What It Catches |
+|---|---|
+| `eslint-disable` | Directives that silence ESLint rules in-file |
+| `@ts-ignore` | TypeScript errors silenced on the next line |
+| `@ts-nocheck` | TypeScript checking disabled for the entire file |
+| `"strict": false` | TypeScript strict mode disabled in `tsconfig.json` |
+| `"noImplicitAny": false` | Implicit `any` allowed in `tsconfig.json` |
+
+Output when triggered:
+```
+🛡️  Config guard triggered in src/lib/api.ts:
+  ⚠️  eslint-disable: 2 directive(s) found — weakens linting
+  ⚠️  TypeScript suppression: 1 @ts-ignore found
+   Confirm these are intentional before committing.
+```
+
+The hook does not block the edit — it surfaces the issue for review. Available in **strict** profile only.
+
+---
+
+## Credential Scan
+
+Fires after every `Edit` or `Write` on `.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.yaml`, and `.yml` files. Scans for patterns that indicate hardcoded credentials:
+
+- `apikey`, `api_key`, `secret_key`, `access_token`, `private_key`, `password`, `auth_token`
+- Combined with an assignment (`=` or `:`) and a value longer than 8 characters
+- Excludes `process.env` references (these are the correct pattern)
+
+Output when triggered:
+```
+🔐 Credential scan — potential secret detected in src/lib/client.ts:
+  line 14: apiKey = "sk-live-a8f3k2m..."
+   Move real secrets to .env and reference via process.env — never commit credentials.
+```
+
+Available in **strict** profile only.
+
+---
+
+## Context Window Optimization
+
+AI Kit injects `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=65` into `.claude/settings.local.json` for all profiles. This tells Claude Code to trigger automatic context compaction when the context window reaches 65% capacity, rather than the default (which lets it fill further before compacting).
+
+```json
+{
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "65"
+  },
+  "hooks": { ... }
+}
+```
+
+**Why 65%?** On large Sitecore or Next.js projects with many file reads and long CLAUDE.md files, waiting until 80–90% capacity before compacting often results in losing critical context mid-task. Compacting at 65% keeps the context window healthier throughout long sessions.
+
+You can override this by editing the value directly in `.claude/settings.local.json`.
 
 ---
 

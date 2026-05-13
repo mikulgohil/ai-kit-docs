@@ -4,7 +4,7 @@ Agents are specialized AI assistants that live in `.claude/agents/` and handle d
 
 ## Available Agents
 
-AI Kit generates up to 16 agents based on your project's detected stack:
+AI Kit generates up to 17 agents based on your project's detected stack:
 
 | Agent | Purpose | Tools |
 |---|---|---|
@@ -18,6 +18,7 @@ AI Kit generates up to 16 agents based on your project's detected stack:
 | **kit-tdd-guide** | Test-driven development guidance — red/green/refactor workflow | Read, Write, Edit, Glob, Grep, Bash |
 | **kit-ci-debugger** | CI/CD failure debugger — analyzes pipeline logs and suggests fixes | Read, Glob, Grep, Bash |
 | **kit-sitecore-specialist** | Sitecore XM Cloud patterns — component mapping, GraphQL, layout service | Read, Write, Edit, Glob, Grep, Bash |
+| **kit-database-reviewer** | GraphQL query auditing, data fetching patterns, N+1 detection, security | Read, Glob, Grep, Bash |
 | **kit-architect** | System design — SSR/SSG/ISR strategy, component hierarchy, data flow | Read, Glob, Grep, Bash |
 | **kit-data-scientist** | ML pipelines, model evaluation, data analysis, experiment tracking | Read, Glob, Grep, Bash |
 | **kit-performance-profiler** | Core Web Vitals, bundle analysis, runtime profiling, rendering optimization | Read, Glob, Grep, Bash |
@@ -42,6 +43,7 @@ In Claude Code, agents are automatically available for delegation. You can invok
 @kit-tdd-guide Walk me through adding tests for the cart feature using TDD
 @kit-ci-debugger Diagnose the failing GitHub Actions workflow
 @kit-sitecore-specialist Debug why the Hero component isn't rendering in Experience Editor
+@kit-database-reviewer Audit the GraphQL queries in src/lib/queries for over-fetching and N+1 patterns
 @kit-architect Design the rendering strategy for the new product pages
 @kit-data-scientist Profile this dataset and recommend a modeling approach
 @kit-performance-profiler Audit the homepage for Core Web Vitals issues
@@ -77,6 +79,12 @@ Provides thorough reviews across multiple dimensions:
 - **Sitecore** — JSS helpers, Experience Editor compatibility, GraphQL efficiency
 
 Rates each category as PASS / WARN / FAIL with specific line references.
+
+**Confidence-gated reviews**: The agent declares its confidence (0–100%) in each review category before reporting. When confidence drops below 80% in any area — because it lacks context like a type definition or auth middleware — it pauses and asks a targeted question rather than guessing. This prevents false positives from incomplete context.
+
+```
+Confidence: Correctness 95% | React 88% | TypeScript 72% (need to see src/types/cart.ts) | Security 91%
+```
 
 ### Security Reviewer
 
@@ -157,6 +165,28 @@ Handles all Sitecore XM Cloud development patterns:
 - **Personalization** — component variants, A/B testing rules
 - **Debugging** — component not rendering, empty fields, GraphQL errors, 404s
 
+### Database Reviewer
+
+Audits the data access layer for correctness, performance, and security across:
+
+- **GraphQL / Experience Edge** — field selection efficiency, fragment reuse, pagination cursors, null safety, schema alignment
+- **Next.js data fetching** — Server vs Client Component fetch placement, `cache`/`revalidate` intent, parallel fetches with `Promise.all`, `.ok` checks on every `fetch()`
+- **ORM patterns** — N+1 query detection (loops with per-iteration fetches), transaction scope for multi-write operations, connection pooling
+- **Security** — parameterized queries only (no string interpolation), authorization checks before queries, no internal IDs or admin fields in public responses, rate limiting on data endpoints
+
+Outputs per-area ratings (PASS / WARN / FAIL) with file and line references, plus a **Data Layer Score** (0–100).
+
+Also confidence-gated: if the agent can't see the full Experience Edge schema or the auth middleware, it asks before reviewing those areas rather than guessing.
+
+Invoke with:
+```
+@kit-database-reviewer Audit all GraphQL queries in src/lib/queries/ for over-fetching
+@kit-database-reviewer Review the fetch patterns in app/(routes)/products/page.tsx
+@kit-database-reviewer Check for N+1 patterns in the product listing components
+```
+
+Conditional — generated when Sitecore CMS is detected or when the project is Next.js (both have significant data-fetching surface).
+
 ### Architect
 
 Makes high-level design decisions for Next.js, Sitecore XM Cloud, and Tailwind projects:
@@ -227,8 +257,10 @@ Some agents are only generated when their tools are detected in your project:
 |---|---|
 | **kit-e2e-runner** | Only if `@playwright/test` is in dependencies |
 | **kit-sitecore-specialist** | Only if Sitecore XM Cloud or JSS is detected |
+| **kit-tdd-guide** | Only if Playwright or a `test` script is detected |
+| **kit-database-reviewer** | Only if Sitecore CMS is detected or project is Next.js |
 
-All other agents (kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-architect, kit-tdd-guide, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
+All other agents (kit-planner, kit-code-reviewer, kit-security-reviewer, kit-build-resolver, kit-doc-updater, kit-refactor-cleaner, kit-architect, kit-ci-debugger, kit-data-scientist, kit-performance-profiler, kit-migration-specialist, kit-dependency-auditor, kit-api-designer) are generated for every project. This keeps the agent list relevant and avoids confusion from agents that can't do their job.
 
 ---
 
